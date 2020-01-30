@@ -13,9 +13,9 @@ class Auth extends CI_Controller{
     {
       $rules = array(
         array(
-                'field' => 'email',
-                'label' => 'Email',
-                'rules' => 'required|trim|valid_email'
+                'field' => 'username',
+                'label' => 'Username',
+                'rules' => 'required|trim'
         ),
         array(
                 'field' => 'password',
@@ -23,6 +23,7 @@ class Auth extends CI_Controller{
                 'rules' => 'required|trim'
         )
       );
+      $this->form_validation->set_error_delimiters('<small class="text-danger pl-3">','</small>');
       $this->form_validation->set_rules($rules);
       if($this->form_validation->run() == false){
         $data['title'] = 'Login Page';
@@ -37,10 +38,10 @@ class Auth extends CI_Controller{
 
     private function _login()
     {
-      $email = $this->input->post('email');
+      $username = $this->input->post('username');
       $password = $this->input->post('password');
 
-      $user = $this->m_auth->getUser('users', $email);
+      $user = $this->m_auth->getUser('users', $username);
 
       //Jika user ada
       if($user){
@@ -68,7 +69,7 @@ class Auth extends CI_Controller{
 
         }else{
           $this->session->set_flashdata('msg','<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            This email has not been activated!
+            This username has not been activated! Please check your email.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -77,7 +78,7 @@ class Auth extends CI_Controller{
         }
       }else{
         $this->session->set_flashdata('msg','<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Email is not registered!
+            Username is not registered! Please register.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -90,33 +91,39 @@ class Auth extends CI_Controller{
     {
       $rules = array(
         array(
-                'field' => 'name',
-                'label' => 'Full Name',
-                'rules' => 'required|trim'
+          'field' => 'username',
+          'label' => 'Username',
+          'rules' => 'required|trim|is_unique[users.user_username]'
         ),
         array(
-                'field' => 'email',
-                'label' => 'Email',
-                'rules' => 'required|trim|valid_email|is_unique[users.user_email]',
-                'errors' => array(
-                  'is_unique' => 'This email has already registered!'
-                ),
+          'field' => 'name',
+          'label' => 'Full Name',
+          'rules' => 'required|trim'
         ),
         array(
-                'field' => 'password1',
-                'label' => 'Password',
-                'rules' => 'required|trim|min_length[8]|matches[password2]',
-                'errors' => array(
-                  'matches' => 'Password dont match!',
-                  'min_length' => 'Password too short!'
-                ),
+          'field' => 'email',
+          'label' => 'Email',
+          'rules' => 'required|trim|valid_email|is_unique[users.user_email]',
+          'errors' => array(
+            'is_unique' => 'This email has already registered!'
+          ),
         ),
         array(
-                'field' => 'password2',
-                'label' => 'Password',
-                'rules' => 'required|trim|matches[password1]'
+          'field' => 'password1',
+          'label' => 'Password',
+          'rules' => 'required|trim|min_length[8]|matches[password2]',
+          'errors' => array(
+            'matches' => 'Password dont match!',
+            'min_length' => 'Password too short!'
+          ),
+        ),
+        array(
+          'field' => 'password2',
+          'label' => 'Password',
+          'rules' => 'required|trim|matches[password1]'
         )
       );
+      $this->form_validation->set_error_delimiters('<small class="text-danger pl-3">','</small>');
         $this->form_validation->set_rules($rules);
         if($this->form_validation->run() == false){
             $data['title'] = 'BlueWash Registration';
@@ -126,6 +133,7 @@ class Auth extends CI_Controller{
         }else {
             $data = [
                 'user_name' => htmlspecialchars($this->input->post('name',ture)),
+                'user_username' => htmlspecialchars($this->input->post('username',true)),
                 'user_email' => htmlspecialchars($this->input->post('email',true)),
                 'user_image' => 'default.jpg',
                 'user_password' => password_hash($this->input->post('password1'),PASSWORD_DEFAULT),

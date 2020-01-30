@@ -7,7 +7,7 @@ class M_auth extends CI_Model{
     $this->db->insert($table, $data);
   }
 
-  public function getUser($table, $email) {
-    return $this->db->get_where($table, ['user_email' => $email])->row_array();
+  public function getUser($table, $username) {
+    return $this->db->get_where($table, ['user_username' => $username])->row_array();
 }
 }
