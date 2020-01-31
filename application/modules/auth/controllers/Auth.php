@@ -11,6 +11,11 @@ class Auth extends CI_Controller{
 
     public function index()
     {
+      if($this->session->userdata('status') == 'admin'){
+        redirect('admin');
+      }else if($this->session->userdata('status') == 'user'){
+        redirect('user');
+      }
       $rules = array(
         array(
                 'field' => 'username',
@@ -50,12 +55,21 @@ class Auth extends CI_Controller{
           //Cek password
           if(password_verify($password, $user['user_password'])){
             $data = [
+              'username' => $user['user_username'],
               'name' => $user['user_name'],
               'email' => $user['user_email'],
               'role_id' => $user['user_role_id']
             ];
-            $this->session->set_userdata($data);
-            redirect('user');
+            if ($user['user_role_id'] == 1) {
+              $data['status'] = 'admin';
+              $this->session->set_userdata($data);
+              redirect('admin');
+            } else if ($user['user_role_id'] == 2) {
+              $data['status'] = 'user';
+              $this->session->set_userdata($data);
+              redirect('user');
+            }
+            
 
           }else{
             $this->session->set_flashdata('msg','<div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -89,6 +103,12 @@ class Auth extends CI_Controller{
 
     public function registration()
     {
+      if($this->session->userdata('status') == 'admin'){
+        redirect('admin');
+      }else if($this->session->userdata('status') == 'user'){
+        redirect('user');
+      }
+
       $rules = array(
         array(
           'field' => 'username',
@@ -154,11 +174,12 @@ class Auth extends CI_Controller{
 
     public function logout()
     {
-      $this->session->unset_userdata(
-        'name',
-        'email',
-        'role_id'
-      );
+      $this->session->unset_userdata('username');
+      $this->session->unset_userdata('name');
+      $this->session->unset_userdata('email');
+      $this->session->unset_userdata('role_id');
+      $this->session->unset_userdata('status');
+
       $this->session->set_flashdata('msg','<div class="alert alert-success alert-dismissible fade show" role="alert">
             You have been logged out!
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -166,6 +187,11 @@ class Auth extends CI_Controller{
             </button>
             </div>');
             redirect('auth');
+    }
+
+    public function block()
+    {
+      $this->load->view('templates/blocked');
     }
 
 }
