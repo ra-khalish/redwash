@@ -17,7 +17,7 @@ class Admin extends CI_Controller{
     public function index()
     {
         $useremail = $this->session->userdata('email');
-        $data['title'] = 'Home Admin';
+        $data['title'] = 'Dashboard';
         $data['user'] = $this->m_admin->getUser('users', $useremail);
         
         //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();

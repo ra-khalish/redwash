@@ -11,7 +11,7 @@ class User extends CI_Controller{
     public function index()
     {
         $useremail = $this->session->userdata('email');
-        $data['title'] = 'User';
+        $data['title'] = 'Queue Motorcycle';
         $data['user'] = $this->m_user->getUser('users', $useremail);
         
         //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
@@ -19,7 +19,33 @@ class User extends CI_Controller{
         $this->load->view('templates/header',$data);
         $this->load->view('templates/sidebar',$data);
         $this->load->view('templates/topbar',$data);
-        $this->load->view('v_user', $data);
+        $this->load->view('v_queuetable', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function userBooking()
+    {
+        $useremail = $this->session->userdata('email');
+        $data['title'] = 'Booking';
+        $data['user'] = $this->m_user->getUser('users', $useremail);
+
+        $this->load->view('templates/header',$data);
+        $this->load->view('templates/sidebar',$data);
+        $this->load->view('templates/topbar',$data);
+        $this->load->view('v_booking', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function userTransaction()
+    {
+        $useremail = $this->session->userdata('email');
+        $data['title'] = 'Transaction';
+        $data['user'] = $this->m_user->getUser('users', $useremail);
+
+        $this->load->view('templates/header',$data);
+        $this->load->view('templates/sidebar',$data);
+        $this->load->view('templates/topbar',$data);
+        $this->load->view('v_queuetable', $data);
         $this->load->view('templates/footer');
     }
 

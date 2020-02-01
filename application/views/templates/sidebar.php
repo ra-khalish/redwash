@@ -9,16 +9,17 @@
   <div class="sidebar-brand-text mx-3">Redwash</div>
 </a>
 
+<?php if($this->session->userdata('status')=='admin'):?>
 <!-- Divider -->
 <hr class="sidebar-divider my-0">
 
 <!-- Nav Item - Dashboard -->
-<li class="nav-item">
+<li class="nav-item <?= ($this->uri->uri_string() == 'admin') ? 'active' : '' ?>">
   <a class="nav-link" href="index.html">
     <i class="fas fa-fw fa-tachometer-alt"></i>
     <span>Dashboard</span></a>
 </li>
-
+<?php endif;?>
 <!-- Divider -->
 <hr class="sidebar-divider">
 
@@ -27,42 +28,40 @@
   Main
 </div>
 
-<!-- Nav Item - Pages Collapse Menu -->
-<li class="nav-item">
-  <a class="nav-link" href="index.html">
-    <i class="fab fa-fw fa-delicious"></i>
-    <span>Home</span></a>
-  <a class="nav-link" href="charts.html">
-    <i class="fas fa-fw fa-chart-area"></i>
-    <span>Charts</span></a>
-  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-    <i class="fas fa-fw fa-user-circle"></i>
-    <span>Users</span>
-  </a>
-  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-    <div class="bg-white py-2 collapse-inner rounded">
-      <h6 class="collapse-header">User:</h6>
-      <a class="collapse-item" href="buttons.html">My Profile</a>
-      <a class="collapse-item" href="cards.html">Edit</a>
-      <a class="collapse-item" href="cards.html">Change Password</a>
-    </div>
-  </div>
-  <a class="nav-link" href="charts.html">
-    <i class="fas fa-fw fa-chart-area"></i>
+<li class="nav-item <?= ($title == 'Queue Motorcycle') ? 'active' :'' ?>">
+  <a class="nav-link pb-0" href="<?= base_url('user');?>">
+    <i class="fas fa-fw fa-motorcycle"></i>
+    <span>Queue Motorcycle</span></a>
+</li>
+<li class="nav-item <?= ($title == 'Booking') ? 'active' :'' ?>">
+  <a class="nav-link pb-0" href="<?= base_url('user/userBooking');?>">
+    <i class="fas fa-fw fa-bookmark"></i>
+    <span>Booking</span></a>
+</li>
+<li class="nav-item <?= ($title == 'Transaction') ? 'active' :'' ?>">
+  <a class="nav-link" href="<?= base_url('user/userTransaction');?>">
+    <i class="fas fa-fw fa-tachometer-alt"></i>
     <span>Transaction</span></a>
 </li>
 
-<!-- Divider -->
+  <?php if($this->session->userdata('status')=='admin'):?>
+  <!-- Divider -->
 <hr class="sidebar-divider">
 
 <!-- Heading -->
 <div class="sidebar-heading">
-  Settings
+  Report & Data
 </div>
 
 <!-- Nav Item - Charts -->
 <li class="nav-item">
-  <a class="nav-link" href="charts.html">
+  <a class="nav-link pb-0" href="charts.html">
+    <i class="fas fa-fw fa-chart-area"></i>
+    <span>Users Data</span></a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link pb-0" href="charts.html">
     <i class="fas fa-fw fa-chart-area"></i>
     <span>Charts</span></a>
 </li>
@@ -73,6 +72,37 @@
     <i class="fas fa-fw fa-table"></i>
     <span>Tables</span></a>
 </li>
+<?php endif;?>
+
+<?php if($this->session->userdata('status')=='user'):?>
+<!-- Divider -->
+<hr class="sidebar-divider">
+  
+  <!-- Heading -->
+  <div class="sidebar-heading">
+    User Settings
+  </div>
+  
+  <!-- Nav Item - Charts -->
+  <li class="nav-item <?= ($this->uri->segment(2)=='userProfile')?'active':''?>">
+    <a class="nav-link pb-0" href="<?= base_url('user/userProfile')?>">
+      <i class="fas fa-fw fa-address-card"></i>
+      <span>My Profile</span></a>
+  </li>
+  
+  <li class="nav-item <?= ($this->uri->segment(2)=='userEdit')?'active':''?>">
+    <a class="nav-link pb-0" href="<?= base_url('user/userEdit')?>">
+      <i class="fas fa-fw fa-user-edit"></i>
+      <span>Edit Profile</span></a>
+  </li>
+  
+  <!-- Nav Item - Tables -->
+  <li class="nav-item <?= ($this->uri->segment(2)=='userCPass')?'active':''?>">
+    <a class="nav-link" href="<?= base_url('user/userCPass')?>">
+      <i class="fas fa-fw fa-key"></i>
+      <span>Change Password</span></a>
+  </li>
+  <?php endif;?>
 
 <!-- Divider -->
 <hr class="sidebar-divider d-none d-md-block">
