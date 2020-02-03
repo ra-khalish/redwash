@@ -69,6 +69,7 @@
     <script src="<?= base_url('assets/vendor/template_landy/')?>vendor/jquery.cookie/jquery.cookie.js"> </script>
     <script src="<?= base_url('assets/vendor/template_landy/')?>vendor/owl.carousel/owl.carousel.min.js"></script>
     <script src="<?= base_url('assets/vendor/template_landy/')?>js/front.js"></script>
+    <script src="<?= base_url('assets/')?>js/login.js"></script>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
     <!---->
     <script>

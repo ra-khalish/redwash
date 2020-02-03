@@ -67,7 +67,7 @@ class Auth extends CI_Controller{
             } else if ($user['user_role_id'] == 2) {
               $data['status'] = 'user';
               $this->session->set_userdata($data);
-              redirect('user');
+              redirect('home');
             }
             
 
@@ -78,7 +78,7 @@ class Auth extends CI_Controller{
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>');
-            redirect('auth');
+            redirect('login');
           }
 
         }else{
@@ -88,7 +88,7 @@ class Auth extends CI_Controller{
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>');
-            redirect('auth');
+            redirect('login');
         }
       }else{
         $this->session->set_flashdata('msg','<div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -97,9 +97,10 @@ class Auth extends CI_Controller{
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>');
-            redirect('auth');
+            redirect('login');
       }
     }
+
 
     public function registration()
     {
@@ -168,7 +169,7 @@ class Auth extends CI_Controller{
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>');
-            redirect('auth');
+            redirect('login');
         }
     }
 
@@ -186,7 +187,7 @@ class Auth extends CI_Controller{
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>');
-            redirect('auth');
+            redirect('home');
     }
 
     public function block()

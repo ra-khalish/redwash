@@ -31,24 +31,57 @@
   <body>
     <!-- navbar-->
     <header class="header">
-      <nav class="navbar navbar-expand-lg fixed-top"><a href="index.html" class="navbar-brand">Red Wash</a>
+      <nav class="navbar navbar-expand-lg fixed-top"><a href="<?= base_url('home');?>" class="navbar-brand">Red Wash</a>
         <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right"><span></span><span></span><span></span></button>
         <div id="navbarSupportedContent" class="collapse navbar-collapse">
           <ul class="navbar-nav ml-auto align-items-start align-items-lg-center">
             <li class="nav-item"><a href="#about-us" class="nav-link link-scroll">About Us</a></li>
             <li class="nav-item"><a href="#features" class="nav-link link-scroll">Features</a></li>
             <li class="nav-item"><a href="#testimonials" class="nav-link link-scroll">Testimonials</a></li>
-            <li class="nav-item"><a href="<?= base_url('login');?>" class="nav-link">Login</a></li>
+        <?php if($this->session->userdata('status') == 'user'):?>
+            <li class="nav-item"><a href="<?= base_url('home/text');?>" class="nav-link">Booking</a></li>
           </ul>
+        <?php else:?>
           <div class="navbar-text">   
-            <!-- Button trigger modal--><a href="<?= base_url('auth/registration');?>" class="btn btn-primary navbar-btn btn-shadow btn-gradient">Sign Up</a>
+            <!-- Button trigger modal--><a href="<?= base_url('registration');?>" class="btn btn-primary navbar-btn btn-shadow btn-gradient">Sign Up</a>
             <!-- Button trigger modal--><!--<a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary navbar-btn btn-shadow btn-gradient">Sign Up</a>-->
           </div>
+        <?php endif;?>
         </div>
       </nav>
     </header>
-    <!-- Modal>
-    <div id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
+
+    <!-- Login -->
+    <div id="loginModal" tabindex="-1" role="dialog" aria-labelledby="logineModalLabel" aria-hidden="true" class="modal fade">
+      <div role="document" class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="loginModalLabel" class="modal-title">Login</h5>
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+          </div>
+          <div class="modal-body">
+            <form id="signupform" class="login_form" action="<?= base_url('auth/do_login');?>" method="POST">
+              <div class="alert alert-danger d-none" id="msg_div">
+                <span id="res_message"></span>
+              </div>
+              <div class="form-group">
+                <label for="fullname">Username</label>
+                <input type="text" name="username" placeholder="Username" id="username">
+              </div>
+              <div class="form-group">
+                <label for="username">Password</label>
+                <input type="password" name="password" placeholder="Password" id="password">
+              </div>
+              <div class="form-group">
+                <button type="submit" id="send_form" class="submit btn btn-primary btn-shadow btn-gradient">Login</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <!--<div id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
       <div role="document" class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
