@@ -39,7 +39,7 @@
             <li class="nav-item"><a href="#features" class="nav-link link-scroll">Features</a></li>
             <li class="nav-item"><a href="#testimonials" class="nav-link link-scroll">Testimonials</a></li>
         <?php if($this->session->userdata('status') == 'user'):?>
-            <li class="nav-item"><a href="<?= base_url('home/text');?>" class="nav-link">Booking</a></li>
+            <li class="nav-item"><a href="<?= base_url('user/userBooking');?>" class="nav-link">Booking</a></li>
           </ul>
         <?php else:?>
           <div class="navbar-text">   
