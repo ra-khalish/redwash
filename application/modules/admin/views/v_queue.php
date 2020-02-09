@@ -4,6 +4,8 @@
 <!-- Page Heading -->
 <h1 class="h3 mb-4 text-gray-800"><?= $title;?></h1>
 
+<?= $this->session->flashdata('msg');?>
+
 <div class="card-deck">
   <div class="card">
     <div class="card-body">
@@ -20,7 +22,7 @@
       <?php foreach ($queue as $key => $q): ?>
         <tr>
           <th scope="row"><?= $no;?></th>
-          <td><?= $q->noplat;?></td>
+          <td><?= $q['noplat'];?></td>
         </tr>
       <?php $no++;?>
       <?php endforeach;?>
@@ -43,10 +45,14 @@
         </tr>
       </thead>
       <tbody>
+      <?php $no=1;?>
+      <?php foreach ($processed as $key => $p): ?>
         <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
+          <th scope="row"><?= $no;?></th>
+          <td><?= $p['noplat'];?></td>
         </tr>
+      <?php $no++;?>
+      <?php endforeach;?>
       </tbody>
     </table>
     </div>
@@ -66,10 +72,14 @@
         </tr>
       </thead>
       <tbody>
+      <?php $no=1;?>
+      <?php foreach ($completed as $key => $c): ?>
         <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
+          <th scope="row"><?= $no;?></th>
+          <td><?= $c['noplat'];?></td>
         </tr>
+      <?php $no++;?>
+      <?php endforeach;?>
       </tbody>
     </table>
     </div>

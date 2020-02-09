@@ -29,11 +29,9 @@ class User extends CI_Controller{
         $data['title'] = 'Booking';
         $data['user'] = $this->m_user->getUser('users', $useremail);
 
-        $this->load->view('templates/header',$data);
-        $this->load->view('templates/sidebar',$data);
-        $this->load->view('templates/topbar',$data);
+        $this->load->view('templates/home_header',$data);
         $this->load->view('v_booking', $data);
-        $this->load->view('templates/footer');
+        $this->load->view('templates/home_footer');
     }
 
     public function userTransaction()
