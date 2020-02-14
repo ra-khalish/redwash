@@ -46,7 +46,7 @@
       </thead>
       <tbody>
       <?php $no=1;?>
-      <?php foreach ($processed as $key => $p): ?>
+      <?php foreach (array_slice($processed,0,2) as $key => $p): ?>
         <tr>
           <th scope="row"><?= $no;?></th>
           <td><?= $p['noplat'];?></td>

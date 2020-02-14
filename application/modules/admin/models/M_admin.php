@@ -50,4 +50,36 @@ class M_admin extends CI_Model{
     public function insertBook($table, $data) {
         $this->db->insert($table, $data);
     }
+
+    //generate dataTable serverside method
+    function getTransaction() {
+        $this->datatables->select('nm_consumer,contact,code_booking,noplat,tot_cost,status,ctime');
+        $this->datatables->from('tbl_washing');
+        $this->datatables->where('ctime',date("Y-m-d"));
+        $this->datatables->add_column('view', '<a href="javascript:void(0);" class="edit_record btn btn-info" data-consumer="$1" data-contact="$2" data-booking="$3" data-noplat="$4" data-cost="$5" data-status="$6" data-ctime="$7">Edit</a>  <a href="javascript:void(0);" class="delete_record btn btn-danger" data-booking="$3">Delete</a>','nm_consumer,contact,code_booking,noplat,tot_cost,status,ctime');
+        return $this->datatables->generate();
+    // $query = $this->db->get('tbl_washing');
+    // return $query->result();
+    }
+
+    //update data method
+    function updateTransaction(){
+        $code_booking = $this->input->post('code_booking');
+        $data = array(
+            'code_booking'  => $this->input->post('code_booking'),
+            'noplat'        => $this->input->post('noplat'),
+            'status'        => $this->input->post('status')
+        );
+        $this->db->where('code_booking',$code_booking);
+        $result = $this->db->update('tbl_washing', $data);
+        return $result;
+    }
+
+    //delete data method
+    function deleteTransaction(){
+        $code_booking = $this->input->post('code_booking');
+        $this->db->where('code_booking',$code_booking);
+        $result = $this->db->delete('tbl_washing');
+        return $result;
+    }
 }

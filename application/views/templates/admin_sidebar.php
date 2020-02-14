@@ -38,7 +38,7 @@
     <span>Booking</span></a>
 </li>
 <li class="nav-item <?= ($title == 'Transaction') ? 'active' :'' ?>">
-  <a class="nav-link" href="<?= base_url('admin/admTransaction');?>">
+  <a class="nav-link" href="<?= base_url('admin/transaction');?>">
     <i class="fas fa-fw fa-tachometer-alt"></i>
     <span>Transaction</span></a>
 </li>

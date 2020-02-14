@@ -8,9 +8,8 @@ class Admin extends CI_Controller{
         if ($this->session->userdata('status') != 'admin') {
             redirect('block');
         }
+        $this->load->library('datatables');
         $this->load->model('m_admin');
-
-
     }
 
     public function index()
@@ -52,7 +51,7 @@ class Admin extends CI_Controller{
     public function csbooking()
     {
         $useremail = $this->session->userdata('email');
-        $data['title'] = 'Booking Form';
+        $data['title'] = 'Booking';
         $data['user'] = $this->m_admin->getUser('users', $useremail);
         $data['typemc'] = $this->m_admin->gettype();
         $data['codebooking'] = $this->m_admin->bkcode();
@@ -76,7 +75,7 @@ class Admin extends CI_Controller{
             array(
                     'field' => 'noplat',
                     'label' => 'Plat Number',
-                    'rules' => 'required|trim|min_length[5]|is_unique[tbl_washing.noplat]',
+                    'rules' => 'required|trim|min_length[5]',
                     'errors' => array(
                         'is_unique' => 'This No Plat has already Booked up!'
                     ),
@@ -116,7 +115,7 @@ class Admin extends CI_Controller{
                 'tot_cost' => htmlspecialchars($this->input->post('tot_cost',true)),
                 'status' => 'Queue',
                 'cashier' => $this->session->userdata('name'),
-                'ctime' => time()
+                'ctime' => date("Y-m-d")
             ];
             $this->m_admin->insertBook('tbl_washing',$data);
             $this->session->set_flashdata('msg','<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -129,4 +128,35 @@ class Admin extends CI_Controller{
         }
     }
 
+    public function transaction()
+    {
+        $useremail      = $this->session->userdata('email');
+        $data['title']  = 'Transaction';
+        $data['user']   = $this->m_admin->getUser('users', $useremail);
+        $data['chstatus'] = ['Queue','Processed','Completed','Paid'];
+
+        //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
+        
+        $this->load->view('templates/admin_header',$data);
+        $this->load->view('templates/admin_sidebar',$data);
+        $this->load->view('templates/admin_topbar',$data);
+        $this->load->view('v_transaction', $data);
+        $this->load->view('templates/admin_footer');
+    }
+
+    function get_transaction()
+    {
+        header('Content-Type: application/json');
+        echo $this->m_admin->getTransaction();
+    }
+
+    function update_transaction(){ //update record method
+        $this->m_admin->updateTransaction();
+        redirect('admin/transaction');
+    }
+
+    function delete_transaction(){ //delete record method
+        $this->m_admin->deleteTransaction();
+        redirect('admin/transaction');
+    }
 }

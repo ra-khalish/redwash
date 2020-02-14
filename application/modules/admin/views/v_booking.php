@@ -21,14 +21,14 @@
       <div class="form-group row">
         <label for="name" class="col-sm-2 col-form-label">Name <span class="text-danger">*</span></label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="nm_consumer" name="nm_consumer" required>
+          <input type="text" class="form-control" id="nm_consumer" name="nm_consumer" value="<?= set_value('nm_consumer');?>" required>
           <?= form_error('nm_consumer'); ?>
         </div>
       </div>
       <div class="form-group row">
         <label for="contact" class="col-sm-2 col-form-label">Phone <span class="text-danger">*</span></label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="contact" name="contact" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required maxlength="12">
+          <input type="text" class="form-control" id="contact" name="contact" value="<?= set_value('contact');?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required maxlength="12">
           <?= form_error('contact'); ?>
         </div>
       </div>
@@ -38,15 +38,15 @@
       <div class="form-group row">
         <label for="noplat" class="col-sm-2 col-form-label">No Plat <span class="text-danger">*</span></label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="noplat" name="noplat" onkeyup="this.value = this.value.toUpperCase();" maxlength="9" required>
+          <input type="text" class="form-control" id="noplat" name="noplat" value="<?= set_value('noplat');?>" onkeyup="this.value = this.value.toUpperCase();" maxlength="9" required>
           <?= form_error('noplat'); ?>
         </div>
       </div>
       <div class="form-group row">
         <label for="typemotor" class="col-sm-2 col-form-label">Type <span class="text-danger">*</span></label>
         <div class="col-sm-10">
-        <select class="form-control" name="typemotor" id="typemotor">
-          <option value="0">Choose</option>
+        <select class="form-control" name="typemotor" id="typemotor" required>
+          <option value="">Choose</option>
           <?php foreach ($typemc as $key => $tm): ?>
           <option value="<?= $tm->price?>"><?= $tm->motor_type;?></option>
           <?php endforeach?>
