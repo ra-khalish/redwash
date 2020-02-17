@@ -33,13 +33,13 @@
     <span>Queue Motorcycle</span></a>
 </li>
 <li class="nav-item <?= ($title == 'Booking') ? 'active' :'' ?>">
-  <a class="nav-link pb-0" href="<?= base_url('admin/csbooking');?>">
+  <a class="nav-link pb-0" href="<?= base_url('admin/fmbooking');?>">
     <i class="fas fa-fw fa-bookmark"></i>
     <span>Booking</span></a>
 </li>
-<li class="nav-item <?= ($title == 'Transaction') ? 'active' :'' ?>">
-  <a class="nav-link" href="<?= base_url('admin/transaction');?>">
-    <i class="fas fa-fw fa-tachometer-alt"></i>
+<li class="nav-item <?= ($title == 'Order Management') ? 'active' :'' ?>">
+  <a class="nav-link" href="<?= base_url('admin/mngbooking');?>">
+    <i class="fas fa-fw fa-clipboard"></i>
     <span>Transaction</span></a>
 </li>
 

@@ -33,12 +33,13 @@ class Admin extends CI_Controller{
         $statusQ        = 'Queue';
         $statusP        = 'Processed';
         $statusC        = 'Completed';
+        $date           = date("Y-m-d");
         $data['title']  = 'Motorcycle Queue';
         $data['user']   = $this->m_admin->getUser('users', $useremail);
 
-        $data['queue']  = $this->m_admin->getqueue('tbl_washing', $statusQ);
-        $data['processed']  = $this->m_admin->getqueue('tbl_washing', $statusP);
-        $data['completed']  = $this->m_admin->getqueue('tbl_washing', $statusC);
+        $data['queue']  = $this->m_admin->getqueue('tbl_washing', $statusQ,$date);
+        $data['processed']  = $this->m_admin->getprocess('tbl_washing', $statusP,$date);
+        $data['completed']  = $this->m_admin->getcompleted('tbl_washing', $statusC,$date);
         //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
         
         $this->load->view('templates/admin_header',$data);
@@ -48,7 +49,7 @@ class Admin extends CI_Controller{
         $this->load->view('templates/admin_footer');
     }
     
-    public function csbooking()
+    public function fmbooking()
     {
         $useremail = $this->session->userdata('email');
         $data['title'] = 'Booking';
@@ -118,20 +119,15 @@ class Admin extends CI_Controller{
                 'ctime' => date("Y-m-d")
             ];
             $this->m_admin->insertBook('tbl_washing',$data);
-            $this->session->set_flashdata('msg','<div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Congratulation!</strong> Your motorcycle is already in the queue.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>');
+            $this->session->set_flashdata('alert',success("<strong>Congratulation!</strong> Motorcycle is already in the queue."));
             redirect('admin/mcqueue');
         }
     }
 
-    public function transaction()
+    public function mngbooking()
     {
         $useremail      = $this->session->userdata('email');
-        $data['title']  = 'Transaction';
+        $data['title']  = 'Order Management';
         $data['user']   = $this->m_admin->getUser('users', $useremail);
         $data['chstatus'] = ['Queue','Processed','Completed','Paid'];
 
@@ -144,19 +140,19 @@ class Admin extends CI_Controller{
         $this->load->view('templates/admin_footer');
     }
 
-    function get_transaction()
+    function get_order()
     {
         header('Content-Type: application/json');
-        echo $this->m_admin->getTransaction();
+        echo $this->m_admin->getOrder();
     }
 
-    function update_transaction(){ //update record method
-        $this->m_admin->updateTransaction();
-        redirect('admin/transaction');
+    function update_order(){ //update record method
+        $this->m_admin->updateOrder();
+        redirect('admin/mngbooking');
     }
 
-    function delete_transaction(){ //delete record method
-        $this->m_admin->deleteTransaction();
-        redirect('admin/transaction');
+    function delete_order(){ //delete record method
+        $this->m_admin->deleteOrder();
+        redirect('admin/mngbooking');
     }
 }

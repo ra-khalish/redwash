@@ -56,6 +56,9 @@
 
   <script>
   $(document).ready(function(){
+    // Notification alert
+    $("#notif").delay(350).slideDown('slow');
+        $("#notif").alert().delay(3000).slideUp('slow');
         // Setup datatables
         $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
       {
@@ -84,7 +87,7 @@
           },
               processing: true,
               serverSide: true,
-              ajax: {"url": "<?php echo base_url().'admin/get_transaction'?>", "type": "POST"},
+              ajax: {"url": "<?php echo base_url().'admin/get_order'?>", "type": "POST"},
                     columns: [
                         {"data": "nm_consumer"},
                         {"data": "contact"},
@@ -94,13 +97,17 @@
                         {"data": "tot_cost", render: $.fn.dataTable.render.number(',', '.', '')},
                         {"data": "status"},
                         {"data": "ctime"},
-                        {"data": "view"}
+                        {"data": "view",
+                          "orderable": false,
+                          "searchable": false
+                        }
                   ],
                 order: [[2, 'desc']],
           rowCallback: function(row, data, iDisplayIndex) {
               var info = this.fnPagingInfo();
               var page = info.iPage;
               var length = info.iLength;
+              var index = page * length + (iDisplayIndex + 1);
               $('td:eq(0)', row).html();
           }
 
@@ -127,27 +134,6 @@
             });
             // End delete Records
     });
-	// $(document).ready(function() {
-	// 	$('#tswashing').DataTable({
-  //     "processing": true,
-  //     "serverSide": true,
-	// 		"ajax": {
-  //       "url": "<?=base_url('admin/get_transaction')?>",
-  //       "type": "POST"
-  //     },
-  //     "order": [[2, "desc" ]],
-  //     "columns": [
-  //           { "output": "nm_consumer" },
-  //           { "output": "contact" },
-  //           { "output": "code_booking" },
-  //           { "output": "noplat" },
-  //           { "output": "tot_cost" },
-  //           { "output": "status" },
-  //           { "output": "cashier" },
-  //           { "output": "ctime" }
-  //       ]
-	// 	});
-	// });
 </script>
 </body>
 

@@ -4,7 +4,7 @@
 <!-- Page Heading -->
 <h1 class="h3 mb-4 text-gray-800"><?= $title;?></h1>
 
-<?= $this->session->flashdata('msg');?>
+<?= $this->session->flashdata('alert');?>
 
 <div class="card-deck">
   <div class="card">

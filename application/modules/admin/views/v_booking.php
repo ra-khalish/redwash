@@ -17,7 +17,7 @@
     <h6 class="card-subtitle text-muted">Fill input form for booking</h6>
     <hr class="sidebar-divider pb-1">
 
-    <form action="<?= base_url('admin/csbooking');?>" id="bookform" method="POST">
+    <form action="<?= base_url('admin/fmbooking');?>" id="bookform" method="POST">
       <div class="form-group row">
         <label for="name" class="col-sm-2 col-form-label">Name <span class="text-danger">*</span></label>
         <div class="col-sm-10">

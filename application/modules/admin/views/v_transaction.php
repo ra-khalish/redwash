@@ -4,10 +4,12 @@
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800"><?= $title;?></h1>
 
+          <?= $this->session->flashdata('alert');?>
+
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Data Transaction</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Data Management</h6>
             </div>
             <div class="card-body">
               <div class="table">
@@ -51,7 +53,7 @@
       <!-- End of Main Content -->
 
 <!-- Modal Update Status-->
-<form id="add-row-form" action="<?php echo site_url('admin/update_transaction');?>" method="post">
+<form id="update-row-form" action="<?php echo site_url('admin/update_order');?>" method="post">
 <div class="modal fade" id="ModalUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -89,7 +91,7 @@
 </form>
 
 <!-- Modal Delete Transaction-->
-<form id="add-row-form" action="<?php echo site_url('admin/delete_transaction');?>" method="post">
+<form id="delete-row-form" action="<?php echo site_url('admin/delete_order');?>" method="post">
 <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
