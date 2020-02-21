@@ -13,30 +13,25 @@
             </div>
             <div class="card-body">
               <div class="table">
-                <table class="table table-bordered" id="tswashing" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="mngwashing" width="100%" cellspacing="0">
                   <thead>
                     <tr>
                       <th>Name</th>
-                      <th>Position</th>
-                      <th>Office</th>
-                      <th>Age</th>
-                      <th>Start date</th>
-                      <th>Salary</th>
-                      <th>Salary</th>
-                      <th>Salary</th>
+                      <th>Phone</th>
+                      <th>Code Booking</th>
+                      <th>Plat Number</th>
+                      <th>Status</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                       <th>Name</th>
-                      <th>Position</th>
-                      <th>Office</th>
-                      <th>Age</th>
-                      <th>Start date</th>
-                      <th>Salary</th>
-                      <th>Salary</th>
-                      <th>Salary</th>
-                    </tr>
+                      <th>Phone</th>
+                      <th>Code Booking</th>
+                      <th>Plat Number</th>
+                      <th>Status</th>
+                      <th>Action</th>
                   </tfoot>
                   <tbody>
                     

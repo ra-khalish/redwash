@@ -8,7 +8,6 @@ class Admin extends CI_Controller{
         if ($this->session->userdata('status') != 'admin') {
             redirect('block');
         }
-        $this->load->library('datatables');
         $this->load->model('m_admin');
     }
 
@@ -27,6 +26,7 @@ class Admin extends CI_Controller{
         $this->load->view('templates/admin_footer');
     }
 
+    //Motorcycle Queue
     public function mcqueue()
     {
         $useremail      = $this->session->userdata('email');
@@ -48,7 +48,9 @@ class Admin extends CI_Controller{
         $this->load->view('v_queue', $data);
         $this->load->view('templates/admin_footer');
     }
+    //End Motorcycle Queue
     
+    //Booking Form
     public function fmbooking()
     {
         $useremail = $this->session->userdata('email');
@@ -123,7 +125,9 @@ class Admin extends CI_Controller{
             redirect('admin/mcqueue');
         }
     }
+    //End Booking Form
 
+    //Order Management
     public function mngbooking()
     {
         $useremail      = $this->session->userdata('email');
@@ -136,7 +140,7 @@ class Admin extends CI_Controller{
         $this->load->view('templates/admin_header',$data);
         $this->load->view('templates/admin_sidebar',$data);
         $this->load->view('templates/admin_topbar',$data);
-        $this->load->view('v_transaction', $data);
+        $this->load->view('v_mgbooking', $data);
         $this->load->view('templates/admin_footer');
     }
 
@@ -154,5 +158,44 @@ class Admin extends CI_Controller{
     function delete_order(){ //delete record method
         $this->m_admin->deleteOrder();
         redirect('admin/mngbooking');
+    }
+    //End Order Management
+
+    public function data_report()
+    {
+        $useremail      = $this->session->userdata('email');
+        $data['title']  = 'Data Report';
+        $data['user']   = $this->m_admin->getUser('users', $useremail);
+
+        //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
+        $startDate  = htmlspecialchars($this->input->post('startDate',true));
+        $endDate    = htmlspecialchars($this->input->post('endDate',true));
+
+        $rules = array(
+            array(
+                    'field' => 'startDate',
+                    'label' => 'Start Date',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'endDate',
+                    'label' => 'End Date',
+                    'rules' => 'required',
+            ),
+        );
+        $this->form_validation->set_rules($rules);
+        if($this->input->post() == false){
+            $this->load->view('templates/admin_header',$data);
+            $this->load->view('templates/admin_sidebar',$data);
+            $this->load->view('templates/admin_topbar',$data);
+            $this->load->view('v_report', $data);
+            $this->load->view('templates/admin_footer');
+        }else{
+            $where = "ctime BETWEEN '$startDate' AND '$endDate'";
+            $data['result'] = $this->m_admin->getReport($where);
+            $data['date'] = $this->m_admin->getReportmonth($where);
+            $data['total'] = $this->m_admin->getTotal($where);
+            $this->load->view('v_resultreport', $data);
+        }
     }
 }

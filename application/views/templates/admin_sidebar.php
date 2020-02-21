@@ -40,7 +40,7 @@
 <li class="nav-item <?= ($title == 'Order Management') ? 'active' :'' ?>">
   <a class="nav-link" href="<?= base_url('admin/mngbooking');?>">
     <i class="fas fa-fw fa-clipboard"></i>
-    <span>Transaction</span></a>
+    <span>Order Management</span></a>
 </li>
 
   <?php if($this->session->userdata('status')=='admin'):?>
@@ -59,10 +59,10 @@
     <span>Users Data</span></a>
 </li>
 
-<li class="nav-item">
-  <a class="nav-link pb-0" href="charts.html">
-    <i class="fas fa-fw fa-chart-area"></i>
-    <span>Charts</span></a>
+<li class="nav-item <?= ($title == 'Data Report') ? 'active' :'' ?>">
+  <a class="nav-link pb-0" href="<?= base_url('admin/data_report');?>">
+    <i class="fas fa-fw fa-archive"></i>
+    <span>Data Report</span></a>
 </li>
 
 <!-- Nav Item - Tables -->

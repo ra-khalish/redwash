@@ -55,10 +55,10 @@ class M_admin extends CI_Model{
 
     //generate dataTable serverside method
     function getOrder() {
-        $this->datatables->select('nm_consumer,contact,code_booking,noplat,tot_cost,status,ctime');
+        $this->datatables->select('nm_consumer,contact,code_booking,noplat,status');
         $this->datatables->from('tbl_washing');
         $this->datatables->where('ctime',date("Y-m-d"));
-        $this->datatables->add_column('view', '<a href="javascript:void(0);" class="edit_record btn btn-info" data-consumer="$1" data-contact="$2" data-booking="$3" data-noplat="$4" data-cost="$5" data-status="$6" data-ctime="$7">Edit</a>  <a href="javascript:void(0);" class="delete_record btn btn-danger" data-booking="$3">Delete</a>','nm_consumer,contact,code_booking,noplat,tot_cost,status,ctime');
+        $this->datatables->add_column('view', '<a href="javascript:void(0);" class="edit_record btn btn-info" data-booking="$3" data-noplat="$4" data-status="$6">Edit Status</a>  <a href="javascript:void(0);" class="delete_record btn btn-danger" data-booking="$3">Delete</a>','nm_consumer,contact,code_booking,noplat,tot_cost,status,ctime');
         return $this->datatables->generate();
     }
 
@@ -66,8 +66,6 @@ class M_admin extends CI_Model{
     function updateOrder(){
         $code_booking = $this->input->post('code_booking');
         $data = array(
-            'code_booking'  => $this->input->post('code_booking'),
-            'noplat'        => $this->input->post('noplat'),
             'status'        => $this->input->post('status')
         );
         $this->db->where('code_booking',$code_booking);
@@ -83,5 +81,51 @@ class M_admin extends CI_Model{
         $result = $this->db->delete('tbl_washing');
         $this->session->set_flashdata('alert',warning("Motorcycle bookings have been deleted"));
         return $result;
+    }
+
+    function getReport($where) {
+        $query = $this
+					->db
+					->select('code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,ctime')
+					->from('tbl_washing')
+					->where($where)
+					->get();
+
+		if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return NULL;
+        }
+    }
+
+    function getReportmonth($where)
+    {
+        $query = $this->db
+            ->select('monthname(ctime)as month,YEAR(ctime)as year')
+            ->distinct()
+            ->from('tbl_washing')
+            ->where($where)
+            ->get();
+            
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        } else {
+            return NULL;
+        }
+    }
+
+    function getTotal($where)
+    {
+        $query = $this->db
+            ->select('SUM(`tot_cost`)as tcost, COUNT(`id`)as tbook')
+            ->from('tbl_washing')
+            ->where($where)
+            ->get();
+            
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        } else {
+            return NULL;
+        }
     }
 }
