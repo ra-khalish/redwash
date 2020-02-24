@@ -53,15 +53,15 @@
 </div>
 
 <!-- Nav Item - Charts -->
-<li class="nav-item">
-  <a class="nav-link pb-0" href="charts.html">
-    <i class="fas fa-fw fa-chart-area"></i>
-    <span>Users Data</span></a>
+<li class="nav-item <?= ($title == 'Order Archive') ? 'active' :'' ?>">
+  <a class="nav-link pb-0" href="<?= base_url('admin/order_arc');?>">
+    <i class="fas fa-fw fa-archive "></i>
+    <span>Data Archive</span></a>
 </li>
 
 <li class="nav-item <?= ($title == 'Data Report') ? 'active' :'' ?>">
   <a class="nav-link pb-0" href="<?= base_url('admin/data_report');?>">
-    <i class="fas fa-fw fa-archive"></i>
+    <i class="fas fa-fw fa-print"></i>
     <span>Data Report</span></a>
 </li>
 

@@ -53,16 +53,37 @@ class M_admin extends CI_Model{
         $this->db->insert($table, $data);
     }
 
-    //generate dataTable serverside method
+    //generate dataTable serverside method for ordermanagement
     function getOrder() {
-        $this->datatables->select('nm_consumer,contact,code_booking,noplat,status');
+        $this->datatables->select('nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status');
         $this->datatables->from('tbl_washing');
         $this->datatables->where('ctime',date("Y-m-d"));
-        $this->datatables->add_column('view', '<a href="javascript:void(0);" class="edit_record btn btn-info" data-booking="$3" data-noplat="$4" data-status="$6">Edit Status</a>  <a href="javascript:void(0);" class="delete_record btn btn-danger" data-booking="$3">Delete</a>','nm_consumer,contact,code_booking,noplat,tot_cost,status,ctime');
+        $this->datatables->add_column('view',
+        '<a href="javascript:void(0);" class="edit_record border-0 btn-transition btn btn-outline-success btn-sm mb" 
+        data-booking="$3" data-noplat="$4" data-status="$8"><i class="fas fa-edit"></i></a> 
+        <a href="javascript:void(0);" class="pay_record border-0 btn-transition btn btn-outline-warning btn-sm mb" 
+        data-booking="$3" data-noplat="$4" data-tot_cost="$6" data-pay="$5" data-ch_cost="$7"><i class="fas fa-money-check-alt"></i></a> 
+        <a href="javascript:void(0);" class="delete_record border-0 btn-transition btn btn-outline-danger btn-sm mb" 
+        data-booking="$3"><i class="fas fa-trash"></i></a>',
+        'nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status');
         return $this->datatables->generate();
     }
 
-    //update data method
+    function getOrderarchive() {
+        $this->datatables->select('nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,ctime');
+        $this->datatables->from('tbl_washing');
+        $this->datatables->add_column('view',
+        '<a href="javascript:void(0);" class="pay_record border-0 btn-transition btn btn-outline-warning btn-sm mb" 
+        data-booking="$3" data-noplat="$4" data-tot_cost="$6" data-pay="$5" data-ch_cost="$7"><i class="fas fa-money-check-alt"></i></a>
+        <a href="javascript:void(0);" class="info_record border-0 btn-transition btn btn-outline-info btn-sm mb" data-nm_consumer="$1" data-contact="$2" 
+        data-booking="$3" data-noplat="$4" data-pay="$5" data-tot_cost="$6" data-ch_cost="$7" data-status="$8" data-ctime="$10"><i class="fas fa-info-circle"></i></a>
+        <a href="javascript:void(0);" class="delete_record border-0 btn-transition btn btn-outline-danger btn-sm mb"
+        data-booking="$3"><i class="fas fa-trash-alt"></i></a>',
+        'nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,ctime');
+        return $this->datatables->generate();
+    }
+
+    //update data method for ordermanagement
     function updateOrder(){
         $code_booking = $this->input->post('code_booking');
         $data = array(
@@ -74,7 +95,21 @@ class M_admin extends CI_Model{
         return $result;
     }
 
-    //delete data method
+    //update data method for ordermanagement
+    function updatePayment(){
+        $code_booking = $this->input->post('code_booking');
+        $data = array(
+            'pay'        => $this->input->post('pay'),
+            'ch_cost'        => $this->input->post('ch_cost'),
+            'status'    => 'Paid'
+        );
+        $this->db->where('code_booking',$code_booking);
+        $result = $this->db->update('tbl_washing', $data);
+        $this->session->set_flashdata('alert',success("The order was paid successfully"));
+        return $result;
+    }
+
+    //delete data method for ordermanagement
     function deleteOrder(){
         $code_booking = $this->input->post('code_booking');
         $this->db->where('code_booking',$code_booking);
@@ -83,6 +118,7 @@ class M_admin extends CI_Model{
         return $result;
     }
 
+    //Report Model
     function getReport($where) {
         $query = $this
 					->db
@@ -128,4 +164,5 @@ class M_admin extends CI_Model{
             return NULL;
         }
     }
+    //End Report Model
 }

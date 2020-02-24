@@ -35,9 +35,9 @@
         <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right"><span></span><span></span><span></span></button>
         <div id="navbarSupportedContent" class="collapse navbar-collapse">
           <ul class="navbar-nav ml-auto align-items-start align-items-lg-center">
-            <li class="nav-item"><a href="#about-us" class="nav-link link-scroll">About Us</a></li>
-            <li class="nav-item"><a href="#features" class="nav-link link-scroll">Features</a></li>
-            <li class="nav-item"><a href="#testimonials" class="nav-link link-scroll">Testimonials</a></li>
+            <li class="nav-item"><a href="<?= base_url('home');?>#about-us" class="nav-link link-scroll">About Us</a></li>
+            <li class="nav-item"><a href="<?= base_url('home');?>#features" class="nav-link link-scroll">Features</a></li>
+            <li class="nav-item"><a href="<?= base_url('home');?>#testimonials" class="nav-link link-scroll">Testimonials</a></li>
         <?php if($this->session->userdata('status') == 'user'):?>
             <li class="nav-item"><a href="<?= base_url('user/userBooking');?>" class="nav-link">Booking</a></li>
           </ul>

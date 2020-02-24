@@ -39,7 +39,7 @@
   </div>
 
   <!-- Bootstrap core JavaScript-->
-  <script src="<?= base_url('assets/');?>js/jquery-3.3.1.js"></script>
+  <script src="<?= base_url('assets/');?>js/jquery-3.4.1.min.js"></script>
   <!--<script src="<?= base_url('assets/');?>vendor/jquery/jquery.min.js"></script>-->
   <script src="<?= base_url('assets/');?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -48,7 +48,9 @@
 
   <!-- Custom scripts for all pages-->
   <script src="<?= base_url('assets/');?>js/sb-admin-2.min.js"></script>
+  <script src="<?= base_url('assets/');?>js/datepicker/js/gijgo.min.js"></script>
   <script src="<?= base_url('assets/');?>js/script.js"></script>
+  <script src="<?= base_url('assets/');?>js/datepick.js"></script>
 
   <!-- Page level plugins -->
   <script src="<?= base_url('assets/');?>js/jquery.dataTables.min.js"></script>
@@ -58,8 +60,9 @@
   $(document).ready(function(){
     // Notification alert
     $("#notif").delay(350).slideDown('slow');
-        $("#notif").alert().delay(3000).slideUp('slow');
-        // Setup datatables
+    $("#notif").alert().delay(3000).slideUp('slow');
+    
+    // Setup datatables
         $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
       {
           return {
@@ -73,36 +76,35 @@
           };
       };
 
-      var table = $("#tswashing").dataTable({
+      var table = $("#mngwashing").dataTable({
           initComplete: function() {
               var api = this.api();
-              $('#tswashing_filter input')
+              $('#mngwashing_filter input')
                   .off('.DT')
                   .on('input.DT', function() {
                       api.search(this.value).draw();
               });
           },
               oLanguage: {
-              sProcessing: "loading..."
+              sProcessing: "Loading..."
           },
               processing: true,
               serverSide: true,
               ajax: {"url": "<?php echo base_url().'admin/get_order'?>", "type": "POST"},
                     columns: [
+                        {"data": "code_booking"},
                         {"data": "nm_consumer"},
                         {"data": "contact"},
-                        {"data": "code_booking"},
                         {"data": "noplat"},
                         //render number format for price
-                        {"data": "tot_cost", render: $.fn.dataTable.render.number(',', '.', '')},
+                        //{"data": "tot_cost", render: $.fn.dataTable.render.number(',', '.', '')},
                         {"data": "status"},
-                        {"data": "ctime"},
                         {"data": "view",
                           "orderable": false,
                           "searchable": false
                         }
                   ],
-                order: [[2, 'desc']],
+                order: [[0, 'desc']],
           rowCallback: function(row, data, iDisplayIndex) {
               var info = this.fnPagingInfo();
               var page = info.iPage;
@@ -110,12 +112,11 @@
               var index = page * length + (iDisplayIndex + 1);
               $('td:eq(0)', row).html();
           }
-
       });
             // end setup datatables
 
             // get Edit Records
-            $('#tswashing').on('click','.edit_record',function(){
+            $('#mngwashing').on('click','.edit_record',function(){
               var booking = $(this).data('booking');
               var noplat  = $(this).data('noplat');
               var status  = $(this).data('status');
@@ -126,14 +127,159 @@
             });
             // End Edit Records
 
+            // get Pay Records
+            $('#mngwashing').on('click','.pay_record',function(){
+              var booking = $(this).data('booking');
+              var noplat  = $(this).data('noplat');
+              var tot_cost  = $(this).data('tot_cost');
+              var pay  = $(this).data('pay');
+              var ch_cost  = $(this).data('ch_cost');
+            $('#ModalPay').modal('show');
+              $('[name="code_booking"]').val(booking);
+              $('[name="noplat"]').val(noplat);
+              $('[name="tot_cost"]').val(tot_cost);
+              $('[name="pay"]').val(pay);
+              $('[name="ch_cost"]').val(ch_cost);
+            });
+            // End Pay Records
+
             // get delete Records
-            $('#tswashing').on('click','.delete_record',function(){
+            $('#mngwashing').on('click','.delete_record',function(){
+            var booking = $(this).data('booking');
+            $('#ModalDelete').modal('show');
+            $('[name="code_booking"]').val(booking);
+            });
+            // End delete Records
+
+            //Archive
+            var table = $("#arcwashing").dataTable({
+          initComplete: function() {
+              var api = this.api();
+              $('#arcwashing_filter input')
+                  .off('.DT')
+                  .on('input.DT', function() {
+                      api.search(this.value).draw();
+              });
+          },
+              oLanguage: {
+              sProcessing: "Loading..."
+          },
+              processing: true,
+              serverSide: true,
+              ajax: {"url": "<?php echo base_url().'admin/get_orderarchive'?>", "type": "POST"},
+                    columns: [
+                        {"data": "code_booking"},
+                        {"data": "noplat"},
+                        //render number format for price
+                        {"data": "pay", render: $.fn.dataTable.render.number(',', '.', '')},
+                        {"data": "tot_cost", render: $.fn.dataTable.render.number(',', '.', '')},
+                        {"data": "ch_cost", render: $.fn.dataTable.render.number(',', '.', '')},
+                        {"data": "ctime"},
+                        {"data": "cashier"},
+                        {"data": "view",
+                          "orderable": false,
+                          "searchable": false
+                        }
+                  ],
+                order: [[0, 'desc']],
+          rowCallback: function(row, data, iDisplayIndex) {
+              var info = this.fnPagingInfo();
+              var page = info.iPage;
+              var length = info.iLength;
+              var index = page * length + (iDisplayIndex + 1);
+              $('td:eq(0)', row).html();
+          }
+      });
+
+           // get Pay Records
+            $('#arcwashing').on('click','.pay_record',function(){
+              var booking = $(this).data('booking');
+              var noplat  = $(this).data('noplat');
+              var tot_cost  = $(this).data('tot_cost');
+              var pay  = $(this).data('pay');
+              var ch_cost  = $(this).data('ch_cost');
+            $('#ModalPay').modal('show');
+              $('[name="code_booking"]').val(booking);
+              $('[name="noplat"]').val(noplat);
+              $('[name="tot_cost"]').val(tot_cost);
+              $('[name="pay"]').val(pay);
+              $('[name="ch_cost"]').val(ch_cost);
+            });
+            // End Pay Records
+
+            // get Pay Records
+            $('#arcwashing').on('click','.info_record',function(){
+              var booking = $(this).data('booking');
+              var nmconsumer = $(this).data('nm_consumer');
+              var contact = $(this).data('contact');
+              var noplat  = $(this).data('noplat');
+              var pay  = $(this).data('pay');
+              var tcost  = $(this).data('tot_cost');
+              var chcost  = $(this).data('ch_cost');
+              var status  = $(this).data('status');
+            $('#ModalInfo').modal('show');
+              $('[id=booking]').text(booking);
+              $('[id="nmconsumer"]').text(nmconsumer);
+              $('[id="contact"]').text(contact);
+              $('[id="noplat"]').text(noplat);
+              $('[id="tcost"]').text(tcost);
+              $('[id="pay"]').text(pay);
+              $('[id="chcost"]').text(chcost);
+              $('[id="status"]').text(status);
+            });
+            // End Pay Records
+
+            // get delete Records
+            $('#arcwashing').on('click','.delete_record',function(){
             var booking = $(this).data('booking');
             $('#ModalDelete').modal('show');
             $('[name="code_booking"]').val(booking);
             });
             // End delete Records
     });
+</script>
+
+<script type="text/javascript">
+$(document).ready(function () {
+  $("#btnload").click(function() {
+            var action = $("#report").attr('action');
+            var report = {
+                startDate: $("#startDate").val(),
+                endDate: $("#endDate").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: action,
+                data: report,
+                beforeSend: function() {
+                    $('#btnload').html('Loading...');
+                    $('.btn').addClass('disabled');
+                },
+                success: function(result) {
+                    $("#result").html(result);
+                    $('#btnload').html('Load Report');
+                    $('.btn').removeClass('disabled');
+                }
+            });
+            return false;
+        });
+
+        $("#pay").keyup(function() {
+          var ch_cost = 0;
+          var pay = parseInt($("#pay").val());
+          var tot_cost = parseInt($("#tot_cost").val());
+
+          ch_cost = pay - tot_cost;
+          $("input[name=ch_cost]").val(ch_cost);
+
+          if (pay < tot_cost) {
+            $("#ch_cost").addClass("text-danger");
+          } else {
+            $("#ch_cost").removeClass("text-danger");
+          }
+        });
+      });
 </script>
 </body>
 

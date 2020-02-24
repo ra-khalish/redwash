@@ -13,25 +13,25 @@
             </div>
             <div class="card-body">
               <div class="table">
-                <table class="table table-bordered" id="mngwashing" width="100%" cellspacing="0">
+                <table class="table table-bordered table-responsive" id="mngwashing" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Name</th>
-                      <th>Phone</th>
-                      <th>Code Booking</th>
+                      <th width="15%">Code Booking</th>
+                      <th width="25%">Consumer Name</th>
+                      <th>Consumer Phone Number</th>
                       <th>Plat Number</th>
-                      <th>Status</th>
-                      <th>Action</th>
+                      <th width="10%">Status</th>
+                      <th width="15%">Action</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
-                      <th>Name</th>
-                      <th>Phone</th>
-                      <th>Code Booking</th>
+                      <th width="15%">Code Booking</th>
+                      <th width="25%">Consumer Name</th>
+                      <th>Consumer Phone Number</th>
                       <th>Plat Number</th>
-                      <th>Status</th>
-                      <th>Action</th>
+                      <th width="10%">Status</th>
+                      <th width="15%">Action</th>
                   </tfoot>
                   <tbody>
                     
@@ -85,6 +85,48 @@
 </div>
 </form>
 
+<!-- Modal Update Pay-->
+<form id="pay-row-form" action="<?php echo site_url('admin/update_payment');?>" method="post">
+<div class="modal fade" id="ModalPay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Payment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+            <label for="code_booking" class="col-form-label">Code Booking:</label>
+            <input type="text" name="code_booking" class="form-control" placeholder="Code Booking" readonly>
+          </div>
+          <div class="form-group">
+            <label for="noplat" class="col-form-label">Plat Number:</label>
+            <input type="text" name="noplat" class="form-control" placeholder="Plat Number" readonly>
+          </div>
+          <div class="form-group">
+            <label for="noplat" class="col-form-label">Total Cost:</label>
+            <input type="text" name="tot_cost" id="tot_cost" class="form-control" placeholder="Plat Number" readonly>
+          </div>
+          <div class="form-group">
+            <label for="noplat" class="col-form-label">Pay:</label>
+            <input type="text" name="pay" id="pay" class="form-control" placeholder="Plat Number">
+          </div>
+          <div class="form-group">
+            <label for="noplat" class="col-form-label">Change Cost:</label>
+            <input type="text" name="ch_cost" id="ch_cost" class="form-control" placeholder="Plat Number" readonly>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">Pay</button>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+
 <!-- Modal Delete Transaction-->
 <form id="delete-row-form" action="<?php echo site_url('admin/delete_order');?>" method="post">
 <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -108,3 +150,7 @@
   </div>
 </div>
 </form>
+
+<script>
+
+</script>

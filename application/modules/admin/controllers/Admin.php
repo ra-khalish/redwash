@@ -78,7 +78,7 @@ class Admin extends CI_Controller{
             array(
                     'field' => 'noplat',
                     'label' => 'Plat Number',
-                    'rules' => 'required|trim|min_length[5]',
+                    'rules' => 'required|trim|min_length[3]',
                     'errors' => array(
                         'is_unique' => 'This No Plat has already Booked up!'
                     ),
@@ -133,7 +133,7 @@ class Admin extends CI_Controller{
         $useremail      = $this->session->userdata('email');
         $data['title']  = 'Order Management';
         $data['user']   = $this->m_admin->getUser('users', $useremail);
-        $data['chstatus'] = ['Queue','Processed','Completed','Paid'];
+        $data['chstatus'] = ['Queue','Processed','Completed'];
 
         //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
         
@@ -155,11 +155,39 @@ class Admin extends CI_Controller{
         redirect('admin/mngbooking');
     }
 
+    function update_payment(){ //update payment record
+        $this->m_admin->updatePayment();
+        redirect('admin/mngbooking');
+    }
+
     function delete_order(){ //delete record method
         $this->m_admin->deleteOrder();
         redirect('admin/mngbooking');
     }
     //End Order Management
+
+    //Order Archive
+    public function order_arc()
+    {
+        $useremail      = $this->session->userdata('email');
+        $data['title']  = 'Order Archive';
+        $data['user']   = $this->m_admin->getUser('users', $useremail);
+        $data['chstatus'] = ['Queue','Processed','Completed'];
+
+        //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
+        
+        $this->load->view('templates/admin_header',$data);
+        $this->load->view('templates/admin_sidebar',$data);
+        $this->load->view('templates/admin_topbar',$data);
+        $this->load->view('v_orderarc', $data);
+        $this->load->view('templates/admin_footer');
+    }
+
+    public function get_orderarchive()
+    {
+        header('Content-Type: application/json');
+        echo $this->m_admin->getOrderarchive();
+    }
 
     public function data_report()
     {
