@@ -134,7 +134,7 @@ class M_admin extends CI_Model{
         }
     }
 
-    function getReportmonth($where)
+    function getReportdate($where)
     {
         $query = $this->db
             ->select('monthname(ctime)as month,YEAR(ctime)as year')
@@ -143,8 +143,8 @@ class M_admin extends CI_Model{
             ->where($where)
             ->get();
             
-        if ($query->num_rows() == 1) {
-            return $query->row();
+        if ($query->num_rows() > 0) {
+            return $query->result();
         } else {
             return NULL;
         }

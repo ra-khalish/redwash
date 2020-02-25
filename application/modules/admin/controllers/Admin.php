@@ -221,7 +221,7 @@ class Admin extends CI_Controller{
         }else{
             $where = "ctime BETWEEN '$startDate' AND '$endDate'";
             $data['result'] = $this->m_admin->getReport($where);
-            $data['date'] = $this->m_admin->getReportmonth($where);
+            $data['date'] = $this->m_admin->getReportdate($where);
             $data['total'] = $this->m_admin->getTotal($where);
             $this->load->view('v_resultreport', $data);
         }

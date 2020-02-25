@@ -5,12 +5,26 @@
 	<tr>
 		<td width="220px"><span class="gt">Month</span></td>
 		<td width="20px"><span class="gt">:</span></td>
-		<td><span class="gt" name="coba"><?= $date->month; ?></span></td>
+		<?php 
+			$mArray = array();
+			foreach ($date as $key => $m) {
+				$mArray[] = ($m->month);
+			}
+			$mArray = array_unique($mArray)
+		?>
+		<td><span class="gt"><?= implode(', ',$mArray); ?></span></td>
 	</tr>
 	<tr>
 		<td width="220px"><span class="gt">Year</span></td>
 		<td width="20px"><span class="gt">:</span></td>
-		<td><span class="gt"><?= $date->year; ?></span></td>
+		<?php 
+			$yArray = array();
+			foreach ($date as $key => $y) {
+				$yArray[] = ($y->year);
+			}
+			$yArray = array_unique($yArray)
+		?>
+		<td><span class="gt"><?= implode(', ',$yArray); ?></span></td>
 	</tr>
 	<tr>
 		<td width="220px"><span class="gt">Total Income</span></td>
@@ -62,9 +76,9 @@
 			<td><?= $rs['cashier']?></td>
 			<td><?= $rs['ctime']?></td>
 		</tr>
-		<?php endforeach;?>  
-		</tbody>
-	</table>
+		<?php endforeach;?>
+	</tbody>
+</table>
 </div>
 <?php }else{?>
 <div><h3 class="text-center text-danger">Cannot load data</h3>
