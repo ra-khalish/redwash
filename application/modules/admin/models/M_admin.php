@@ -70,16 +70,16 @@ class M_admin extends CI_Model{
     }
 
     function getOrderarchive() {
-        $this->datatables->select('nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,ctime');
+        $this->datatables->select('nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,ctime,etime');
         $this->datatables->from('tbl_washing');
         $this->datatables->add_column('view',
         '<a href="javascript:void(0);" class="pay_record border-0 btn-transition btn btn-outline-warning btn-sm mb" 
         data-booking="$3" data-noplat="$4" data-tot_cost="$6" data-pay="$5" data-ch_cost="$7"><i class="fas fa-money-check-alt"></i></a>
         <a href="javascript:void(0);" class="info_record border-0 btn-transition btn btn-outline-info btn-sm mb" data-nm_consumer="$1" data-contact="$2" 
-        data-booking="$3" data-noplat="$4" data-pay="$5" data-tot_cost="$6" data-ch_cost="$7" data-status="$8" data-ctime="$10"><i class="fas fa-info-circle"></i></a>
+        data-booking="$3" data-noplat="$4" data-pay="$5" data-tot_cost="$6" data-ch_cost="$7" data-status="$8"><i class="fas fa-info-circle"></i></a>
         <a href="javascript:void(0);" class="delete_record border-0 btn-transition btn btn-outline-danger btn-sm mb"
         data-booking="$3"><i class="fas fa-trash-alt"></i></a>',
-        'nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,ctime');
+        'nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,ctime,etime');
         return $this->datatables->generate();
     }
 
@@ -87,7 +87,8 @@ class M_admin extends CI_Model{
     function updateOrder(){
         $code_booking = $this->input->post('code_booking');
         $data = array(
-            'status'        => $this->input->post('status')
+            'status'        => $this->input->post('status'),
+            'etime'         => date("Y-m-d H:i:s")
         );
         $this->db->where('code_booking',$code_booking);
         $result = $this->db->update('tbl_washing', $data);
@@ -99,9 +100,10 @@ class M_admin extends CI_Model{
     function updatePayment(){
         $code_booking = $this->input->post('code_booking');
         $data = array(
-            'pay'        => $this->input->post('pay'),
-            'ch_cost'        => $this->input->post('ch_cost'),
-            'status'    => 'Paid'
+            'pay'       => $this->input->post('pay'),
+            'ch_cost'   => $this->input->post('ch_cost'),
+            'status'    => 'Paid',
+            'etime'     => date("Y-m-d H:i:s")
         );
         $this->db->where('code_booking',$code_booking);
         $result = $this->db->update('tbl_washing', $data);
@@ -122,7 +124,7 @@ class M_admin extends CI_Model{
     function getReport($where) {
         $query = $this
 					->db
-					->select('code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,ctime')
+					->select('code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,etime')
 					->from('tbl_washing')
 					->where($where)
 					->get();

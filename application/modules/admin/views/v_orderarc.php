@@ -18,24 +18,22 @@
                 <tr>
                     <th width="15%">Code Booking</th>
                     <th width="15%">Plat Number</th>
-                    <th width="15%">Pay</th>
-                    <th width="15%">Price</th>
-                    <th width="15%">Change Pay</th>
-                    <th width="15%">Date</th>
+                    <th width="15%">Status</th>
+                    <th width="15%">Start</th>
+                    <th width="15%">End</th>
                     <th>Cashier</th>
-                    <th width="10%">Action</th>
+                    <th width="15%">Action</th>
                 </tr>
                 </thead>
                 <tfoot>
                 <tr>
                     <th width="15%">Code Booking</th>
                     <th width="15%">Plat Number</th>
-                    <th width="15%">Pay</th>
-                    <th width="15%">Price</th>
-                    <th width="15%">Change Pay</th>
-                    <th width="15%">Date</th>
+                    <th width="15%">Status</th>
+                    <th width="15%">Start</th>
+                    <th width="15%">End</th>
                     <th>Cashier</th>
-                    <th width="10%">Action</th>
+                    <th width="15%">Action</th>
                 </tfoot>
                 <tbody>
                 
@@ -56,14 +54,14 @@
 <div class="modal-dialog" role="document">
 <div class="modal-content">
     <div class="modal-header">
-    <h5 class="modal-title" id="myModalLabel">Update status</h5>
+    <h5 class="modal-title" id="myModalLabel">Bill Order</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
     </div>
     <div class="modal-body">
     <div class="card">
-    <table class="table table-borderless">
+    <table class="table table-borderless table-sm">
         <tbody>
             <tr>
             <th scope="row">Code Booking</th>
@@ -130,15 +128,15 @@
         </div>
         <div class="form-group">
         <label for="noplat" class="col-form-label">Total Cost:</label>
-        <input type="text" name="tot_cost" id="tot_cost" class="form-control" placeholder="Plat Number" readonly>
+        <input type="text" name="tot_cost" id="tot_cost" class="form-control" placeholder="Total Cost" readonly>
         </div>
         <div class="form-group">
         <label for="noplat" class="col-form-label">Pay:</label>
-        <input type="text" name="pay" id="pay" class="form-control" placeholder="Plat Number">
+        <input type="text" name="pay" id="pay" class="form-control" placeholder="Pay" onkeyup="change()">
         </div>
         <div class="form-group">
         <label for="noplat" class="col-form-label">Change Cost:</label>
-        <input type="text" name="ch_cost" id="ch_cost" class="form-control" placeholder="Plat Number" readonly>
+        <input type="text" name="ch_cost" id="ch_cost" class="form-control" placeholder="Change Cost" readonly>
         </div>
     </div>
     <div class="modal-footer">

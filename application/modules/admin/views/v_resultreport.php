@@ -29,7 +29,7 @@
 	<tr>
 		<td width="220px"><span class="gt">Total Income</span></td>
 		<td width="20px"><span class="gt">:</span></td>
-		<td><span class="gt">Rp. <?= $total->tcost; ?></span></td>
+		<td><span class="gt">Rp. <?= number_format($total->tcost, 0, ",", "."); ?></span></td>
 	</tr>
 	<tr>
 		<td width="220px"><span class="gt">Number of transactions</span></td>
@@ -49,7 +49,7 @@
 			<th>Change</th>
 			<th>Status</th>
 			<th>Cashier</th>
-			<th>Date</th>
+			<th>Date time</th>
 		</tr>
 		</thead>
 		<tfoot>
@@ -61,7 +61,7 @@
 			<th>Change</th>
 			<th>Status</th>
 			<th>Cashier</th>
-			<th>Date</th>
+			<th>Date time</th>
 		</tr>
 		</tfoot>
 		<tbody>
@@ -74,7 +74,7 @@
 			<td><?= $rs['ch_cost']?></td>
 			<td><?= $rs['status']?></td>
 			<td><?= $rs['cashier']?></td>
-			<td><?= $rs['ctime']?></td>
+			<td><?= $rs['etime']?></td>
 		</tr>
 		<?php endforeach;?>
 	</tbody>

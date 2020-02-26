@@ -43,7 +43,6 @@
     <span>Order Management</span></a>
 </li>
 
-  <?php if($this->session->userdata('status')=='admin'):?>
   <!-- Divider -->
 <hr class="sidebar-divider">
 
@@ -66,20 +65,19 @@
 </li>
 
 <!-- Nav Item - Tables -->
-<li class="nav-item">
-  <a class="nav-link" href="tables.html">
-    <i class="fas fa-fw fa-table"></i>
-    <span>Tables</span></a>
-</li>
-<?php endif;?>
 
-<?php if($this->session->userdata('status')=='user'):?>
+<li class="nav-item <?= ($title == 'Users Admin') ? 'active' :'' ?>">
+  <a class="nav-link" href="<?= base_url('admin/users_admin');?>">
+    <i class="fas fa-fw fa-users"></i>
+    <span>Users</span></a>
+</li>
+
 <!-- Divider -->
 <hr class="sidebar-divider">
   
   <!-- Heading -->
   <div class="sidebar-heading">
-    User Settings
+  Settings
   </div>
   
   <!-- Nav Item - Charts -->
@@ -101,7 +99,6 @@
       <i class="fas fa-fw fa-key"></i>
       <span>Change Password</span></a>
   </li>
-  <?php endif;?>
 
 <!-- Divider -->
 <hr class="sidebar-divider d-none d-md-block">

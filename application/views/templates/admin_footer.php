@@ -104,7 +104,7 @@
                           "searchable": false
                         }
                   ],
-                order: [[0, 'desc']],
+                order: [[0, 'asc']],
           rowCallback: function(row, data, iDisplayIndex) {
               var info = this.fnPagingInfo();
               var page = info.iPage;
@@ -171,10 +171,9 @@
                         {"data": "code_booking"},
                         {"data": "noplat"},
                         //render number format for price
-                        {"data": "pay", render: $.fn.dataTable.render.number(',', '.', '')},
-                        {"data": "tot_cost", render: $.fn.dataTable.render.number(',', '.', '')},
-                        {"data": "ch_cost", render: $.fn.dataTable.render.number(',', '.', '')},
+                        {"data": "status"},
                         {"data": "ctime"},
+                        {"data": "etime"},
                         {"data": "cashier"},
                         {"data": "view",
                           "orderable": false,
@@ -207,7 +206,7 @@
             });
             // End Pay Records
 
-            // get Pay Records
+            // get Info Records
             $('#arcwashing').on('click','.info_record',function(){
               var booking = $(this).data('booking');
               var nmconsumer = $(this).data('nm_consumer');
@@ -227,7 +226,7 @@
               $('[id="chcost"]').text(chcost);
               $('[id="status"]').text(status);
             });
-            // End Pay Records
+            // End Info Records
 
             // get delete Records
             $('#arcwashing').on('click','.delete_record',function(){
@@ -264,22 +263,23 @@ $(document).ready(function () {
             });
             return false;
         });
-
-        $("#pay").keyup(function() {
-          var ch_cost = 0;
-          var pay = parseInt($("#pay").val());
-          var tot_cost = parseInt($("#tot_cost").val());
-
-          ch_cost = pay - tot_cost;
-          $("input[name=ch_cost]").val(ch_cost);
-
-          if (pay < tot_cost) {
-            $("#ch_cost").addClass("text-danger");
-          } else {
-            $("#ch_cost").removeClass("text-danger");
-          }
-        });
       });
+</script>
+<script>
+function change() {
+	var ch_cost = 0;
+	var pay = parseInt($("input[name=pay]").val());
+	var tot_cost = parseInt($("#tot_cost").val());
+
+	ch_cost = pay - tot_cost;
+	$("input[name=ch_cost]").val(ch_cost);
+
+	if (pay < tot_cost) {
+		$("#ch_cost").addClass("text-danger");
+	} else {
+		$("#ch_cost").removeClass("text-danger");
+	}
+}
 </script>
 </body>
 

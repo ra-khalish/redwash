@@ -18,19 +18,16 @@
         </tr>
       </thead>
       <tbody>
-      <?php $no=1;?>
+      <?php $no='#';?>
       <?php foreach ($queue as $key => $q): ?>
         <tr>
-          <th scope="row"><?= $no;?></th>
+          <th scope="row"><?= $q['code_booking']?></th>
           <td><?= $q['noplat'];?></td>
         </tr>
       <?php $no++;?>
       <?php endforeach;?>
       </tbody>
     </table>
-    </div>
-    <div class="card-footer">
-      <small class="text-muted">Last updated 3 mins ago</small>
     </div>
   </div>
 
@@ -45,19 +42,16 @@
         </tr>
       </thead>
       <tbody>
-      <?php $no=1;?>
+      <?php $no='#';?>
       <?php foreach (array_slice($processed,0,2) as $key => $p): ?>
         <tr>
-          <th scope="row"><?= $no;?></th>
+          <th scope="row"><?= $p['code_booking']?></th>
           <td><?= $p['noplat'];?></td>
         </tr>
       <?php $no++;?>
       <?php endforeach;?>
       </tbody>
     </table>
-    </div>
-    <div class="card-footer">
-      <small class="text-muted">Last updated 3 mins ago</small>
     </div>
   </div>
 
@@ -72,19 +66,16 @@
         </tr>
       </thead>
       <tbody>
-      <?php $no=1;?>
+      <?php $no='#';?>
       <?php foreach ($completed as $key => $c): ?>
         <tr>
-          <th scope="row"><?= $no;?></th>
+          <th scope="row"><?= $c['code_booking']?></th>
           <td><?= $c['noplat'];?></td>
         </tr>
       <?php $no++;?>
       <?php endforeach;?>
       </tbody>
     </table>
-    </div>
-    <div class="card-footer">
-      <small class="text-muted">Last updated 3 mins ago</small>
     </div>
   </div>
 </div>

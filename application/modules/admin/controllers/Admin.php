@@ -118,7 +118,7 @@ class Admin extends CI_Controller{
                 'tot_cost' => htmlspecialchars($this->input->post('tot_cost',true)),
                 'status' => 'Queue',
                 'cashier' => $this->session->userdata('name'),
-                'ctime' => date("Y-m-d")
+                'ctime' => date("Y-m-d H:i:s")
             ];
             $this->m_admin->insertBook('tbl_washing',$data);
             $this->session->set_flashdata('alert',success("<strong>Congratulation!</strong> Motorcycle is already in the queue."));
@@ -172,7 +172,6 @@ class Admin extends CI_Controller{
         $useremail      = $this->session->userdata('email');
         $data['title']  = 'Order Archive';
         $data['user']   = $this->m_admin->getUser('users', $useremail);
-        $data['chstatus'] = ['Queue','Processed','Completed'];
 
         //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
         
@@ -225,5 +224,20 @@ class Admin extends CI_Controller{
             $data['total'] = $this->m_admin->getTotal($where);
             $this->load->view('v_resultreport', $data);
         }
+    }
+
+    public function users_admin()
+    {
+        $useremail      = $this->session->userdata('email');
+        $data['title']  = 'Users Admin';
+        $data['user']   = $this->m_admin->getUser('users', $useremail);
+
+        //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
+        
+        $this->load->view('templates/admin_header',$data);
+        $this->load->view('templates/admin_sidebar',$data);
+        $this->load->view('templates/admin_topbar',$data);
+        $this->load->view('v_usersadmin', $data);
+        $this->load->view('templates/admin_footer');
     }
 }

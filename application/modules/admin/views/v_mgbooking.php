@@ -111,7 +111,7 @@
           </div>
           <div class="form-group">
             <label for="noplat" class="col-form-label">Pay:</label>
-            <input type="text" name="pay" id="pay" class="form-control" placeholder="Plat Number">
+            <input type="text" name="pay" id="pay" class="form-control" placeholder="Plat Number" onkeyup="change()">
           </div>
           <div class="form-group">
             <label for="noplat" class="col-form-label">Change Cost:</label>
