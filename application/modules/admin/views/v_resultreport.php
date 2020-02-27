@@ -49,7 +49,7 @@
 			<th>Change</th>
 			<th>Status</th>
 			<th>Cashier</th>
-			<th>Date time</th>
+			<th>Date</th>
 		</tr>
 		</thead>
 		<tfoot>
@@ -61,7 +61,7 @@
 			<th>Change</th>
 			<th>Status</th>
 			<th>Cashier</th>
-			<th>Date time</th>
+			<th>Date</th>
 		</tr>
 		</tfoot>
 		<tbody>

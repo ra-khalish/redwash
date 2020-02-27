@@ -124,7 +124,7 @@ class M_admin extends CI_Model{
     function getReport($where) {
         $query = $this
 					->db
-					->select('code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,etime')
+					->select('code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,date(etime)as etime')
 					->from('tbl_washing')
 					->where($where)
 					->get();
