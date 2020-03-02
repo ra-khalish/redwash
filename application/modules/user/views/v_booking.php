@@ -1,57 +1,83 @@
-    <section>
+    <section id="queue">
       <div class="container">
         <div class="row block">
           <div class="col-lg-9">
             <ul class="breadcrumb">
-              <li class="breadcrumb-item"><a href="<?= base_url('home');?>">Home</a></li>
-              <li class="breadcrumb-item">Booking</li>
+              <li class="breadcrumb-item"><a href="<?= base_url('user/queue');?>">Queue</a></li>
+              <li class="breadcrumb-item">Booking Form</li>
             </ul>
-            <h1>Booking Page</h1>
-            <p class="lead">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p>
+            <h1>Booking Form</h1>
           </div>
         </div>
-        <div class="row d-flex align-items-center block">
-          <div class="col-lg-6 image"><img src="img/feature-1.png" alt="..." class="img-fluid"></div>
-          <div class="col-lg-6 text">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p>
+        <a class="lead btn btn-primary mb-2" href="<?= base_url('user/queue');?>" role="button"><i class="fas fa-arrow-circle-left"></i>Back</></a>
+        <!-- Begin Page Content -->
+        <!-- Basic Card Example -->
+        <div class="card-body">
+        <div class="card mx-auto" style="max-width: 640px;">
+        <div class="card-body">
+        <h5><span class="badge badge-info float-right"><?= $codebooking?></span></h5>
+        <h5 class="card-title">Booking Form</h5>
+        <h6 class="card-subtitle text-muted">Fill input form for booking</h6>
+        <hr class="sidebar-divider pb-1">
+
+        <form action="<?= base_url('user/fbooking');?>" id="bookform" method="POST">
+          <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Name <span class="text-danger">*</span></label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="nm_consumer" name="nm_consumer" value="<?= $user['user_name'];?>" readonly>
+              <?= form_error('nm_consumer'); ?>
+            </div>
+            <div>
+              <input type="hidden" class="form-control" id="user_id" name="user_id" value="<?= $user['user_id'];?>" readonly>
+            </div>
           </div>
-        </div>
-        <div class="row d-flex align-items-center block">
-          <div class="col-lg-6 text text-right order-2 order-lg-1">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p>
+          <div class="form-group row">
+            <label for="contact" class="col-sm-2 col-form-label">Phone <span class="text-danger">*</span></label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="contact" name="contact" value="<?= $user['user_contact'];?>" readonly>
+              <?= form_error('contact'); ?>
+            </div>
           </div>
-          <div class="col-lg-6 image order-1 order-lg-2"><img src="img/feature-2.png" alt="..." class="img-fluid"></div>
-        </div>
-        <div class="block">       
-          <blockquote class="blockquote">
-            <p class="mb-0">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum</p>
-            <footer class="blockquote-footer">Someone famous in 
-              <cite title="Source Title">Source Title</cite>
-            </footer>
-          </blockquote>
-        </div>
-        <div class="row d-flex align-items-center block">
-          <div class="col-lg-6 image"><img src="img/feature-3.png" alt="..." class="img-fluid"></div>
-          <div class="col-lg-6 text">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p>
+          <div class="form-group row">
+              <input type="hidden" class="form-control" id="code_booking" name="code_booking" value="<?= $codebooking?>" readonly>
           </div>
-        </div>
-        <div class="row block no-margin-bottom">
-          <div class="col-lg-9">
-            <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
-            <h2>Header Level 2</h2>
-            <ol>
-              <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-              <li>Aliquam tincidunt mauris eu risus.</li>
-            </ol>
-            <h3>Header Level 3</h3>
-            <ul>
-              <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-              <li>Aliquam tincidunt mauris eu risus.                    </li>
-            </ul>
+          <div class="form-group row">
+            <label for="noplat" class="col-sm-2 col-form-label">No Plat <span class="text-danger">*</span></label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="noplat" name="noplat" value="<?= set_value('noplat');?>" onkeyup="this.value = this.value.toUpperCase();" maxlength="9" required>
+              <?= form_error('noplat'); ?>
+            </div>
           </div>
+          <div class="form-group row">
+            <label for="typemotor" class="col-sm-2 col-form-label">Type <span class="text-danger">*</span></label>
+            <div class="col-sm-10">
+            <select class="form-control" name="typemotor" id="typemotor" required>
+              <option value="">Choose</option>
+              <?php foreach ($typemc as $key => $tm): ?>
+              <option value="<?= $tm->price?>"><?= $tm->motor_type;?></option>
+              <?php endforeach?>
+            </select>
+            <?= form_error('typemotor'); ?>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="total" class="col-sm-2 col-form-label">Total Amount :</label>
+            <div class="col-sm-10">
+              <input type="text" readonly class="form-control-plaintext form-control-lg" id="tot_cost" name="tot_cost" value="0" required>
+            </div>
+          </div>
+          <hr class="sidebar-divider pb-3">
+          <div class="form-group row">
+            <div class="col-sm-10">
+              <button type="submit" class="btn btn-primary float-left">Submit</button>
+            </div>
+          </div>
+        </form>
+
         </div>
+        </div>
+        </div>
+
+        
       </div>
     </section>
-    

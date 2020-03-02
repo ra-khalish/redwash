@@ -51,6 +51,7 @@
     <script src="<?= base_url('assets/vendor/template_landy/')?>vendor/jquery.cookie/jquery.cookie.js"> </script>
     <script src="<?= base_url('assets/vendor/template_landy/')?>vendor/owl.carousel/owl.carousel.min.js"></script>
     <script src="<?= base_url('assets/vendor/template_landy/')?>js/front.js"></script>
+    <script src="<?= base_url('assets/')?>js/script.js"></script>
     <!-- Logout Modal-->
   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -69,5 +70,10 @@
       </div>
     </div>
   </div>
+
+  <script>
+    $("#notif").delay(350).slideDown('slow');
+    $("#notif").alert().delay(3000).slideUp('slow');
+  </script>
   </body>
 </html>

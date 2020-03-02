@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="<?= base_url('assets/vendor/template_landy/')?>css/style.default.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="<?= base_url('assets/vendor/template_landy/')?>css/custom.css">
+    <link rel="stylesheet" href="<?= base_url('assets/')?>css/style.css">
+    <link href="<?= base_url('assets/');?>vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="favicon.png">
   </head>
@@ -32,11 +34,7 @@
         <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right"><span></span><span></span><span></span></button>
         <div id="navbarSupportedContent" class="collapse navbar-collapse">
           <ul class="navbar-nav ml-auto align-items-start align-items-lg-center">
-            <li class="nav-item"><a href="<?= base_url('home');?>#about-us" class="nav-link link-scroll">About Us</a></li>
-            <li class="nav-item"><a href="<?= base_url('home');?>#features" class="nav-link link-scroll">Features</a></li>
-            <li class="nav-item"><a href="<?= base_url('home');?>#testimonials" class="nav-link link-scroll">Testimonials</a></li>
         <?php if($this->session->userdata('status') == 'user'):?>
-            <li class="nav-item"><a href="<?= base_url('user/queue');?>" class="nav-link">RedWash Queue</a></li>
             <!-- Example single danger button -->
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
@@ -49,7 +47,7 @@
                 <a class="dropdown-item" href="#">
                   Profile
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="<?= base_url('user/transaction');?>">
                   Transaction
                 </a>
                 <div class="dropdown-divider"></div>
