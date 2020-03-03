@@ -15,11 +15,11 @@
                     <h1 class="h4 text-gray-900 mb-4">Login Page</h1>
                   </div>
 
-                  <?= $this->session->flashdata('msg');?>
+                  <?= $this->session->flashdata('alert');?>
 
                   <form class="user" method="post" action="<?= base_url('auth')?>">
                     <div class="form-group">
-                      <input type="text" class="form-control form-control-user" id="username" name="username" placeholder="Enter Username" value="<?= set_value('username');?>">
+                      <input type="text" class="form-control form-control-user" id="username" name="username" placeholder="Enter Email or Username" value="<?= set_value('username');?>">
                       <?= form_error('username');?>
                     </div>
                     <div class="form-group">
@@ -38,7 +38,9 @@
                     <a class="small" href="<?= base_url('registration')?>">Create an Account!</a>
                   </div>
                   <div class="text-center">
-                    <a class="small" href="<?= base_url('home')?>">Back to home</a>
+                  <a class="btn btn-outline-secondary btn-sm" href="<?= base_url('home')?>" role="button">
+                    Back to home
+                  </a>
                   </div>
                 </div>
               </div>

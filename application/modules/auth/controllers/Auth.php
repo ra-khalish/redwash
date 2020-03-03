@@ -45,8 +45,9 @@ class Auth extends CI_Controller{
     {
       $username = $this->input->post('username');
       $password = $this->input->post('password');
+      $where = "user_email='$username' OR user_username='$username'";
 
-      $user = $this->m_auth->getUser('users', $username);
+      $user = $this->m_auth->getUser('users', $where);
 
       //Jika user ada
       if($user){
@@ -64,40 +65,23 @@ class Auth extends CI_Controller{
               $data['status'] = 'admin';
               $this->session->set_userdata($data);
               redirect('admin');
-            } else if ($user['user_role_id'] == 2) {
+            }else if($user['user_role_id'] == 2) {
               $data['status'] = 'user';
               $this->session->set_userdata($data);
-              redirect('home');
+              $this->session->set_flashdata('alert',success("<strong>Login Successfully</strong>"));
+              redirect('user/queue');
             }
-            
-
           }else{
-            $this->session->set_flashdata('msg','<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Wrong password!
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>');
+            $this->session->set_flashdata('alert',error('Email/Username and Password is not correct!'));
             redirect('login');
           }
-
         }else{
-          $this->session->set_flashdata('msg','<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            This username has not been activated! Please check your email.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>');
-            redirect('login');
+          $this->session->set_flashdata('alert',error('This Email/Username has not been activated! Please check your email.'));
+          redirect('login');
         }
       }else{
-        $this->session->set_flashdata('msg','<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Username is not registered! Please register.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>');
-            redirect('login');
+        $this->session->set_flashdata('alert',error('Email/Username is not registered! Please register.'));
+        redirect('login');
       }
     }
 
@@ -130,6 +114,14 @@ class Auth extends CI_Controller{
           ),
         ),
         array(
+          'field' => 'contact',
+          'label' => 'Contact Number',
+          'rules' => 'required|trim|is_unique[users.user_contact]',
+          'errors' => array(
+            'is_unique' => 'This contact number has already was taken!'
+          ),
+        ),
+        array(
           'field' => 'password1',
           'label' => 'Password',
           'rules' => 'required|trim|min_length[8]|matches[password2]',
@@ -145,32 +137,120 @@ class Auth extends CI_Controller{
         )
       );
       $this->form_validation->set_error_delimiters('<small class="text-danger pl-3">','</small>');
-        $this->form_validation->set_rules($rules);
+      $this->form_validation->set_rules($rules);
         if($this->form_validation->run() == false){
-            $data['title'] = 'BlueWash Registration';
+            $data['title'] = 'RedWash Registration';
             $this->load->view('templates/auth_header',$data);
             $this->load->view('v_registration');
             $this->load->view('templates/auth_footer');
         }else {
+            $email = $this->input->post('email',true);
             $data = [
-                'user_name' => htmlspecialchars($this->input->post('name',ture)),
+                'user_name' => htmlspecialchars($this->input->post('name',true)),
                 'user_username' => htmlspecialchars($this->input->post('username',true)),
-                'user_email' => htmlspecialchars($this->input->post('email',true)),
+                'user_email' => htmlspecialchars($email),
                 'user_image' => 'default.jpg',
                 'user_password' => password_hash($this->input->post('password1'),PASSWORD_DEFAULT),
                 'user_role_id' => 2,
-                'user_is_active' => 1,
+                'user_is_active' => 0,
                 'user_ctime' => time()
             ];
+
+            //token
+            $token = base64_encode(random_bytes(32));
+            $users_token = [
+              'user_email' => $email,
+              'user_token' => $token,
+              'user_cdate' => time()
+            ];
             $this->m_auth->insertReg('users',$data);
-            $this->session->set_flashdata('msg','<div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Congratulation!</strong> Your account has been created, Please Login.
+            $this->m_auth->insertTkn('users_token',$users_token);
+            
+            $this->_sendEmail($token, 'verify');
+            $this->session->set_flashdata('alert',success('<strong>Congratulation!</strong> Your account has been created, Please Check your email.'));
+            redirect('login');
+        }
+    }
+
+    private function _sendEmail($token, $type)
+    {
+      $config = array(
+        'protocol'  => 'smtp',
+        'smtp_host' => 'ssl://smtp.googlemail.com',
+        'smtp_user' => 'radevman403@gmail.com',
+        'smtp_pass' => 'devraf430',
+        'smtp_port' => 465,
+        'mailtype'  => 'html',
+        'charset'   => 'utf-8',
+        'newline'   => "\r\n"
+      );
+
+      //$this->load->library('email',$config);
+      $this->email->initialize($config);
+
+      $this->email->from('radevman403','Admin RedWash');
+      $this->email->to($this->input->post('email'));
+
+      if($type == 'verify'){
+        $this->email->subject('Account Verification');
+        $this->email->message('Click this link to verify you account : 
+          <a href="'.base_url() . 'auth/verify?email=' . $this->input->post('email') 
+          . '&token=' . urlencode($token) . '">Activate</a>');
+      }
+
+      if($this->email->send()){
+        return true;
+      }else{
+        echo $this->email->print_debugger();
+        die;
+      }
+    }
+
+    public function verify()
+    {
+      $email = $this->input->get('email');
+      $token = $this->input->get('token');
+
+      $user = $this->db->get_where('users',['user_email' => $email])->row_array();
+
+      if($user){
+        $users_token = $this->db->get_where('users_token',['user_token' => $token])->row_array();
+
+        if($users_token){
+          if(time() - $users_token['user_cdate'] < (60*60*24)){
+            $this->db->set('user_is_active', 1);
+            $this->db->where('user_email', $email);
+            $this->db->update('users');
+            $this->db->delete('users_token', ['user_email' => $email]);
+            
+            $this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">'. $email . ' has been activated! Please login.</div>');
+            redirect('auth');
+
+            }else{
+              $this->db->delete('users', ['user_email' => $email]);
+              $this->db->delete('users_token', ['user_email' => $email]);
+              $this->session->set_flashdata('alert',error('Email/Username is not registered! Please register.'));
+              $this->session->set_flashdata('msg','<div class="alert alert-danger" role="alert">Account activation failed! Token expired.</div>');
+              redirect('auth');
+          }
+        }else{
+          $this->session->set_flashdata('msg','<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Account activation failed! Token Invalid.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>');
-            redirect('login');
+            redirect('auth');
         }
+      }else{
+        $this->session->set_flashdata('msg','<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Account activation failed! Wrong email.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>');
+            redirect('auth');
+      }
     }
 
     public function logout()

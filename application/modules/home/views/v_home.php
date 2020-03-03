@@ -5,7 +5,7 @@
           <div class="col-lg-6 text order-2 order-lg-1">
             <h1>Red &mdash; Wash&nbsp;</h1>
             <p class="hero-text">Clean, Shiny and Quick</p>
-            <div class="CTA"><a href="#features" class="btn btn-primary btn-shadow btn-gradient link-scroll">Discover More</a><a href="#" class="btn btn-outline-primary">Sign Up Now</a></div>
+            <div class="CTA"><a href="#features" class="btn btn-primary btn-shadow btn-gradient link-scroll">Discover More</a><a href="<?= base_url('registration')?>" class="btn btn-outline-primary">Sign Up Now</a></div>
           </div>
           <div class="col-lg-6 order-1 order-lg-2"><img src="<?= base_url('assets/vendor/template_landy/')?>img/motorsatu.png" alt="..." class="img-fluid"></div>
         </div>
