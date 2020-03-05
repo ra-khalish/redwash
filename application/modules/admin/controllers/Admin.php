@@ -9,6 +9,7 @@ class Admin extends CI_Controller{
             redirect('block');
         }
         $this->load->model('m_admin');
+        $this->load->library('pdf');
     }
 
     public function index()
@@ -17,12 +18,20 @@ class Admin extends CI_Controller{
         $data['title'] = 'Dashboard';
         $data['user'] = $this->m_admin->getUser('users', $useremail);
         
+        $statusQ        = 'Queue';
+        $statusP        = 'Processed';
+        $statusC        = 'Completed';
+        $date           = date("Y-m-d");
+        $data['queue']  = $this->m_admin->getctqueue($statusQ,$date);
+        $data['process']  = $this->m_admin->getctprocess($statusP,$date);
+        $data['annual']  = $this->m_admin->getannual('tbl_washing',$date);
+        $data['monthly']  = $this->m_admin->getmonthly('tbl_washing',$date);
         //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
         
         $this->load->view('templates/admin_header',$data);
         $this->load->view('templates/admin_sidebar',$data);
         $this->load->view('templates/admin_topbar',$data);
-        $this->load->view('v_admin', $data);
+        $this->load->view('v_dashboard', $data);
         $this->load->view('templates/admin_footer');
     }
 
@@ -86,11 +95,6 @@ class Admin extends CI_Controller{
             array(
                     'field' => 'typemotor',
                     'label' => 'Type',
-                    'rules' => 'required'
-            ),
-            array(
-                    'field' => 'radiotierpl',
-                    'label' => 'Tier Polish',
                     'rules' => 'required'
             ),
             array(
@@ -222,10 +226,28 @@ class Admin extends CI_Controller{
             $data['result'] = $this->m_admin->getReport($where);
             $data['date'] = $this->m_admin->getReportdate($where);
             $data['total'] = $this->m_admin->getTotal($where);
+            $data['start'] = $startDate;
+            $data['end'] = $endDate;
             $this->load->view('v_resultreport', $data);
         }
     }
 
+    public function grtReport()
+    {
+        $start = $this->input->get('start');
+        $end = $this->input->get('end');
+
+        $where = "ctime BETWEEN '$start' AND '$end'";
+        $data['result'] = $this->m_admin->getReport($where);
+        $data['date'] = $this->m_admin->getReportdate($where);
+        $data['total'] = $this->m_admin->getTotal($where);
+        // $html = $this->load->view('v_resultreport', $data, true);
+        // $this->pdf->generate($html,'contoh');
+        $this->pdf->setPaper('A4', 'potrait');
+        $this->pdf->filename = "laporan-redwash.pdf";
+        $this->pdf->load_view('v_resultreport', $data);
+    }
+    
     public function users_admin()
     {
         $useremail      = $this->session->userdata('email');

@@ -6,9 +6,6 @@
 
 <!-- Basic Card Example -->
 <div class="card shadow mb-4">
-  <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Booking Form</h6>
-  </div>
     <div class="card-body">
     <div class="card mx-auto" style="max-width: 640px;">
     <div class="card-body">
@@ -52,20 +49,6 @@
           <?php endforeach?>
         </select>
         <?= form_error('typemotor'); ?>
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-sm-3">Tier Polish <span class="text-danger">*</span></div>
-        <div class="col-sm-7">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input calc" type="radio" name="radiotierpl" id="radioyes" value="5000">
-          <label class="form-check-label" for="radioyes">Yes</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input calc" type="radio" name="radiotierpl" id="radiono" value="0">
-          <label class="form-check-label" for="radiono">No</label>
-        </div>
-        <?= form_error('radiotierpl'); ?>
         </div>
       </div>
       <div class="form-group row">

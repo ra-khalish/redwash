@@ -1,6 +1,9 @@
 <?php if(!empty($result)){?>
+<link href="<?= base_url('assets/');?>css/sb-admin-2.min.css" rel="stylesheet">
 <h1 class="text-center">Redwash Report</h1>
-
+<?php if(!empty($start)){ ?>
+	<a href="<?= base_url().'admin/grtReport?start='.$start.'&end='.$end;?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm float-right"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+<?php } ?>
 <table class="table table-borderless table-sm">
 	<tr>
 		<td width="220px"><span class="gt">Month</span></td>
@@ -38,8 +41,8 @@
 	</tr>
 </table>
 
-<div class="table">
-	<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+<div class="table align-center">
+	<table class="table table-bordered" width="100%" cellspacing="0">
 		<thead>
 		<tr>
 			<th>Code Booking</th>
@@ -52,18 +55,6 @@
 			<th>Date</th>
 		</tr>
 		</thead>
-		<tfoot>
-		<tr>
-			<th>Code Booking</th>
-			<th>No Plat</th>
-			<th>Pay</th>
-			<th>Total Cost</th>
-			<th>Change</th>
-			<th>Status</th>
-			<th>Cashier</th>
-			<th>Date</th>
-		</tr>
-		</tfoot>
 		<tbody>
 		<?php foreach ($result as $key => $rs):?>
 		<tr>

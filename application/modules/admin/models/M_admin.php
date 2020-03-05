@@ -7,21 +7,65 @@ class M_admin extends CI_Model{
         return $this->db->get_where($table, ['user_email' => $email])->row_array();
     }
 
+    public function getctqueue($statusQ, $date)
+    {
+        $where = "status='$statusQ' AND date(ctime)='$date'";
+        $query = $this->db
+            ->select('COUNT(`status`)as statusq')
+            ->from('tbl_washing')
+            ->where($where)
+            ->get();
+        return $query->row();
+    }
+
+    public function getctprocess($statusP, $date)
+    {
+        $where = "status='$statusP' AND date(ctime)='$date'";
+        $query = $this->db
+            ->select('COUNT(`status`)as statusp')
+            ->from('tbl_washing')
+            ->where($where)
+            ->get();    
+        return $query->row();
+    }
+
+    public function getmonthly($table,$date)
+    {
+        $where = "MONTH(ctime) = MONTH('$date')";
+        $query = $this->db
+            ->select('SUM(`tot_cost`)AS totMonth')
+            ->from($table)
+            ->where($where)
+            ->get();    
+        return $query->row();
+    }
+
+    public function getannual($table,$date)
+    {
+        $where = "YEAR(ctime) = YEAR('$date')";
+        $query = $this->db
+            ->select('SUM(`tot_cost`)AS totYear')
+            ->from($table)
+            ->where($where)
+            ->get();    
+        return $query->row();
+    }
+
     public function getqueue($table, $statusQ, $date)
     {
-        $where = "status='$statusQ' AND ctime='$date'";
+        $where = "status='$statusQ' AND date(ctime)='$date'";
         return $this->db->get_where($table, $where)->result_array();
     }
 
     public function getprocess($table, $statusP,$date)
     {
-        $where = "status='$statusP' AND ctime='$date'";
+        $where = "status='$statusP' AND date(ctime)='$date'";
         return $this->db->get_where($table, $where)->result_array();
     }
 
     public function getcompleted($table, $statusC,$date)
     {
-        $where = "status='$statusC' AND ctime='$date'";
+        $where = "status='$statusC' AND date(ctime)='$date'";
         return $this->db->get_where($table, $where)->result_array();
     }
 
@@ -57,7 +101,7 @@ class M_admin extends CI_Model{
     function getOrder() {
         $this->datatables->select('nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status');
         $this->datatables->from('tbl_washing');
-        $this->datatables->where('ctime',date("Y-m-d"));
+        $this->datatables->where('date(ctime)',date("Y-m-d"));
         $this->datatables->add_column('view',
         '<a href="javascript:void(0);" class="edit_record border-0 btn-transition btn btn-outline-success btn-sm mb" 
         data-booking="$3" data-noplat="$4" data-status="$8"><i class="fas fa-edit"></i></a> 
@@ -88,6 +132,7 @@ class M_admin extends CI_Model{
         $code_booking = $this->input->post('code_booking');
         $data = array(
             'status'        => $this->input->post('status'),
+            'cashier'       => $this->session->userdata('name'),
             'etime'         => date("Y-m-d H:i:s")
         );
         $this->db->where('code_booking',$code_booking);
@@ -103,6 +148,7 @@ class M_admin extends CI_Model{
             'pay'       => $this->input->post('pay'),
             'ch_cost'   => $this->input->post('ch_cost'),
             'status'    => 'Paid',
+            'cashier' => $this->session->userdata('name'),
             'etime'     => date("Y-m-d H:i:s")
         );
         $this->db->where('code_booking',$code_booking);
