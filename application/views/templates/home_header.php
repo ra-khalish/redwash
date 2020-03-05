@@ -68,6 +68,7 @@
         </div>
       </nav>
     </header>
+    <?= $this->session->flashdata('alert');?>
 
     <!-- Login -->
     <div id="loginModal" tabindex="-1" role="dialog" aria-labelledby="logineModalLabel" aria-hidden="true" class="modal fade">

@@ -69,5 +69,9 @@
       </div>
     </div>
   </div>
+  <script>
+    $("#notif").delay(350).slideDown('slow');
+    $("#notif").alert().delay(3000).slideUp('slow');
+  </script>
   </body>
 </html>

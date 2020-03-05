@@ -52,6 +52,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'home';
 $route['login'] = 'auth';
 $route['registration'] = 'auth/registration';
+$route['forgot-password'] = 'auth/forgotPass';
+$route['change-password'] = 'auth/changePass';
 $route['logout'] = 'auth/logout';
 $route['block'] = 'auth/block';
 

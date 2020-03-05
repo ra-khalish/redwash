@@ -47,7 +47,7 @@ class Auth extends CI_Controller{
       $password = $this->input->post('password');
       $where = "user_email='$username' OR user_username='$username'";
 
-      $user = $this->m_auth->getUser('users', $where);
+      $user = $this->m_auth->getUserlogin('users', $where);
 
       //Jika user ada
       if($user){
@@ -193,9 +193,14 @@ class Auth extends CI_Controller{
 
       if($type == 'verify'){
         $this->email->subject('Account Verification');
-        $this->email->message('Click this link to verify you account : 
+        $this->email->message('Click this link to verify your account : 
           <a href="'.base_url() . 'auth/verify?email=' . $this->input->post('email') 
           . '&token=' . urlencode($token) . '">Activate</a>');
+      } else if($type == 'forgot'){
+        $this->email->subject('Reset Password');
+        $this->email->message('Click this link to reset your password : 
+          <a href="'.base_url() . 'auth/resetpassword?email=' . $this->input->post('email') 
+          . '&token=' . urlencode($token) . '">Reset Password</a>');
       }
 
       if($this->email->send()){
@@ -211,10 +216,10 @@ class Auth extends CI_Controller{
       $email = $this->input->get('email');
       $token = $this->input->get('token');
 
-      $user = $this->db->get_where('users',['user_email' => $email])->row_array();
+      $user = $this->m_auth->getUser('users', $email);
 
       if($user){
-        $users_token = $this->db->get_where('users_token',['user_token' => $token])->row_array();
+        $users_token = $this->m_auth->getToken('users_token', $token);
 
         if($users_token){
           if(time() - $users_token['user_cdate'] < (60*60*24)){
@@ -223,33 +228,22 @@ class Auth extends CI_Controller{
             $this->db->update('users');
             $this->db->delete('users_token', ['user_email' => $email]);
             
-            $this->session->set_flashdata('msg','<div class="alert alert-success" role="alert">'. $email . ' has been activated! Please login.</div>');
-            redirect('auth');
+            $this->session->set_flashdata('alert',success('<strong>'.$email.'</strong> has been activated! Please login.'));
+            redirect('login');
 
             }else{
               $this->db->delete('users', ['user_email' => $email]);
               $this->db->delete('users_token', ['user_email' => $email]);
-              $this->session->set_flashdata('alert',error('Email/Username is not registered! Please register.'));
-              $this->session->set_flashdata('msg','<div class="alert alert-danger" role="alert">Account activation failed! Token expired.</div>');
+              $this->session->set_flashdata('alert',error('Account activation failed! Token expired.'));
               redirect('auth');
           }
         }else{
-          $this->session->set_flashdata('msg','<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Account activation failed! Token Invalid.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>');
-            redirect('auth');
+          $this->session->set_flashdata('alert',error('Account activation failed! Token Invalid.'));
+          redirect('login');
         }
       }else{
-        $this->session->set_flashdata('msg','<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Account activation failed! Wrong email.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>');
-            redirect('auth');
+        $this->session->set_flashdata('alert',error('Account activation failed! Wrong email.'));
+        redirect('login');
       }
     }
 
@@ -261,13 +255,8 @@ class Auth extends CI_Controller{
       $this->session->unset_userdata('role_id');
       $this->session->unset_userdata('status');
 
-      $this->session->set_flashdata('msg','<div class="alert alert-success alert-dismissible fade show" role="alert">
-            You have been logged out!
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>');
-            redirect('home');
+      $this->session->set_flashdata('alert',success('You have been logged out!'));
+      redirect('home');
     }
 
     public function block()
@@ -275,4 +264,96 @@ class Auth extends CI_Controller{
       $this->load->view('templates/blocked');
     }
 
+    public function forgotPass()
+    {
+      $this->form_validation->set_rules('email','Email','trim|required|valid_email');
+      $this->form_validation->set_error_delimiters('<small class="text-danger pl-3">','</small>');
+      if($this->form_validation->run() == false){
+        $data['title'] = 'Forgot Password';
+        $this->load->view('templates/auth_header',$data);
+        $this->load->view('v_forgotpassword');
+        $this->load->view('templates/auth_footer');
+      }else{
+        $email  = $this->input->post('email');
+        $user   = $this->db->get_where('users', ['user_email' => $email, 'user_is_active' => 1])->row_array();
+
+        if($user){
+          $token = base64_encode(random_bytes(32));
+          $users_token = [
+            'user_email' => $email,
+            'user_token' => $token,
+            'user_cdate' => time()
+          ];
+
+          $this->m_auth->insertTkn('users_token',$users_token);
+          $this->_sendEmail($token,'forgot');
+          $this->session->set_flashdata('alert',success('Please check your email to reset your password!'));
+          redirect('login');
+        }else{
+          $this->session->set_flashdata('alert',error('Email is not registered or activated!'));
+          redirect('forgot-password');
+        }
+      }
+    }
+
+    public function resetpassword()
+    {
+      $email = $this->input->get('email');
+      $token = $this->input->get('token');
+
+      $user = $this->m_auth->getUser('users', $email);
+
+      if($user){
+        $users_token = $this->m_auth->getToken('users_token', $token);
+
+        if($users_token){
+          $this->session->set_userdata('reset_email', $email);
+          $this->changePass();
+        }else{
+          $this->session->set_flashdata('alert',error('Reset password failed! Wrong token.'));
+          redirect('login');
+        }
+      }else{
+        $this->session->set_flashdata('alert',error('Reset password failed! Wrong email.'));
+        redirect('login');
+      }
+    }
+
+    public function changePass()
+    {
+      if(!$this->session->userdata('reset_email')){
+        redirect('login');
+      }
+      $rules = array(
+        array(
+                'field' => 'password1',
+                'label' => 'Password',
+                'rules' => 'required|trim|min_length[8]|matches[password2]'
+        ),
+        array(
+                'field' => 'password2',
+                'label' => 'Password',
+                'rules' => 'required|trim|min_length[8]|matches[password1]'
+        )
+      );
+      $this->form_validation->set_error_delimiters('<small class="text-danger pl-3">','</small>');
+      $this->form_validation->set_rules($rules);
+      if($this->form_validation->run() == false){
+        $data['title'] = 'Change Password';
+        $this->load->view('templates/auth_header',$data);
+        $this->load->view('v_changepassword');
+        $this->load->view('templates/auth_footer');
+      }else{
+        $password = password_hash($this->input->post('password1'),PASSWORD_DEFAULT);
+        $email = $this->session->userdata('reset_email');
+
+        $this->db->set('user_password', $password);
+        $this->db->where('user_email', $email);
+        $this->db->update('users');
+
+        $this->session->unset_userdata('reset_email');
+        $this->session->set_flashdata('alert',success('Password has been changed! Please login.'));
+        redirect('login');
+      }
+    }
 }
