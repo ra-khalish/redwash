@@ -98,13 +98,25 @@
                         {"data": "noplat"},
                         //render number format for price
                         //{"data": "tot_cost", render: $.fn.dataTable.render.number(',', '.', '')},
-                        {"data": "status"},
+                        {"data": "status",
+                          "render": function (data, type, row, meta) {
+                            if(data === 'Queue'){
+                              var label = 'badge-info';
+                            }else if (data === 'Processed'){
+                              var label = 'badge-warning';
+                            }else{
+                              label = 'badge-success';
+                            }
+                            return '<h5><span class="badge ' + label + '">' + data + '</span></h5>';
+                          }
+                        },
                         {"data": "view",
                           "orderable": false,
-                          "searchable": false
+                          "searchable": false,
                         }
-                  ],
-                order: [[0, 'asc']],
+                    ],
+              order: [[0, 'asc']],
+                
           rowCallback: function(row, data, iDisplayIndex) {
               var info = this.fnPagingInfo();
               var page = info.iPage;
@@ -153,7 +165,7 @@
 
             //Archive
             var table = $("#arcwashing").dataTable({
-          initComplete: function() {
+            initComplete: function() {
               var api = this.api();
               $('#arcwashing_filter input')
                   .off('.DT')
@@ -171,7 +183,18 @@
                         {"data": "code_booking"},
                         {"data": "noplat"},
                         //render number format for price
-                        {"data": "status"},
+                        {"data": "status",
+                          "render": function (data, type, row, meta) {
+                            if(data === 'Queue'){
+                              var label = 'badge-info';
+                            }else if (data === 'Processed'){
+                              var label = 'badge-warning';
+                            }else{
+                              label = 'badge-success';
+                            }
+                            return '<h5><span class="badge ' + label + '">' + data + '</span></h5>';
+                          }
+                        },
                         {"data": "ctime"},
                         {"data": "etime"},
                         {"data": "cashier"},
