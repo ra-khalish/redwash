@@ -213,4 +213,11 @@ class M_admin extends CI_Model{
         }
     }
     //End Report Model
+
+    public function editUser($table,$data,$useremail)
+    {
+        $this->db->set($data);
+        $this->db->where('user_email',$useremail);
+        $this->db->update($table);
+    }
 }

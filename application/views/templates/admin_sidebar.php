@@ -2,7 +2,7 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
 <!-- Sidebar - Brand -->
-<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+<a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
   <div class="sidebar-brand-icon rotate-n-15">
     <i class="fab fa-rockrms"></i>
   </div>
@@ -81,23 +81,10 @@
   </div>
   
   <!-- Nav Item - Charts -->
-  <li class="nav-item <?= ($this->uri->segment(2)=='userProfile')?'active':''?>">
-    <a class="nav-link pb-0" href="<?= base_url('user/userProfile')?>">
+  <li class="nav-item <?= ($title == 'My Profile')?'active':''?>">
+    <a class="nav-link pb-3" href="<?= base_url('admin/userProfile')?>">
       <i class="fas fa-fw fa-address-card"></i>
       <span>My Profile</span></a>
-  </li>
-  
-  <li class="nav-item <?= ($this->uri->segment(2)=='userEdit')?'active':''?>">
-    <a class="nav-link pb-0" href="<?= base_url('user/userEdit')?>">
-      <i class="fas fa-fw fa-user-edit"></i>
-      <span>Edit Profile</span></a>
-  </li>
-  
-  <!-- Nav Item - Tables -->
-  <li class="nav-item <?= ($this->uri->segment(2)=='userCPass')?'active':''?>">
-    <a class="nav-link" href="<?= base_url('user/userCPass')?>">
-      <i class="fas fa-fw fa-key"></i>
-      <span>Change Password</span></a>
   </li>
 
 <!-- Divider -->

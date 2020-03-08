@@ -251,7 +251,7 @@ class Admin extends CI_Controller{
     public function users_admin()
     {
         $useremail      = $this->session->userdata('email');
-        $data['title']  = 'Users Admin';
+        $data['title']  = 'Users Management';
         $data['user']   = $this->m_admin->getUser('users', $useremail);
 
         //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
@@ -259,7 +259,118 @@ class Admin extends CI_Controller{
         $this->load->view('templates/admin_header',$data);
         $this->load->view('templates/admin_sidebar',$data);
         $this->load->view('templates/admin_topbar',$data);
-        $this->load->view('v_usersadmin', $data);
+        $this->load->view('v_userdata', $data);
         $this->load->view('templates/admin_footer');
+    }
+
+    public function userProfile()
+    {
+        $useremail      = $this->session->userdata('email');
+        $data['title']  = 'My Profile';
+        $data['user']   = $this->m_admin->getUser('users', $useremail);
+
+        $this->load->view('templates/admin_header',$data);
+        $this->load->view('templates/admin_sidebar',$data);
+        $this->load->view('templates/admin_topbar',$data);
+        $this->load->view('v_userprofile', $data);
+        $this->load->view('templates/admin_footer');
+    }
+
+    public function editProfile()
+    {
+        $useremail      = $this->session->userdata('email');
+        $data['title']  = 'My Profile';
+        $data['user']   = $this->m_admin->getUser('users', $useremail);
+
+        $rules = array(
+            array(
+                    'field' => 'name',
+                    'label' => 'Name',
+                    'rules' => 'required'
+            ),
+            array(
+                    'field' => 'contact',
+                    'label' => 'Contact',
+                    'rules' => 'required|trim|max_length[12]|integer',
+                    'errors' => array(
+                        'max_length' => 'Your number is too long',
+                    ),
+            )
+        );
+        $this->form_validation->set_rules($rules);
+        $this->form_validation->set_error_delimiters('<small class="text-danger pl-3">','</small>');
+
+        if ($this->form_validation->run() == false){
+            $this->load->view('templates/admin_header',$data);
+            $this->load->view('templates/admin_sidebar',$data);
+            $this->load->view('templates/admin_topbar',$data);
+            $this->load->view('v_userprofile', $data);
+            $this->load->view('templates/admin_footer');
+        }else{
+            $data = array(
+                'user_name' => $this->input->post('name'),
+                'user_contact' => $this->input->post('contact'),
+            );
+            $this->m_admin->editUser('users', $data, $useremail);
+            $this->session->set_flashdata('alert',success("<strong>Congratulation!</strong> Your data has been updated."));
+            redirect('admin/userProfile');
+        }
+    }
+
+    public function editPassword()
+    {
+        $useremail      = $this->session->userdata('email');
+        $data['title']  = 'My Profile';
+        $data['user']   = $this->m_admin->getUser('users', $useremail);
+
+        $rules = array(
+            array(
+                    'field' => 'current_password',
+                    'label' => 'Current Password',
+                    'rules' => 'required|trim'
+            ),
+            array(
+                    'field' => 'new_password',
+                    'label' => 'New Password',
+                    'rules' => 'required|trim|min_length[8]|matches[new_conpassword]'
+            ),
+            array(
+                'field' => 'new_conpassword',
+                'label' => 'New Confrim Password',
+                'rules' => 'required|trim|min_length[8]|matches[new_password]'
+            )
+        );
+        $this->form_validation->set_rules($rules);
+        $this->form_validation->set_error_delimiters('<small class="text-danger pl-3">','</small>');
+
+        if ($this->form_validation->run() == false){
+            $this->load->view('templates/admin_header',$data);
+            $this->load->view('templates/admin_sidebar',$data);
+            $this->load->view('templates/admin_topbar',$data);
+            $this->load->view('v_userprofile', $data);
+            $this->load->view('templates/admin_footer');
+        }else{
+            $current_password = $this->input->post('current_password');
+            $new_password = $this->input->post('new_password');
+
+            if(!password_verify($current_password, $data['user']['user_password'])){
+                $this->session->set_flashdata('alert',error("Wrong current password!"));
+                redirect('admin/userProfile');
+            }else {
+                if($current_password == $new_password){
+                    $this->session->set_flashdata('alert',error("New password cannot be the same as current password"));
+                    redirect('admin/userProfile');
+                }else {
+                    //pass ok
+                    $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
+                    $data = array(
+                        'user_password' => $password_hash
+                    );
+                    $this->m_admin->editUser('users', $data, $useremail);
+                    $this->session->set_flashdata('alert',success("Password Changed!"));
+                    redirect('admin/userProfile');
+                }
+            }
+        }
     }
 }

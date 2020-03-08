@@ -32,7 +32,7 @@
                   <?= form_error('email');?>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control form-control-user" id="contact" name="contact" placeholder="Phone Number" value="<?= set_value('contact');?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required maxlength="12">
+                  <input type="text" class="form-control form-control-user" id="contact" name="contact" placeholder="Phone Number" value="<?= set_value('contact');?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="12">
                   <?= form_error('contact');?>
                 </div>
                 <button type="submit" class="btn btn-primary btn-user btn-block">
