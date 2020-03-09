@@ -7,6 +7,7 @@
     <!-- Content Row -->
     <div class="row">
 
+    <?php if($this->session->userdata('role_id') == '1'):?>
     <!-- Earnings (Monthly) Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
     <div class="card border-left-primary shadow h-100 py-2">
@@ -40,6 +41,7 @@
         </div>
     </div>
     </div>
+    <?php endif;?>
 
     <!-- Earnings (Monthly) Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">

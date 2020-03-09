@@ -43,6 +43,7 @@
     <span>Order Management</span></a>
 </li>
 
+<?php if($this->session->userdata('role_id') == '1'):?>
   <!-- Divider -->
 <hr class="sidebar-divider">
 
@@ -71,6 +72,7 @@
     <i class="fas fa-fw fa-users"></i>
     <span>Employee</span></a>
 </li>
+<?php endif;?>
 
 <!-- Divider -->
 <hr class="sidebar-divider">

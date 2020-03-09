@@ -15,6 +15,7 @@ class Admin extends CI_Controller{
     public function index()
     {
         $useremail = $this->session->userdata('email');
+        $username = $this->session->userdata('username');
         $data['title'] = 'Dashboard';
         $data['user'] = $this->m_admin->getUser('users', $useremail);
         
@@ -39,6 +40,7 @@ class Admin extends CI_Controller{
     public function mcqueue()
     {
         $useremail      = $this->session->userdata('email');
+        $username = $this->session->userdata('username');
         $statusQ        = 'Queue';
         $statusP        = 'Processed';
         $statusC        = 'Completed';
@@ -63,6 +65,7 @@ class Admin extends CI_Controller{
     public function fmbooking()
     {
         $useremail = $this->session->userdata('email');
+        $username = $this->session->userdata('username');
         $data['title'] = 'Booking';
         $data['user'] = $this->m_admin->getUser('users', $useremail);
         $data['typemc'] = $this->m_admin->gettype();
@@ -135,6 +138,7 @@ class Admin extends CI_Controller{
     public function mngbooking()
     {
         $useremail      = $this->session->userdata('email');
+        $username = $this->session->userdata('username');
         $data['title']  = 'Order Management';
         $data['user']   = $this->m_admin->getUser('users', $useremail);
         $data['chstatus'] = ['Queue','Processed','Completed'];
@@ -173,6 +177,9 @@ class Admin extends CI_Controller{
     //Order Archive
     public function order_arc()
     {
+        if ($this->session->userdata('role_id') != '1') {
+            redirect('admin');
+        }
         $useremail      = $this->session->userdata('email');
         $data['title']  = 'Order Archive';
         $data['user']   = $this->m_admin->getUser('users', $useremail);
@@ -194,6 +201,9 @@ class Admin extends CI_Controller{
 
     public function data_report()
     {
+        if ($this->session->userdata('role_id') != '1') {
+            redirect('admin');
+        }
         $useremail      = $this->session->userdata('email');
         $data['title']  = 'Data Report';
         $data['user']   = $this->m_admin->getUser('users', $useremail);
@@ -251,6 +261,9 @@ class Admin extends CI_Controller{
     //Start Employee
     public function users_emply()
     {
+        if ($this->session->userdata('role_id') != '1') {
+            redirect('admin');
+        }
         $useremail      = $this->session->userdata('email');
         $data['title']  = 'Employee Management';
         $data['user']   = $this->m_admin->getUser('users', $useremail);

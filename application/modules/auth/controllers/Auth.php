@@ -64,6 +64,12 @@ class Auth extends CI_Controller{
             if ($user['user_role_id'] == 1) {
               $data['status'] = 'admin';
               $this->session->set_userdata($data);
+              $this->session->set_flashdata('alert',success("<strong>Login Successfully</strong>"));
+              redirect('admin');
+            }else if($user['user_role_id'] == 3) {
+              $data['status'] = 'admin';
+              $this->session->set_userdata($data);
+              $this->session->set_flashdata('alert',success("<strong>Login Successfully</strong>"));
               redirect('admin');
             }else if($user['user_role_id'] == 2) {
               $data['status'] = 'user';
