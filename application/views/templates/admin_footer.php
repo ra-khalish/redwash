@@ -258,8 +258,80 @@
             $('[name="code_booking"]').val(booking);
             });
             // End delete Records
+
+  //Table Employee
+  var table = $("#tableemply").dataTable({
+  initComplete: function() {
+    var api = this.api();
+    $('#tableemply_filter input')
+        .off('.DT')
+        .on('input.DT', function() {
+            api.search(this.value).draw();
     });
-</script>
+  },
+    oLanguage: {
+    sProcessing: "Loading..."
+  },
+    processing: true,
+    serverSide: true,
+    ajax: {"url": "<?php echo base_url().'admin/get_emply'?>", "type": "POST"},
+          columns: [
+              {"data": "user_name"},
+              {"data": "user_username"},
+              {"data": "user_contact"},
+              {"data": "user_role"},
+              //render number format for price
+              //{"data": "tot_cost", render: $.fn.dataTable.render.number(',', '.', '')},
+              {"data": "user_is_active",
+                "render": function (data, type, row, meta) {
+                  if(data === '1'){
+                    var label = 'badge-success';
+                    var status = 'Active';
+                  }else{
+                    var label = 'badge-danger';
+                    var status = 'Not Active';
+                  }
+                  return '<h5><span class="badge ' + label + '">' + status + '</span></h5>';
+                }
+              },
+              {"data": "user_ctime"},
+              {"data": "view",
+                "orderable": false,
+                "searchable": false,
+              }
+          ],
+      
+  rowCallback: function(row, data, iDisplayIndex) {
+    var info = this.fnPagingInfo();
+    var page = info.iPage;
+    var length = info.iLength;
+    var index = page * length + (iDisplayIndex + 1);
+    $('td:eq(0)', row).html();
+  }
+  });
+  // get Edit Records
+  $('#tableemply').on('click','.edit_record',function(){
+    var username = $(this).data('username');
+    var name = $(this).data('name');
+    var status  = $(this).data('status');
+  $('#ModalUpdate').modal('show');
+    $('[name="user_username"]').val(username);
+    $('[name="user_name"]').val(name);
+    $('[name="user_is_active"]').val(status);
+  });
+  // End Edit Records
+
+  // get delete Records
+  $('#tableemply').on('click','.delete_record',function(){
+    var username = $(this).data('username');
+  $('#ModalDelete').modal('show');
+    $('[name="user_username"]').val(username);
+  });
+  // End delete Records
+  //Table Employee
+
+  });
+  </script>
 
 <script type="text/javascript">
 $(document).ready(function () {
@@ -288,6 +360,7 @@ $(document).ready(function () {
         });
       });
 </script>
+
 <script>
 function change() {
 	var ch_cost = 0;

@@ -66,10 +66,10 @@
 
 <!-- Nav Item - Tables -->
 
-<li class="nav-item <?= ($title == 'Users Admin') ? 'active' :'' ?>">
-  <a class="nav-link" href="<?= base_url('admin/users_admin');?>">
+<li class="nav-item <?= ($title == 'Employee Management') ? 'active' :'' ?>">
+  <a class="nav-link" href="<?= base_url('admin/users_emply');?>">
     <i class="fas fa-fw fa-users"></i>
-    <span>Users</span></a>
+    <span>Employee</span></a>
 </li>
 
 <!-- Divider -->

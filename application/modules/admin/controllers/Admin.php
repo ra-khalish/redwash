@@ -248,10 +248,11 @@ class Admin extends CI_Controller{
         $this->pdf->load_view('v_resultreport', $data);
     }
     
-    public function users_admin()
+    //Start Employee
+    public function users_emply()
     {
         $useremail      = $this->session->userdata('email');
-        $data['title']  = 'Users Management';
+        $data['title']  = 'Employee Management';
         $data['user']   = $this->m_admin->getUser('users', $useremail);
 
         //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
@@ -259,9 +260,92 @@ class Admin extends CI_Controller{
         $this->load->view('templates/admin_header',$data);
         $this->load->view('templates/admin_sidebar',$data);
         $this->load->view('templates/admin_topbar',$data);
-        $this->load->view('v_userdata', $data);
+        $this->load->view('v_emplydata', $data);
         $this->load->view('templates/admin_footer');
     }
+
+    function get_emply()
+    {
+        header('Content-Type: application/json');
+        echo $this->m_admin->getallEmply();
+    }
+
+    public function addEmply()
+    {
+        $data = array('success' => false, 'messages' => array());
+
+        $rules = array(
+            array(
+                'field' => 'name',
+                'label' => 'Name',
+                'rules' => 'required',
+            ),
+            array(
+                'field' => 'username',
+                'label' => 'Username',
+                'rules' => 'required|trim|is_unique[users.user_username]',
+                'errors' => array('is_unique' => 'This username has already was taken!'
+                )
+            ),
+            array(
+                'field' => 'contact',
+                'label' => 'Contact',
+                'rules' => 'required|trim|min_length[11]|is_unique[users.user_contact]',
+                'errors' => array(
+                    'is_unique' => 'This contact number has already was taken!',
+                    'min_length' => 'Contact Number too short'
+                )
+            ),
+            array(
+                'field' => 'password1',
+                'label' => 'Password',
+                'rules' => 'required|trim|min_length[8]|matches[password2]',
+                'errors' => array(
+                    'matches' => 'Password dont match!',
+                    'min_length' => 'Password too short!'
+                ),
+            ),
+            array(
+                'field' => 'password2',
+                'label' => 'Confirm Password',
+                'rules' => 'required|trim|matches[password1]'
+            )
+        );
+        $this->form_validation->set_rules($rules);
+		$this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
+		if ($this->form_validation->run() == false) {
+            foreach ($this->input->post() as $key => $value) {
+				$data['messages'][$key] = form_error($key);
+			}
+		}
+		else {
+            $data['success'] = true;
+            $emply = array(
+                'user_name' => htmlspecialchars($this->input->post('name',true)),
+                'user_username' => htmlspecialchars($this->input->post('username',true)),
+                'user_contact' => htmlspecialchars($this->input->post('contact',true)),
+                'user_password' => password_hash($this->input->post('password1'),PASSWORD_DEFAULT),
+                'user_role_id' => 3,
+                'user_is_active' => 1,
+                'user_ctime' => date("Y-m-d")
+            );
+            $this->m_admin->insertEmply('users',$emply);
+			$data['message'] = $this->session->set_flashdata('alert',success("Employee data has been added!"));
+            $data['view'] = 'users_emply';
+		}
+		echo json_encode($data);
+    }
+
+    function update_emply(){ //update record method
+        $this->m_admin->updateEmply();
+        redirect('admin/users_emply');
+    }
+
+    function delete_emply(){ //delete record method
+        $this->m_admin->deleteEmply();
+        redirect('admin/users_emply');
+    }
+    //End Employee
 
     public function userProfile()
     {

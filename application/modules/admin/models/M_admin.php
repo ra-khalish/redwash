@@ -214,6 +214,49 @@ class M_admin extends CI_Model{
     }
     //End Report Model
 
+    //Start Model Employee
+    public function insertEmply($table, $data) {
+        $this->db->insert($table, $data);
+    }
+
+    function getallEmply()
+    {
+        $this->datatables->select('user_name,user_username,user_contact,id_user_role,user_role,user_is_active,user_ctime');
+        $this->datatables->from('users');
+        $this->datatables->join('users_role', 'user_role_id=id_user_role');
+        $this->datatables->where('user_role', 'Employee');
+        $this->datatables->add_column('view',
+        '<a href="javascript:void(0);" class="edit_record border-0 btn-transition btn btn-outline-success btn-sm mb" 
+        data-name="$1" data-username="$2" data-role="$5" data-status="$6"><i class="fas fa-edit"></i></a>
+        <a href="javascript:void(0);" class="delete_record border-0 btn-transition btn btn-outline-danger btn-sm mb"
+        data-username="$2"><i class="fas fa-trash-alt"></i></a>',
+        'user_name,user_username,user_contact,user_role_id,user_role,user_is_active,user_ctime');
+        return $this->datatables->generate();
+    }
+
+    function updateEmply()
+    {
+        $username = $this->input->post('user_username');
+        $active = $this->input->post('user_is_active');
+        $data = array(
+            'user_is_active'       => $active
+        );
+        $this->db->where('user_username',$username);
+        $result = $this->db->update('users', $data);
+        $this->session->set_flashdata('alert',success("Employee Data has been updated!"));
+        return $result;
+    }
+
+    function deleteEmply()
+    {
+        $username = $this->input->post('user_username');
+        $this->db->where('user_username',$username);
+        $result = $this->db->delete('users');
+        $this->session->set_flashdata('alert',warning("Employee has been deleted!"));
+        return $result;
+    }
+    //End Model Employee
+
     public function editUser($table,$data,$useremail)
     {
         $this->db->set($data);
