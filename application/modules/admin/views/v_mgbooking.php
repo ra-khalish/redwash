@@ -17,20 +17,22 @@
                   <thead>
                     <tr>
                       <th width="15%">Code Booking</th>
-                      <th width="25%">Consumer Name</th>
+                      <th width="20%">Consumer Name</th>
                       <th>Consumer Phone Number</th>
                       <th>Plat Number</th>
                       <th width="10%">Status</th>
+                      <th>Payment</th>
                       <th width="15%">Action</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                       <th width="15%">Code Booking</th>
-                      <th width="25%">Consumer Name</th>
+                      <th width="20%">Consumer Name</th>
                       <th>Consumer Phone Number</th>
                       <th>Plat Number</th>
                       <th width="10%">Status</th>
+                      <th>Payment</th>
                       <th width="15%">Action</th>
                   </tfoot>
                   <tbody>

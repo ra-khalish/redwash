@@ -36,7 +36,7 @@
                         <th>Contact Number</th>
                         <th width="15%">Role</th>
                         <th width="15%">Status</th>
-                        <th>Date Create/th>
+                        <th>Date Create</th>
                         <th width="15%">Action</th>
                     </tfoot>
                     <tbody>

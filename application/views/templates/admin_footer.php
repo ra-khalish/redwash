@@ -110,6 +110,15 @@
                             return '<h5><span class="badge ' + label + '">' + data + '</span></h5>';
                           }
                         },
+                        {"data": "payment",
+                          "render": function (data, type, row, meta) {
+                            if(row.status === 'Completed'){
+                              return data
+                            }else{
+                              return "";
+                            }
+                          }
+                        },
                         {"data": "view",
                           "orderable": false,
                           "searchable": false,

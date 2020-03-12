@@ -237,7 +237,7 @@ class Admin extends CI_Controller{
             $this->load->view('v_report', $data);
             $this->load->view('templates/admin_footer');
         }else{
-            $where = "ctime BETWEEN '$startDate' AND '$endDate'";
+            $where = "ctime >= '$startDate' AND  etime <= '$endDate'";
             $data['result'] = $this->m_admin->getReport($where);
             $data['date'] = $this->m_admin->getReportdate($where);
             $data['total'] = $this->m_admin->getTotal($where);

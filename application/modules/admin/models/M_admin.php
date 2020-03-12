@@ -102,14 +102,15 @@ class M_admin extends CI_Model{
         $this->datatables->select('nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status');
         $this->datatables->from('tbl_washing');
         $this->datatables->where('date(ctime)',date("Y-m-d"));
+        $this->datatables->add_column('payment','<a href="javascript:void(0);" class="pay_record border-0 btn-transition btn btn-outline-warning btn-sm mb" 
+        data-booking="$1" data-noplat="$2" data-tot_cost="$4" data-pay="$3" data-ch_cost="$5"><i class="fas fa-money-check-alt"></i></a> 
+        ', 'code_booking,noplat,pay,tot_cost,ch_cost');
         $this->datatables->add_column('view',
         '<a href="javascript:void(0);" class="edit_record border-0 btn-transition btn btn-outline-success btn-sm mb" 
-        data-booking="$3" data-noplat="$4" data-status="$8"><i class="fas fa-edit"></i></a> 
-        <a href="javascript:void(0);" class="pay_record border-0 btn-transition btn btn-outline-warning btn-sm mb" 
-        data-booking="$3" data-noplat="$4" data-tot_cost="$6" data-pay="$5" data-ch_cost="$7"><i class="fas fa-money-check-alt"></i></a> 
+        data-booking="$1" data-noplat="$2" data-status="$3"><i class="fas fa-edit"></i></a> 
         <a href="javascript:void(0);" class="delete_record border-0 btn-transition btn btn-outline-danger btn-sm mb" 
-        data-booking="$3"><i class="fas fa-trash"></i></a>',
-        'nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status');
+        data-booking="$1"><i class="fas fa-trash"></i></a>',
+        'code_booking,noplat,status');
         return $this->datatables->generate();
     }
 
