@@ -11,10 +11,11 @@ class User extends CI_Controller{
         $this->load->model('m_user');
     }
 
+    //Kontrol Antrian
     public function queue()
     {
         $useremail = $this->session->userdata('email');
-        $data['title'] = 'Queue';
+        $data['title'] = 'Queue Page';
         $data['user'] = $this->m_user->getUser('users', $useremail);
 
         $statusQ        = 'Queue';
@@ -31,6 +32,7 @@ class User extends CI_Controller{
         $this->load->view('templates/user_footer');
     }
 
+    //Kontrol Pemesanan
     public function fbooking()
     {
         $useremail = $this->session->userdata('email');
@@ -102,10 +104,11 @@ class User extends CI_Controller{
         }
     }
 
+    //Kontrol transaksi
     public function transaction()
     {
         $useremail = $this->session->userdata('email');
-        $data['title'] = 'Queue';
+        $data['title'] = 'Transaction';
         $data['user'] = $this->m_user->getUser('users', $useremail);
 
         $this->load->view('templates/user_header',$data);
@@ -113,29 +116,33 @@ class User extends CI_Controller{
         $this->load->view('templates/user_footer');
     }
 
-    public function userTransaction()
+    //Fungsi ambil data transaksi dengan json
+    function userTransaction()
     {
         $id = $this->session->userdata('id');
         header('Content-Type: application/json');
         echo $this->m_user->getTransaction($id);
     }
 
+    //Fungsi delete data transaksi
     function deleteTransaction(){ //delete record method
         $this->m_user->delTransaction();
         redirect('user/transaction');
     }
 
+    //Kontrol profile
     public function user_profile()
     {
         $useremail = $this->session->userdata('email');
-        $data['title'] = 'Queue';
+        $data['title'] = 'Profile';
         $data['user'] = $this->m_user->getUser('users', $useremail);
 
         $this->load->view('templates/user_header',$data);
-        $this->load->view('v_useredit', $data);
+        $this->load->view('v_userprofile', $data);
         $this->load->view('templates/user_footer');
     }
 
+    //Fungsi edit profile
     public function editProfile()
     {
         $useremail = $this->session->userdata('email');
@@ -176,6 +183,7 @@ class User extends CI_Controller{
 		echo json_encode($data);
     }
 
+    //Fungsi edit password
     public function editPass()
     {
         $useremail = $this->session->userdata('email');

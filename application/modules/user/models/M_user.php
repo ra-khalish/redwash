@@ -3,34 +3,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class M_user extends CI_Model{
     
+    //Ambil data user
     public function getUser($table, $email)
     {
         return $this->db->get_where($table, ['user_email' => $email])->row_array();
     }
 
+    //Ambil data antrian
     public function getqueue($table, $statusQ, $date)
     {
         $where = "status='$statusQ' AND date(ctime)='$date'";
         return $this->db->get_where($table, $where)->result_array();
     }
 
+    //Ambil data pengerjaan
     public function getprocess($table, $statusP,$date)
     {
         $where = "status='$statusP' AND date(ctime)='$date'";
         return $this->db->get_where($table, $where)->result_array();
     }
 
+    //Ambil data selesai
     public function getcompleted($table, $statusC,$date)
     {
         $where = "status='$statusC' AND date(ctime)='$date'";
         return $this->db->get_where($table, $where)->result_array();
     }
 
+    //Ambil data tipemotor/paket cuci motor
     public function gettype()
     {
         return $this->db->get('tbl_typemotor')->result();
     }
 
+    //Membuat kode pemesanan
     public function bkcode()
     {
         $this->db->select('RIGHT(tbl_washing.code_booking,3) as cbook',FALSE);
@@ -50,10 +56,12 @@ class M_user extends CI_Model{
         return $cdbook;
     }
 
+    //Menginput pemesanan
     public function insertBook($table, $data) {
         $this->db->insert($table, $data);
     }
 
+    //Ambil data transaksi dengan DataTables
     public function getTransaction($id) {
         $this->datatables->select('code_booking,noplat,pay,tot_cost,ch_cost,status,ctime,etime');
         $this->datatables->from('tbl_washing');
@@ -65,7 +73,7 @@ class M_user extends CI_Model{
         return $this->datatables->generate();
     }
 
-    //delete data method for ordermanagement
+    //Menghapus data transaksi
     function delTransaction(){
         $code_booking = $this->input->post('code_booking');
         $this->db->where('code_booking',$code_booking);
@@ -74,6 +82,7 @@ class M_user extends CI_Model{
         return $result;
     }
 
+    //Query untuk update data user
     public function updateData($table, $datauser, $useremail)
     {
         $this->db->set($datauser);

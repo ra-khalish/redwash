@@ -6,7 +6,7 @@
             <ul class="breadcrumb">
               <li class="breadcrumb-item">Queue</li>
             </ul>
-            <h1>Queue Page</h1>
+            <h1><?= $title;?></h1>
         </div>
     </div>
     

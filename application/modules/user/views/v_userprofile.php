@@ -6,9 +6,9 @@
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?= base_url('user/queue');?>">Queue</a></li>
                 <li class="breadcrumb-item"><?= $user['user_name'];?></li>
-                <li class="breadcrumb-item">Profile</li>
+                <li class="breadcrumb-item"><?= $title;?></li>
             </ul>
-            <h1>Profile</h1>
+            <h1><?= $title;?></h1>
         </div>
         </div>
 
