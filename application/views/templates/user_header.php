@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/vendor/template_landy/')?>css/style.default.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="<?= base_url('assets/vendor/template_landy/')?>css/custom.css">
+    <link href="<?= base_url('assets/');?>vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="<?= base_url('assets/')?>css/style.css">
     <link href="<?= base_url('assets/');?>vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <!-- Favicon-->
@@ -39,12 +40,12 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="mr-2"><?= $user['user_name'];?></span><img class="mr-2 img-profile rounded-circle img-fluid profile-size" src="<?= base_url('assets/img/profile/'). $user['user_image'];?>">
+              <span class="mr-2"><?= $user['user_name'];?></span>
               </button>
 
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="<?= base_url('user/user_profile');?>">
                   Profile
                 </a>
                 <a class="dropdown-item" href="<?= base_url('user/transaction');?>">

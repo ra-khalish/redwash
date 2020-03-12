@@ -53,4 +53,32 @@ class M_user extends CI_Model{
     public function insertBook($table, $data) {
         $this->db->insert($table, $data);
     }
+
+    public function getTransaction($id) {
+        $this->datatables->select('code_booking,noplat,pay,tot_cost,ch_cost,status,ctime,etime');
+        $this->datatables->from('tbl_washing');
+        $this->datatables->where('user_id',$id);
+        $this->datatables->add_column('view',
+        '<a href="javascript:void(0);" class="delete_record border-0 btn-transition btn btn-outline-danger btn-sm mb" 
+        data-booking="$1"><i class="fas fa-trash"></i></a>',
+        'code_booking,noplat,pay,tot_cost,ch_cost,status,ctime,etime');
+        return $this->datatables->generate();
+    }
+
+    //delete data method for ordermanagement
+    function delTransaction(){
+        $code_booking = $this->input->post('code_booking');
+        $this->db->where('code_booking',$code_booking);
+        $result = $this->db->delete('tbl_washing');
+        $this->session->set_flashdata('alert',warning("Transaction has been deleted"));
+        return $result;
+    }
+
+    public function updateData($table, $datauser, $useremail)
+    {
+        $this->db->set($datauser);
+        $this->db->where('user_email',$useremail);
+        $this->db->update($table);
+    }
+
 }

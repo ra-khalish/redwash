@@ -52,6 +52,11 @@
     <script src="<?= base_url('assets/vendor/template_landy/')?>vendor/owl.carousel/owl.carousel.min.js"></script>
     <script src="<?= base_url('assets/vendor/template_landy/')?>js/front.js"></script>
     <script src="<?= base_url('assets/')?>js/script.js"></script>
+    <script src="<?= base_url('assets/')?>js/profile.js"></script>
+    <!--Datatables-->
+    <!-- Page level plugins -->
+    <script src="<?= base_url('assets/');?>js/jquery.dataTables.min.js"></script>
+    <script src="<?= base_url('assets/');?>vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <!-- Logout Modal-->
   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -72,8 +77,89 @@
   </div>
 
   <script>
-    $("#notif").delay(350).slideDown('slow');
-    $("#notif").alert().delay(3000).slideUp('slow');
+  $("#notif").delay(350).slideDown('slow');
+  $("#notif").alert().delay(3000).slideUp('slow');
+  $(document).ready(function(){
+    $(".nav-tabs a").click(function(){
+    $(this).tab('show');
+    });
+    // Setup datatables
+        $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+      {
+          return {
+              "iStart": oSettings._iDisplayStart,
+              "iEnd": oSettings.fnDisplayEnd(),
+              "iLength": oSettings._iDisplayLength,
+              "iTotal": oSettings.fnRecordsTotal(),
+              "iFilteredTotal": oSettings.fnRecordsDisplay(),
+              "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+              "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+          };
+      };
+
+      var table = $("#tsc-user").dataTable({
+          initComplete: function() {
+              var api = this.api();
+              $('#tsc-user_filter input')
+                  .off('.DT')
+                  .on('input.DT', function() {
+                      api.search(this.value).draw();
+              });
+          },
+              oLanguage: {
+              sProcessing: "Loading..."
+          },
+              processing: true,
+              serverSide: true,
+              ajax: {"url": "<?php echo base_url().'user/userTransaction'?>", "type": "POST"},
+                    columns: [
+                        {"data": "code_booking"},
+                        {"data": "noplat"},
+                        //render number format for price
+                        {"data": "pay", render: $.fn.dataTable.render.number(',', '.', '')},
+                        {"data": "tot_cost", render: $.fn.dataTable.render.number(',', '.', '')},
+                        {"data": "ch_cost", render: $.fn.dataTable.render.number(',', '.', '')},
+                        {"data": "ctime"},
+                        {"data": "etime"},
+                        {"data": "status",
+                          "render": function (data, type, row, meta) {
+                            if(data === 'Queue'){
+                              var label = 'badge-info';
+                            }else if (data === 'Processed'){
+                              var label = 'badge-warning';
+                            }else{
+                              label = 'badge-success';
+                            }
+                            return '<h5><span class="badge ' + label + '">' + data + '</span></h5>';
+                          }
+                        },
+                        {"data": "view",
+                          "orderable": false,
+                          "searchable": false,
+                        }
+                    ],
+              order: [[0, 'asc']],
+              lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+                
+          rowCallback: function(row, data, iDisplayIndex) {
+              var info = this.fnPagingInfo();
+              var page = info.iPage;
+              var length = info.iLength;
+              var index = page * length + (iDisplayIndex + 1);
+              $('td:eq(0)', row).html();
+          }
+      });
+            // end setup datatables
+
+            // get delete Records
+            $('#tsc-user').on('click','.delete_record',function(){
+            var booking = $(this).data('booking');
+            $('#ModalDelete').modal('show');
+            $('[name="code_booking"]').val(booking);
+            });
+            //End delete Records
+
+  });
   </script>
   </body>
 </html>

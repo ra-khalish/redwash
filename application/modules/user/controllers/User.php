@@ -108,4 +108,125 @@ class User extends CI_Controller{
         $this->load->view('templates/user_footer');
     }
 
+    public function userTransaction()
+    {
+        $id = $this->session->userdata('id');
+        header('Content-Type: application/json');
+        echo $this->m_user->getTransaction($id);
+    }
+
+    function deleteTransaction(){ //delete record method
+        $this->m_user->delTransaction();
+        redirect('user/transaction');
+    }
+
+    public function user_profile()
+    {
+        $useremail = $this->session->userdata('email');
+        $data['title'] = 'Queue';
+        $data['user'] = $this->m_user->getUser('users', $useremail);
+
+        $this->load->view('templates/user_header',$data);
+        $this->load->view('v_useredit', $data);
+        $this->load->view('templates/user_footer');
+    }
+
+    public function editProfile()
+    {
+        $useremail = $this->session->userdata('email');
+        $data = array('success' => false, 'messages' => array());
+
+        $rules = array(
+            array(
+                'field' => 'name',
+                'label' => 'Name',
+                'rules' => 'required',
+            ),
+            array(
+                'field' => 'contact',
+                'label' => 'Contact',
+                'rules' => 'required|trim|min_length[11]',
+                'errors' => array(
+                    'is_unique' => 'This contact number has already was taken!',
+                    'min_length' => 'Contact Number too short'
+                )
+            )
+        );
+        $this->form_validation->set_rules($rules);
+		$this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
+		if ($this->form_validation->run() == false) {
+            foreach ($this->input->post() as $key => $value) {
+				$data['messages'][$key] = form_error($key);
+			}
+		}
+		else {
+            $data['success'] = true;
+            $datauser = array(
+                'user_name' => htmlspecialchars($this->input->post('name',true)),
+                'user_contact' => htmlspecialchars($this->input->post('contact',true)),
+            );
+            $this->m_user->updateData('users',$datauser,$useremail);
+			$data['message'] = $this->session->set_flashdata('alert',success("Profile has been updated."));
+            $data['view'] = 'user_profile';
+		}
+		echo json_encode($data);
+    }
+
+    public function editPass()
+    {
+        $useremail = $this->session->userdata('email');
+        $user =  $this->m_user->getUser('users', $useremail);
+        $data = array('success' => false, 'error' => false, 'messages' => array());
+
+        $rules = array(
+            array(
+                    'field' => 'current_password',
+                    'label' => 'Current Password',
+                    'rules' => 'required|trim'
+            ),
+            array(
+                    'field' => 'new_password',
+                    'label' => 'New Password',
+                    'rules' => 'required|trim|min_length[8]|matches[new_conpassword]'
+            ),
+            array(
+                'field' => 'new_conpassword',
+                'label' => 'New Confrim Password',
+                'rules' => 'required|trim|min_length[8]|matches[new_password]'
+            )
+        );
+        $this->form_validation->set_rules($rules);
+		$this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
+		if ($this->form_validation->run() == false) {
+            foreach ($this->input->post() as $key => $value) {
+				$data['messages'][$key] = form_error($key);
+			}
+		} else {
+            $current_password = htmlspecialchars($this->input->post('current_password',true));
+            $new_password = htmlspecialchars($this->input->post('new_password', true));
+
+            if(!password_verify($current_password, $user['user_password'])){
+                $data['error'] = true;
+                $data['message'] = $this->session->set_flashdata('alert',error("Wrong current password!"));
+                $data['view'] = 'user_profile';
+            }else {
+                if($current_password == $new_password){
+                    $data['error'] = true;
+                    $data['message'] = $this->session->set_flashdata('alert',error("New password cannot be the same as current password"));
+                    $data['view'] = 'user_profile';
+                }else {
+                    $data['success'] = true;
+                    //pass ok
+                    $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
+                    $datauser = array(
+                        'user_password' => $password_hash
+                    );
+                    $this->m_user->updateData('users',$datauser,$useremail);
+                    $data['message'] = $this->session->set_flashdata('alert',success("Password Changed!"));
+                    $data['view'] = 'user_profile';
+                }
+            }
+        }
+        echo json_encode($data);
+    }
 }
