@@ -98,7 +98,7 @@ class Auth extends CI_Controller{
       if($this->session->userdata('status') == 'admin'){
         redirect('admin');
       }else if($this->session->userdata('status') == 'user'){
-        redirect('user');
+        redirect('user/queue');
       }
 
       $rules = array(
@@ -156,11 +156,11 @@ class Auth extends CI_Controller{
                 'user_name' => htmlspecialchars($this->input->post('name',true)),
                 'user_username' => htmlspecialchars($this->input->post('username',true)),
                 'user_email' => htmlspecialchars($email),
-                'user_image' => 'default.jpg',
+                'user_contact' => htmlspecialchars($this->input->post('contact',true)),
                 'user_password' => password_hash($this->input->post('password1'),PASSWORD_DEFAULT),
                 'user_role_id' => 2,
                 'user_is_active' => 0,
-                'user_ctime' => time()
+                'user_ctime' => date("Y-m-d")
             ];
 
             //token
