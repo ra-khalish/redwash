@@ -41,6 +41,14 @@ class User extends CI_Controller{
 
         $rules = array(
             array(
+                'field' => 'code_booking',
+                'label' => 'Code Booking',
+                'rules' => 'is_unique[tbl_washing.code_booking]',
+                'errors' => array(
+                    'is_unique' => 'Please send the booking again'
+                ),
+            ),
+            array(
                     'field' => 'nm_consumer',
                     'label' => 'Consumer',
                     'rules' => 'required'
@@ -56,10 +64,7 @@ class User extends CI_Controller{
             array(
                     'field' => 'noplat',
                     'label' => 'Plat Number',
-                    'rules' => 'required|trim|min_length[3]',
-                    'errors' => array(
-                        'is_unique' => 'This No Plat has already Booked up!'
-                    ),
+                    'rules' => 'required|trim|min_length[3]'
             ),
             array(
                     'field' => 'typemotor',
@@ -147,7 +152,6 @@ class User extends CI_Controller{
                 'label' => 'Contact',
                 'rules' => 'required|trim|min_length[11]',
                 'errors' => array(
-                    'is_unique' => 'This contact number has already was taken!',
                     'min_length' => 'Contact Number too short'
                 )
             )

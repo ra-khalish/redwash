@@ -1,5 +1,6 @@
     <section id="queue">
       <div class="container">
+      <?= $this->session->flashdata('alert');?>
         <div class="row block">
           <div class="col-lg-9">
             <ul class="breadcrumb">
@@ -18,6 +19,7 @@
         <h5><span class="badge badge-info float-right"><?= $codebooking?></span></h5>
         <h5 class="card-title">Booking Form</h5>
         <h6 class="card-subtitle text-muted">Fill input form for booking</h6>
+        <span class="float-right"><?= form_error('code_booking'); ?></span>
         <hr class="sidebar-divider pb-1">
 
         <form action="<?= base_url('user/fbooking');?>" id="bookform" method="POST">

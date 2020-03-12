@@ -215,8 +215,8 @@ class M_admin extends CI_Model{
     //End Report Model
 
     //Start Model Employee
-    public function insertEmply($table, $data) {
-        $this->db->insert($table, $data);
+    public function insertEmply($table, $emply) {
+        $this->db->insert($table, $emply);
     }
 
     function getallEmply()

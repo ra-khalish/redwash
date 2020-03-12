@@ -12,9 +12,13 @@
     <h5><span class="badge badge-info float-right"><?= $codebooking?></span></h5>
     <h5 class="card-title">Booking Form</h5>
     <h6 class="card-subtitle text-muted">Fill input form for booking</h6>
+    <span class="float-right"><?= form_error('code_booking'); ?></span>
     <hr class="sidebar-divider pb-1">
 
     <form action="<?= base_url('admin/fmbooking');?>" id="bookform" method="POST">
+      <div class="form-group row">
+          <input type="hidden" class="form-control" id="code_booking" name="code_booking" value="<?= $codebooking?>" readonly>
+      </div>
       <div class="form-group row">
         <label for="name" class="col-sm-2 col-form-label">Name <span class="text-danger">*</span></label>
         <div class="col-sm-10">
@@ -28,9 +32,6 @@
           <input type="text" class="form-control" id="contact" name="contact" value="<?= set_value('contact');?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required maxlength="12">
           <?= form_error('contact'); ?>
         </div>
-      </div>
-      <div class="form-group row">
-          <input type="hidden" class="form-control" id="code_booking" name="code_booking" value="<?= $codebooking?>" readonly>
       </div>
       <div class="form-group row">
         <label for="noplat" class="col-sm-2 col-form-label">No Plat <span class="text-danger">*</span></label>

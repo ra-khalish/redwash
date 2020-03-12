@@ -75,6 +75,14 @@ class Admin extends CI_Controller{
         
         $rules = array(
             array(
+                'field' => 'code_booking',
+                'label' => 'Code Booking',
+                'rules' => 'is_unique[tbl_washing.code_booking]',
+                'errors' => array(
+                    'is_unique' => 'Please send the booking again'
+                ),
+            ),
+            array(
                     'field' => 'nm_consumer',
                     'label' => 'Consumer',
                     'rules' => 'required'
@@ -90,10 +98,7 @@ class Admin extends CI_Controller{
             array(
                     'field' => 'noplat',
                     'label' => 'Plat Number',
-                    'rules' => 'required|trim|min_length[3]',
-                    'errors' => array(
-                        'is_unique' => 'This No Plat has already Booked up!'
-                    ),
+                    'rules' => 'required|trim|min_length[3]'
             ),
             array(
                     'field' => 'typemotor',
@@ -117,19 +122,19 @@ class Admin extends CI_Controller{
             $this->load->view('v_booking', $data);
             $this->load->view('templates/admin_footer');
         } else {
-            $data = [
-                'nm_consumer' => htmlspecialchars($this->input->post('nm_consumer',true)),
-                'contact' => htmlspecialchars($this->input->post('contact',true)),
-                'code_booking' => htmlspecialchars($this->input->post('code_booking',true)),
-                'noplat' => htmlspecialchars($this->input->post('noplat',true)),
-                'tot_cost' => htmlspecialchars($this->input->post('tot_cost',true)),
-                'status' => 'Queue',
-                'cashier' => $this->session->userdata('name'),
-                'ctime' => date("Y-m-d H:i:s")
-            ];
-            $this->m_admin->insertBook('tbl_washing',$data);
-            $this->session->set_flashdata('alert',success("<strong>Congratulation!</strong> Motorcycle is already in the queue."));
-            redirect('admin/mcqueue');
+                $data = [
+                    'nm_consumer' => htmlspecialchars($this->input->post('nm_consumer',true)),
+                    'contact' => htmlspecialchars($this->input->post('contact',true)),
+                    'code_booking' => htmlspecialchars($this->input->post('code_booking',true)),
+                    'noplat' => htmlspecialchars($this->input->post('noplat',true)),
+                    'tot_cost' => htmlspecialchars($this->input->post('tot_cost',true)),
+                    'status' => 'Queue',
+                    'cashier' => $this->session->userdata('name'),
+                    'ctime' => date("Y-m-d H:i:s")
+                ];
+                $this->m_admin->insertBook('tbl_washing',$data);
+                $this->session->set_flashdata('alert',success("<strong>Congratulation!</strong> Motorcycle is already in the queue."));
+                redirect('admin/mcqueue');
         }
     }
     //End Booking Form
