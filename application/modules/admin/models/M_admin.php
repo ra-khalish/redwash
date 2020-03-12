@@ -258,9 +258,9 @@ class M_admin extends CI_Model{
     }
     //End Model Employee
 
-    public function editUser($table,$data,$useremail)
+    public function editUser($table,$datauser,$useremail)
     {
-        $this->db->set($data);
+        $this->db->set($datauser);
         $this->db->where('user_email',$useremail);
         $this->db->update($table);
     }

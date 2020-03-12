@@ -50,6 +50,7 @@
   <script src="<?= base_url('assets/');?>js/sb-admin-2.min.js"></script>
   <script src="<?= base_url('assets/');?>js/datepicker/js/gijgo.min.js"></script>
   <script src="<?= base_url('assets/');?>js/script.js"></script>
+  <script src="<?= base_url('assets/');?>js/profile.js"></script>
   <script src="<?= base_url('assets/');?>js/datepick.js"></script>
 
   <!-- Page level plugins -->

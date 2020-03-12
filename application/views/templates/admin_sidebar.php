@@ -84,7 +84,7 @@
   
   <!-- Nav Item - Charts -->
   <li class="nav-item <?= ($title == 'My Profile')?'active':''?>">
-    <a class="nav-link pb-3" href="<?= base_url('admin/userProfile')?>">
+    <a class="nav-link pb-3" href="<?= base_url('admin/admin_profile')?>">
       <i class="fas fa-fw fa-address-card"></i>
       <span>My Profile</span></a>
   </li>

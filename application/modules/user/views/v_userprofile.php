@@ -51,7 +51,7 @@
                 </table>
             </div>
             <div class="tab-pane" id="profileedit" role="tabpanel" aria-labelledby="profileedit-tab">
-            <?php echo form_open('user/editProfile', array("id" => "form-profile", "class" => "form-horizontal")) ?>
+            <?php echo form_open('user/edituserProfile', array("id" => "form-profile", "class" => "form-horizontal")) ?>
                 <div class="form-row my-4">
                     <div class="form-group col-md-6 mb-2">
                     <label for="email">Email</label>
@@ -76,17 +76,17 @@
             </form>
             </div>
             <div class="tab-pane" id="chpassword" role="tabpanel" aria-labelledby="chpassword-tab">
-            <?php echo form_open('user/editPass', array("id" => "form-chpass", "class" => "form-horizontal")) ?>
+            <?php echo form_open('user/edituserPass', array("id" => "form-chpass", "class" => "form-horizontal")) ?>
                 <div class="form-group my-4">
-                    <label for="current_password">Password</label>
+                    <label for="current_password">Current Password</label>
                     <input type="password" class="form-control" id="current_password" name="current_password">
                 </div>
                 <div class="form-group">
-                    <label for="new_password">Password</label>
+                    <label for="new_password">New Password</label>
                     <input type="password" class="form-control" id="new_password" name="new_password">
                 </div>
                 <div class="form-group">
-                    <label for="new_conpassword">Password</label>
+                    <label for="new_conpassword">Confirm Password</label>
                     <input type="password" class="form-control" id="new_conpassword" name="new_conpassword">
                 </div>
                 <button type="submit" class="form-group btn btn-primary">Submit</button>

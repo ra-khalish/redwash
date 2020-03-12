@@ -4,7 +4,7 @@
         <div class="row block">
           <div class="col-lg-9">
             <ul class="breadcrumb">
-              <li class="breadcrumb-item">Queue</li>
+              <li class="breadcrumb-item"><?= $title;?></li>
             </ul>
             <h1><?= $title;?></h1>
         </div>

@@ -51,50 +51,45 @@
                 </table>
             </div>
             <div class="tab-pane" id="profileedit" role="tabpanel" aria-labelledby="profileedit-tab">
-                <form action="<?= base_url('admin/editProfile') ?>" method="post" accept-charset="utf-8">
+            <?php echo form_open('admin/editProfile', array("id" => "form-profile", "class" => "form-horizontal")) ?>
                 <div class="form-row my-4">
-                    <div class="col-md-6 mb-2">
+                    <div class="form-group col-md-6 mb-2">
                     <label for="email">Email</label>
-                    <input type="text" class="form-control" id="email" name="email" value="<?= $user['user_email']?>" readonly>
+                    <input type="text" class="form-control" id="email" name="email" value="<?= $user['user_email'];?>" readonly>
                     </div>
-                    <div class="col-md-6 mb-2">
+                    <div class="form-group col-md-6 mb-2">
                     <label for="username">Username</label>
                     <input type="text" class="form-control" id="username" name="username" value="<?= $user['user_username'];?>" readonly>
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="col-md-6 mb-3">
+                    <div class="form-group col-md-6 mb-3">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" id="name" name="name" value="<?= $user['user_name'];?>">
-                    <?= form_error('name');?>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="form-group col-md-6 mb-3">
                     <label for="contact">Contact</label>
-                    <input type="text" class="form-control" id="contact" name="contact" value="<?= $user['user_contact'];?>">
-                    <?= form_error('contact');?>
+                    <input type="text" class="form-control" id="contact" name="contact" value="<?= $user['user_contact'];?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="12">
                     </div>
                 </div>
-                <button class="btn btn-primary btn-submit" type="submit">Submit form</button>
-                </form>
+                <button class="form-group btn btn-primary btn-submit" type="submit">Submit form</button>
+            </form>
             </div>
             <div class="tab-pane" id="password" role="tabpanel" aria-labelledby="password-tab">
-                <form action="<?= base_url('admin/editPassword'); ?>" method="post">
+            <?php echo form_open('admin/editPass', array("id" => "form-chpass", "class" => "form-horizontal")) ?>
                 <div class="form-group my-4">
-                    <label for="current_password">Password</label>
+                    <label for="current_password">Current Password</label>
                     <input type="password" class="form-control" id="current_password" name="current_password">
-                    <?= form_error('current_password');?>
                 </div>
                 <div class="form-group">
-                    <label for="new_password">Password</label>
+                    <label for="new_password">New Password</label>
                     <input type="password" class="form-control" id="new_password" name="new_password">
-                    <?= form_error('new_password');?>
                 </div>
                 <div class="form-group">
-                    <label for="new_conpassword">Password</label>
+                    <label for="new_conpassword">Confirm Password</label>
                     <input type="password" class="form-control" id="new_conpassword" name="new_conpassword">
-                    <?= form_error('new_conpassword');?>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="form-group btn btn-primary">Submit</button>
                 </form>
             </div>
             </div>

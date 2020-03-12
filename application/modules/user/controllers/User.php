@@ -143,7 +143,7 @@ class User extends CI_Controller{
     }
 
     //Fungsi edit profile
-    public function editProfile()
+    public function edituserProfile()
     {
         $useremail = $this->session->userdata('email');
         $data = array('success' => false, 'messages' => array());
@@ -184,7 +184,7 @@ class User extends CI_Controller{
     }
 
     //Fungsi edit password
-    public function editPass()
+    public function edituserPass()
     {
         $useremail = $this->session->userdata('email');
         $user =  $this->m_user->getUser('users', $useremail);
@@ -192,14 +192,14 @@ class User extends CI_Controller{
 
         $rules = array(
             array(
-                    'field' => 'current_password',
-                    'label' => 'Current Password',
-                    'rules' => 'required|trim'
+                'field' => 'current_password',
+                'label' => 'Current Password',
+                'rules' => 'required|trim'
             ),
             array(
-                    'field' => 'new_password',
-                    'label' => 'New Password',
-                    'rules' => 'required|trim|min_length[8]|matches[new_conpassword]'
+                'field' => 'new_password',
+                'label' => 'New Password',
+                'rules' => 'required|trim|min_length[8]|matches[new_conpassword]'
             ),
             array(
                 'field' => 'new_conpassword',
@@ -233,7 +233,7 @@ class User extends CI_Controller{
                     $datauser = array(
                         'user_password' => $password_hash
                     );
-                    $this->m_user->updateData('users',$datauser,$useremail);
+                    $this->m_user->editUser('users',$datauser,$useremail);
                     $data['message'] = $this->session->set_flashdata('alert',success("Password Changed!"));
                     $data['view'] = 'user_profile';
                 }

@@ -83,7 +83,7 @@ class M_user extends CI_Model{
     }
 
     //Query untuk update data user
-    public function updateData($table, $datauser, $useremail)
+    public function editUser($table,$datauser,$useremail)
     {
         $this->db->set($datauser);
         $this->db->where('user_email',$useremail);
