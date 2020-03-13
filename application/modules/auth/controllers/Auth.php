@@ -9,6 +9,7 @@ class Auth extends CI_Controller{
         $this->load->library('form_validation');
     }
 
+    //Login
     public function index()
     {
       if($this->session->userdata('status') == 'admin'){
@@ -37,7 +38,7 @@ class Auth extends CI_Controller{
         $this->load->view('templates/auth_footer');
 
       } else {
-        $this->_login();
+        $this->_login(); //Mengarah ke fungsi login
       }
     }
 
@@ -92,7 +93,7 @@ class Auth extends CI_Controller{
       }
     }
 
-
+    //Registrasi
     public function registration()
     {
       if($this->session->userdata('status') == 'admin'){
@@ -163,24 +164,26 @@ class Auth extends CI_Controller{
                 'user_ctime' => date("Y-m-d")
             ];
 
-            //token
+            //Membuat token
             $token = base64_encode(random_bytes(32));
             $users_token = [
               'user_email' => $email,
               'user_token' => $token,
               'user_cdate' => time()
             ];
-            $this->m_auth->insertReg('users',$data);
-            $this->m_auth->insertTkn('users_token',$users_token);
+            $this->m_auth->insertReg('users',$data); //Memasukkan data ke table user
+            $this->m_auth->insertTkn('users_token',$users_token); //Memasukkan data ke tabel token
             
-            $this->_sendEmail($token, 'verify');
+            $this->_sendEmail($token, 'verify');//Mengirim token ke fungsi _sendEmail
             $this->session->set_flashdata('alert',success('<strong>Congratulation!</strong> Your account has been created, Please Check your email.'));
             redirect('login');
         }
     }
 
+    //Fungsi sendEmail
     private function _sendEmail($token, $type)
     {
+      //Konfigurasi untuk email pengirim kode aktivasi
       $config = array(
         'protocol'  => 'smtp',
         'smtp_host' => 'ssl://smtp.googlemail.com',
@@ -193,23 +196,28 @@ class Auth extends CI_Controller{
       );
 
       //$this->load->library('email',$config);
+      //Menjalankan librari email dari konfigurasi yang ada
       $this->email->initialize($config);
 
+      //Email pengirim
       $this->email->from('radevman403','Admin RedWash');
+      //Email akan dikirim ke email yang di input
       $this->email->to($this->input->post('email'));
 
+      //Jika fungsi sendEmail untuk verify
       if($type == 'verify'){
         $this->email->subject('Account Verification');
         $this->email->message('Click this link to verify your account : 
           <a href="'.base_url() . 'auth/verify?email=' . $this->input->post('email') 
-          . '&token=' . urlencode($token) . '">Activate</a>');
+          . '&token=' . urlencode($token) . '">Activate</a>');//Masuk kembali ke login
       } else if($type == 'forgot'){
         $this->email->subject('Reset Password');
         $this->email->message('Click this link to reset your password : 
           <a href="'.base_url() . 'auth/resetpassword?email=' . $this->input->post('email') 
-          . '&token=' . urlencode($token) . '">Reset Password</a>');
+          . '&token=' . urlencode($token) . '">Reset Password</a>');//Masuk ke forgot password
       }
 
+      //Mengirim email
       if($this->email->send()){
         return true;
       }else{
@@ -218,6 +226,7 @@ class Auth extends CI_Controller{
       }
     }
 
+    //Fungsi verify
     public function verify()
     {
       $email = $this->input->get('email');
@@ -229,7 +238,7 @@ class Auth extends CI_Controller{
         $users_token = $this->m_auth->getToken('users_token', $token);
 
         if($users_token){
-          if(time() - $users_token['user_cdate'] < (60*60*24)){
+          if(time() - $users_token['user_cdate'] < (60*60*24)){//Batas waktu token
             $this->db->set('user_is_active', 1);
             $this->db->where('user_email', $email);
             $this->db->update('users');
@@ -239,21 +248,25 @@ class Auth extends CI_Controller{
             redirect('login');
 
             }else{
+              //Jika waktu nya habis
               $this->db->delete('users', ['user_email' => $email]);
               $this->db->delete('users_token', ['user_email' => $email]);
               $this->session->set_flashdata('alert',error('Account activation failed! Token expired.'));
               redirect('auth');
           }
         }else{
+          //Jika token berbeda dari tabel token
           $this->session->set_flashdata('alert',error('Account activation failed! Token Invalid.'));
           redirect('login');
         }
       }else{
+        //Jika token benar, email salah
         $this->session->set_flashdata('alert',error('Account activation failed! Wrong email.'));
         redirect('login');
       }
     }
 
+    //Fungsi Logout
     public function logout()
     {
       $this->session->unset_userdata('username');
@@ -266,11 +279,13 @@ class Auth extends CI_Controller{
       redirect('home');
     }
 
+    //Fungsi blok
     public function block()
     {
       $this->load->view('templates/blocked');
     }
 
+    //Fungsi lupa password
     public function forgotPass()
     {
       $this->form_validation->set_rules('email','Email','trim|required|valid_email');
@@ -292,17 +307,21 @@ class Auth extends CI_Controller{
             'user_cdate' => time()
           ];
 
+          //Memasukkan data token ke tabel
           $this->m_auth->insertTkn('users_token',$users_token);
+          //Memanggil fungsi sendEmail dengan kondisi forgot
           $this->_sendEmail($token,'forgot');
           $this->session->set_flashdata('alert',success('Please check your email to reset your password!'));
           redirect('login');
         }else{
+          //Jika email nya belum di registrasi
           $this->session->set_flashdata('alert',error('Email is not registered or activated!'));
           redirect('forgot-password');
         }
       }
     }
 
+    //Fungsi password
     public function resetpassword()
     {
       $email = $this->input->get('email');
@@ -314,20 +333,24 @@ class Auth extends CI_Controller{
         $users_token = $this->m_auth->getToken('users_token', $token);
 
         if($users_token){
-          $this->session->set_userdata('reset_email', $email);
-          $this->changePass();
+          $this->session->set_userdata('reset_email', $email);//Memasang session dari email
+          $this->changePass();//Memanggil fungsi changePass
         }else{
+          //Jika token nya salah
           $this->session->set_flashdata('alert',error('Reset password failed! Wrong token.'));
           redirect('login');
         }
       }else{
+        //Jika email nya salah
         $this->session->set_flashdata('alert',error('Reset password failed! Wrong email.'));
         redirect('login');
       }
     }
 
+    //Fungsi changePass
     public function changePass()
     {
+      //Jika session nya tidak ada
       if(!$this->session->userdata('reset_email')){
         redirect('login');
       }

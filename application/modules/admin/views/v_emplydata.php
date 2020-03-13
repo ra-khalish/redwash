@@ -40,7 +40,7 @@
                         <th width="15%">Action</th>
                     </tfoot>
                     <tbody>
-                      
+                      <!-- DataTable -->
                     </tbody>
                   </table>
                 </div>

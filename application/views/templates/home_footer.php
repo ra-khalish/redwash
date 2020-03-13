@@ -10,12 +10,6 @@
               <li><a href="Indonesia">Indonesia</a></li>
               <li><a href="tel:62 896 6208 0514">+62 896 6208 0514</a></li>
             </ul>
-            <ul class="social-icons list-inline">
-              <li class="list-inline-item"><a href="#" target="_blank" title="Facebook"><i class="fa fa-facebook"></i></a></li>
-              <li class="list-inline-item"><a href="#" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></li>
-              <li class="list-inline-item"><a href="#" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a></li>
-              <li class="list-inline-item"><a href="#" target="_blank" title="Pinterest"><i class="fa fa-pinterest"></i></a></li>
-            </ul>
           </div>
           <div class="col-lg-3 col-md-6">
             <h5>Operational Hour</h5>
@@ -27,19 +21,6 @@
               <li> <a href="#">Friday : 10:00-22:00</a></li>
               <li> <a href="#">Saturday : 10:00-22:00</a></li>
             </ul>
-          </div>
-        </div>
-      </div>
-      <div class="copyrights">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-7">
-              <p>&copy; 2017 Landy.com. All rights reserved.                        </p>
-            </div>
-            <div class="col-md-5 text-right">
-              <p>Template By <a href="https://bootstrapious.com/" class="external">Bootstrapious</a>  </p>
-              <!-- Please do not remove the backlink to Bootstrapious unless you support us at http://bootstrapious.com/donate. It is part of the license conditions. Thanks for understanding :) -->
-            </div>
           </div>
         </div>
       </div>

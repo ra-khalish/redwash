@@ -1,7 +1,7 @@
-<?php if(!empty($result)){?>
+<?php if(!empty($result)){?> <!-- Cek data -->
 <link href="<?= base_url('assets/');?>css/sb-admin-2.min.css" rel="stylesheet">
 <h1 class="text-center">Redwash Report</h1>
-<?php if(!empty($start)){ ?>
+<?php if(!empty($start)){ ?> <!-- Cek tanggal untuk generate PDF -->
 	<a href="<?= base_url().'admin/grtReport?start='.$start.'&end='.$end;?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm float-right"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 <?php } ?>
 <table class="table table-borderless table-sm">
@@ -15,6 +15,7 @@
 			}
 			$mArray = array_unique($mArray)
 		?>
+		<!-- Menggabung elemen array dengan string -->
 		<td><span class="gt"><?= implode(', ',$mArray); ?></span></td>
 	</tr>
 	<tr>
@@ -27,6 +28,7 @@
 			}
 			$yArray = array_unique($yArray)
 		?>
+		<!-- Menggabung elemen array dengan string -->
 		<td><span class="gt"><?= implode(', ',$yArray); ?></span></td>
 	</tr>
 	<tr>

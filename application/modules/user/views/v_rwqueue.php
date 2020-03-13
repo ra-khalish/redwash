@@ -7,18 +7,18 @@
               <li class="breadcrumb-item"><?= $title;?></li>
             </ul>
             <h1><?= $title;?></h1>
+          </div>
         </div>
-    </div>
-    
-    <a class="lead btn btn-primary mb-3" href="<?= base_url('user/fbooking');?>" role="button"><i class="fas fa-plus-circle"></i>Booking</></a>
+      <!-- Content -->
+      <a class="lead btn btn-primary mb-3" href="<?= base_url('user/fbooking');?>" role="button"><i class="fas fa-plus-circle"></i>Booking</></a>
         <div class="card-deck">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">In Queue</h5>
-              <table class="table">
+              <table class="table table-responsive">
               <thead class="table-info">
                 <tr>
-                  <th scope="col">#</th>
+                  <th scope="col" width="10%">#</th>
                   <th scope="col">No Plat</th>
                 </tr>
               </thead>
@@ -39,10 +39,10 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Processed</h5>
-              <table class="table">
+              <table class="table table-responsive">
               <thead class="table-warning">
                 <tr>
-                  <th scope="col">#</th>
+                  <th scope="col" width="10%">#</th>
                   <th scope="col">No Plat</th>
                 </tr>
               </thead>
@@ -63,10 +63,10 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Completed</h5>
-              <table class="table">
+              <table class="table table-responsive">
               <thead class="table-success">
                 <tr>
-                  <th scope="col">#</th>
+                  <th scope="col" width="10%">#</th>
                   <th scope="col">No Plat</th>
                 </tr>
               </thead>
@@ -85,5 +85,6 @@
           </div>
         </div>
         </div>
+        <!-- Content -->
       </div>
     </section>

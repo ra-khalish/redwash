@@ -28,9 +28,9 @@
             </form>
             <hr>
             <div class="text-center">
-            <a class="btn btn-outline-secondary btn-sm" href="<?= base_url('auth')?>" role="button">
-            Back to login
-            </a>
+                <a class="btn btn-outline-secondary btn-sm" href="<?= base_url('auth')?>" role="button">
+                Back to login
+                </a>
             </div>
         </div>
         </div>

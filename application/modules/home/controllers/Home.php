@@ -21,17 +21,4 @@ class Home extends CI_Controller{
         $this->load->view('templates/home_footer');
     }
 
-    public function text()
-    {
-        $useremail = $this->session->userdata('email');
-        $data['title'] = 'Dashboard';
-        $data['user'] = $this->m_home->getUser('users', $useremail);
-        
-        //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
-        
-        $this->load->view('templates/home_header',$data);
-        $this->load->view('v_text', $data);
-        $this->load->view('templates/home_footer');
-    }
-
 }

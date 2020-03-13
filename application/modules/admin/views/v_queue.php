@@ -7,6 +7,7 @@
 <?= $this->session->flashdata('alert');?>
 
 <div class="card-deck">
+  
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">In Queue</h5>
@@ -75,9 +76,10 @@
       <?php $no++;?>
       <?php endforeach;?>
       </tbody>
-    </table>
+      </table>
     </div>
   </div>
+
 </div>
 
 </div>

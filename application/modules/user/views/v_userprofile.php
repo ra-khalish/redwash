@@ -12,6 +12,7 @@
         </div>
         </div>
 
+        <!-- Content -->
         <a class="lead btn btn-primary mb-3" href="<?= base_url('user/queue');?>" role="button"><i class="fas fa-arrow-circle-left"></i>Queue Page</></a>
             <ul class="nav nav-tabs" id="userTab" role="tablist">
             <li class="nav-item">
@@ -93,6 +94,7 @@
                 </form>
             </div>
             </div>
+            <!-- Content -->
 
     </div>
 </section>

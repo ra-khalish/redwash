@@ -10,8 +10,9 @@
             <h1><?= $title;?></h1>
           </div>
         </div>
+
         <a class="lead btn btn-primary mb-2" href="<?= base_url('user/queue');?>" role="button"><i class="fas fa-arrow-circle-left"></i>Back</></a>
-        <!-- Begin Page Content -->
+        <!-- Content -->
         <!-- Basic Card Example -->
         <div class="card-body">
         <div class="card mx-auto" style="max-width: 640px;">
@@ -79,7 +80,7 @@
         </div>
         </div>
         </div>
+        <!-- Content -->
 
-        
       </div>
     </section>

@@ -13,24 +13,24 @@
             </div>
             <div class="card-body">
 
-<form action="<?= base_url('admin/data_report')?>" id="report">
-  <div class="form-row">
-    <div class="col-md-4 mb-3">
-      <label for="validationDefault01">Start Date</label>
-      <input type="text" class="form-control" id="startDate" name="startDate" required>
-    </div>
-    <div class="col-md-4 mb-3">
-      <label for="validationDefault02">End Date</label>
-      <input type="text" class="form-control" id="endDate" name="endDate" required>
-    </div>
-  </div>
-  <h6>Max input one month<span class="text-danger">*</span></h6>
-  <button class="btn btn-success" id="btnload" type="submit">Load Report</button>
-</form>
+            <form action="<?= base_url('admin/data_report')?>" id="report">
+              <div class="form-row">
+                <div class="col-md-4 mb-3">
+                  <label for="validationDefault01">Start Date</label>
+                  <input type="text" class="form-control" id="startDate" name="startDate" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="validationDefault02">End Date</label>
+                  <input type="text" class="form-control" id="endDate" name="endDate" required>
+                </div>
+              </div>
+              <h6>Max input one month<span class="text-danger">*</span></h6>
+              <button class="btn btn-success" id="btnload" type="submit">Load Report</button>
+            </form>
 
-<hr class="sidebar-divider">
+            <hr class="sidebar-divider">
 
-<div id="result"></div>
+            <div id="result"></div>
 
             </div>
           </div>

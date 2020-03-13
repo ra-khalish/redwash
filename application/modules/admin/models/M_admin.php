@@ -2,11 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class M_admin extends CI_Model{
-    public function getUser($table, $email)
+    
+    //Ambil data user
+    public function getUser($table, $useremail,$username)
     {
-        return $this->db->get_where($table, ['user_email' => $email])->row_array();
+        $where = "user_email = '$useremail' OR user_username = '$username'";
+        return $this->db->get_where($table, $where)->row_array();
     }
 
+    //Ambil jumlah antrian hari ini
     public function getctqueue($statusQ, $date)
     {
         $where = "status='$statusQ' AND date(ctime)='$date'";
@@ -18,6 +22,7 @@ class M_admin extends CI_Model{
         return $query->row();
     }
 
+    //Ambil jumlah pekerjaan hari ini
     public function getctprocess($statusP, $date)
     {
         $where = "status='$statusP' AND date(ctime)='$date'";
@@ -29,6 +34,7 @@ class M_admin extends CI_Model{
         return $query->row();
     }
 
+    //Total pendapatan perbulan
     public function getmonthly($table,$date)
     {
         $where = "MONTH(ctime) = MONTH('$date')";
@@ -40,6 +46,7 @@ class M_admin extends CI_Model{
         return $query->row();
     }
 
+    //Total pendapatan pertahun
     public function getannual($table,$date)
     {
         $where = "YEAR(ctime) = YEAR('$date')";
@@ -51,29 +58,34 @@ class M_admin extends CI_Model{
         return $query->row();
     }
 
+    //Ambil data antrian hari ini
     public function getqueue($table, $statusQ, $date)
     {
         $where = "status='$statusQ' AND date(ctime)='$date'";
         return $this->db->get_where($table, $where)->result_array();
     }
 
+    //Ambil data pekerjaan hari ini
     public function getprocess($table, $statusP,$date)
     {
         $where = "status='$statusP' AND date(ctime)='$date'";
         return $this->db->get_where($table, $where)->result_array();
     }
 
+    //Ambil data selesai hari ini
     public function getcompleted($table, $statusC,$date)
     {
         $where = "status='$statusC' AND date(ctime)='$date'";
         return $this->db->get_where($table, $where)->result_array();
     }
 
+    //Ambil data paket motor
     public function gettype()
     {
         return $this->db->get('tbl_typemotor')->result();
     }
 
+    //Fungsi membuat kode
     public function bkcode()
     {
         $this->db->select('RIGHT(tbl_washing.code_booking,3) as cbook',FALSE);
@@ -93,11 +105,12 @@ class M_admin extends CI_Model{
         return $cdbook;
     }
 
+    //Menambah pemesanan
     public function insertBook($table, $data) {
         $this->db->insert($table, $data);
     }
 
-    //generate dataTable serverside method for ordermanagement
+    //generate dataTable serverside metode untuk ordermanagement
     function getOrder() {
         $this->datatables->select('nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status');
         $this->datatables->from('tbl_washing');
@@ -114,6 +127,7 @@ class M_admin extends CI_Model{
         return $this->datatables->generate();
     }
 
+    //DataTable untuk arsip pemesanan 
     function getOrderarchive() {
         $this->datatables->select('nm_consumer,contact,code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,ctime,etime');
         $this->datatables->from('tbl_washing');
@@ -258,10 +272,11 @@ class M_admin extends CI_Model{
     }
     //End Model Employee
 
-    public function editUser($table,$datauser,$useremail)
+    public function editUser($table,$datauser,$username)
     {
+        $where = 
         $this->db->set($datauser);
-        $this->db->where('user_email',$useremail);
+        $this->db->where('user_username',$username);
         $this->db->update($table);
     }
 }

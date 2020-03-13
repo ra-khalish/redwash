@@ -11,23 +11,22 @@ class Admin extends CI_Controller{
         $this->load->model('m_admin');
         $this->load->library('pdf');
     }
-
+    
+    //Dashboard
     public function index()
     {
         $useremail = $this->session->userdata('email');
         $username = $this->session->userdata('username');
         $data['title'] = 'Dashboard';
-        $data['user'] = $this->m_admin->getUser('users', $useremail);
+        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
         
-        $statusQ        = 'Queue';
-        $statusP        = 'Processed';
-        $statusC        = 'Completed';
-        $date           = date("Y-m-d");
+        $statusQ = 'Queue';
+        $statusP = 'Processed';
+        $date = date("Y-m-d");
         $data['queue']  = $this->m_admin->getctqueue($statusQ,$date);
-        $data['process']  = $this->m_admin->getctprocess($statusP,$date);
-        $data['annual']  = $this->m_admin->getannual('tbl_washing',$date);
-        $data['monthly']  = $this->m_admin->getmonthly('tbl_washing',$date);
-        //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
+        $data['process'] = $this->m_admin->getctprocess($statusP,$date);
+        $data['annual'] = $this->m_admin->getannual('tbl_washing',$date);
+        $data['monthly'] = $this->m_admin->getmonthly('tbl_washing',$date);
         
         $this->load->view('templates/admin_header',$data);
         $this->load->view('templates/admin_sidebar',$data);
@@ -36,22 +35,21 @@ class Admin extends CI_Controller{
         $this->load->view('templates/admin_footer');
     }
 
-    //Motorcycle Queue
+    //Tabel antrian motor
     public function mcqueue()
     {
-        $useremail      = $this->session->userdata('email');
+        $useremail = $this->session->userdata('email');
         $username = $this->session->userdata('username');
         $statusQ        = 'Queue';
         $statusP        = 'Processed';
         $statusC        = 'Completed';
         $date           = date("Y-m-d");
         $data['title']  = 'Motorcycle Queue';
-        $data['user']   = $this->m_admin->getUser('users', $useremail);
+        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
 
         $data['queue']  = $this->m_admin->getqueue('tbl_washing', $statusQ,$date);
         $data['processed']  = $this->m_admin->getprocess('tbl_washing', $statusP,$date);
         $data['completed']  = $this->m_admin->getcompleted('tbl_washing', $statusC,$date);
-        //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
         
         $this->load->view('templates/admin_header',$data);
         $this->load->view('templates/admin_sidebar',$data);
@@ -59,19 +57,17 @@ class Admin extends CI_Controller{
         $this->load->view('v_queue', $data);
         $this->load->view('templates/admin_footer');
     }
-    //End Motorcycle Queue
+    //Tabel antrian motor
     
-    //Booking Form
+    //Form Pemesanan
     public function fmbooking()
     {
         $useremail = $this->session->userdata('email');
         $username = $this->session->userdata('username');
         $data['title'] = 'Booking';
-        $data['user'] = $this->m_admin->getUser('users', $useremail);
+        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
         $data['typemc'] = $this->m_admin->gettype();
         $data['codebooking'] = $this->m_admin->bkcode();
-        
-        //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
         
         $rules = array(
             array(
@@ -137,18 +133,16 @@ class Admin extends CI_Controller{
                 redirect('admin/mcqueue');
         }
     }
-    //End Booking Form
+    //Form Pemesanan
 
-    //Order Management
+    //Pengolahan Pemesanan
     public function mngbooking()
     {
         $useremail      = $this->session->userdata('email');
         $username = $this->session->userdata('username');
         $data['title']  = 'Order Management';
-        $data['user']   = $this->m_admin->getUser('users', $useremail);
+        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
         $data['chstatus'] = ['Queue','Processed','Completed'];
-
-        //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
         
         $this->load->view('templates/admin_header',$data);
         $this->load->view('templates/admin_sidebar',$data);
@@ -157,6 +151,7 @@ class Admin extends CI_Controller{
         $this->load->view('templates/admin_footer');
     }
 
+    //DataTable ambil data tbl_washing
     function get_order()
     {
         header('Content-Type: application/json');
@@ -177,17 +172,18 @@ class Admin extends CI_Controller{
         $this->m_admin->deleteOrder();
         redirect('admin/mngbooking');
     }
-    //End Order Management
+    //Pengolahan Pemesanan
 
-    //Order Archive
+    //Arsip Pemesanan
     public function order_arc()
     {
         if ($this->session->userdata('role_id') != '1') {
             redirect('admin');
         }
         $useremail      = $this->session->userdata('email');
+        $username = $this->session->userdata('username');
         $data['title']  = 'Order Archive';
-        $data['user']   = $this->m_admin->getUser('users', $useremail);
+        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
 
         //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
         
@@ -198,20 +194,23 @@ class Admin extends CI_Controller{
         $this->load->view('templates/admin_footer');
     }
 
+    //DataTable ambil arsip pemesanan
     public function get_orderarchive()
     {
         header('Content-Type: application/json');
         echo $this->m_admin->getOrderarchive();
     }
 
+    //Halaman pengambilan datal laporan
     public function data_report()
     {
         if ($this->session->userdata('role_id') != '1') {
             redirect('admin');
         }
         $useremail      = $this->session->userdata('email');
+        $username = $this->session->userdata('username');
         $data['title']  = 'Data Report';
-        $data['user']   = $this->m_admin->getUser('users', $useremail);
+        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
 
         //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
         $startDate  = htmlspecialchars($this->input->post('startDate',true));
@@ -247,6 +246,7 @@ class Admin extends CI_Controller{
         }
     }
 
+    //Menampilkan bentuk pdf dari hasil laporan
     public function grtReport()
     {
         $start = $this->input->get('start');
@@ -263,15 +263,16 @@ class Admin extends CI_Controller{
         $this->pdf->load_view('v_resultreport', $data);
     }
     
-    //Start Employee
+    //Data Karyawan
     public function users_emply()
     {
         if ($this->session->userdata('role_id') != '1') {
             redirect('admin');
         }
-        $useremail      = $this->session->userdata('email');
+        $useremail = $this->session->userdata('email');
+        $username = $this->session->userdata('username');
         $data['title']  = 'Employee Management';
-        $data['user']   = $this->m_admin->getUser('users', $useremail);
+        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
 
         //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
         
@@ -282,12 +283,14 @@ class Admin extends CI_Controller{
         $this->load->view('templates/admin_footer');
     }
 
+    //DataTable ambil data user yang status karyawan
     function get_emply()
     {
         header('Content-Type: application/json');
         echo $this->m_admin->getallEmply();
     }
 
+    //Fungsi membuat user karyawan
     public function addEmply()
     {
         $data = array('success' => false, 'messages' => array());
@@ -341,6 +344,7 @@ class Admin extends CI_Controller{
             $emply = array(
                 'user_name' => htmlspecialchars($this->input->post('name',true)),
                 'user_username' => htmlspecialchars($this->input->post('username',true)),
+                'user_email' => NULL,
                 'user_contact' => htmlspecialchars($this->input->post('contact',true)),
                 'user_password' => password_hash($this->input->post('password1'),PASSWORD_DEFAULT),
                 'user_role_id' => 3,
@@ -354,6 +358,7 @@ class Admin extends CI_Controller{
 		echo json_encode($data);
     }
 
+    //Update status karyawan aktif atau tidak
     function update_emply(){ //update record method
         $this->m_admin->updateEmply();
         redirect('admin/users_emply');
@@ -363,13 +368,15 @@ class Admin extends CI_Controller{
         $this->m_admin->deleteEmply();
         redirect('admin/users_emply');
     }
-    //End Employee
+    //Data Karyawan
 
+    //Profile
     public function admin_profile()
     {
-        $useremail      = $this->session->userdata('email');
+        $useremail = $this->session->userdata('email');
+        $username = $this->session->userdata('username');
         $data['title']  = 'My Profile';
-        $data['user']   = $this->m_admin->getUser('users', $useremail);
+        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
 
         $this->load->view('templates/admin_header',$data);
         $this->load->view('templates/admin_sidebar',$data);
@@ -382,6 +389,8 @@ class Admin extends CI_Controller{
     public function editProfile()
     {
         $useremail = $this->session->userdata('email');
+        $username = $this->session->userdata('username');
+        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
         $data = array('success' => false, 'messages' => array());
 
         $rules = array(
@@ -412,7 +421,7 @@ class Admin extends CI_Controller{
                 'user_name' => htmlspecialchars($this->input->post('name',true)),
                 'user_contact' => htmlspecialchars($this->input->post('contact',true)),
             );
-            $this->m_admin->editUser('users',$datauser,$useremail);
+            $this->m_admin->editUser('users',$datauser,$username);
 			$data['message'] = $this->session->set_flashdata('alert',success("Profile has been updated."));
             $data['view'] = 'admin_profile';
 		}
@@ -423,7 +432,8 @@ class Admin extends CI_Controller{
     public function editPass()
     {
         $useremail = $this->session->userdata('email');
-        $user =  $this->m_admin->getUser('users', $useremail);
+        $username = $this->session->userdata('username');
+        $user = $this->m_admin->getUser('users', $useremail,$username);
         $data = array('success' => false, 'error' => false, 'messages' => array());
 
         $rules = array(
@@ -469,7 +479,7 @@ class Admin extends CI_Controller{
                     $datauser = array(
                         'user_password' => $password_hash
                     );
-                    $this->m_admin->editUser('users',$datauser,$useremail);
+                    $this->m_admin->editUser('users',$datauser,$username);
                     $data['message'] = $this->session->set_flashdata('alert',success("Password Changed!"));
                     $data['view'] = 'admin_profile';
                 }
@@ -477,4 +487,5 @@ class Admin extends CI_Controller{
         }
         echo json_encode($data);
     }
+    //Profile
 }

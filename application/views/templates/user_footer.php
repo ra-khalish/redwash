@@ -10,12 +10,6 @@
               <li><a href="Indonesia">Indonesia</a></li>
               <li><a href="tel:62 896 6208 0514">+62 896 6208 0514</a></li>
             </ul>
-            <ul class="social-icons list-inline">
-              <li class="list-inline-item"><a href="#" target="_blank" title="Facebook"><i class="fa fa-facebook"></i></a></li>
-              <li class="list-inline-item"><a href="#" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></li>
-              <li class="list-inline-item"><a href="#" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a></li>
-              <li class="list-inline-item"><a href="#" target="_blank" title="Pinterest"><i class="fa fa-pinterest"></i></a></li>
-            </ul>
           </div>
           <div class="col-lg-3 col-md-6">
             <h5>Operational Hour</h5>
@@ -27,19 +21,6 @@
               <li> <a href="#">Friday : 10:00-22:00</a></li>
               <li> <a href="#">Saturday : 10:00-22:00</a></li>
             </ul>
-          </div>
-        </div>
-      </div>
-      <div class="copyrights">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-7">
-              <p>&copy; 2017 Landy.com. All rights reserved.                        </p>
-            </div>
-            <div class="col-md-5 text-right">
-              <p>Template By <a href="https://bootstrapious.com/" class="external">Bootstrapious</a>  </p>
-              <!-- Please do not remove the backlink to Bootstrapious unless you support us at http://bootstrapious.com/donate. It is part of the license conditions. Thanks for understanding :) -->
-            </div>
           </div>
         </div>
       </div>
@@ -77,89 +58,91 @@
   </div>
 
   <script>
-  $("#notif").delay(350).slideDown('slow');
-  $("#notif").alert().delay(3000).slideUp('slow');
+    $("#notif").delay(350).slideDown('slow');
+    $("#notif").alert().delay(3000).slideUp('slow');
+    
   $(document).ready(function(){
     $(".nav-tabs a").click(function(){
     $(this).tab('show');
     });
+
     // Setup datatables
-        $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
-      {
-          return {
-              "iStart": oSettings._iDisplayStart,
-              "iEnd": oSettings.fnDisplayEnd(),
-              "iLength": oSettings._iDisplayLength,
-              "iTotal": oSettings.fnRecordsTotal(),
-              "iFilteredTotal": oSettings.fnRecordsDisplay(),
-              "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
-              "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
-          };
+    $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+    {
+      return {
+        "iStart": oSettings._iDisplayStart,
+        "iEnd": oSettings.fnDisplayEnd(),
+        "iLength": oSettings._iDisplayLength,
+        "iTotal": oSettings.fnRecordsTotal(),
+        "iFilteredTotal": oSettings.fnRecordsDisplay(),
+        "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+        "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
       };
+    };
 
-      var table = $("#tsc-user").dataTable({
-          initComplete: function() {
-              var api = this.api();
-              $('#tsc-user_filter input')
-                  .off('.DT')
-                  .on('input.DT', function() {
-                      api.search(this.value).draw();
-              });
+    var table = $("#tsc-user").dataTable({
+      initComplete: function() {
+        var api = this.api();
+        $('#tsc-user_filter input')
+          .off('.DT')
+          .on('input.DT', function() {
+            api.search(this.value).draw();
+        });
+      },
+      oLanguage: {
+      sProcessing: "Loading..."
+      },
+      processing: true,
+      serverSide: true,
+      ajax: {"url": "<?php echo base_url().'user/userTransaction'?>", "type": "POST"},
+        columns: [
+          {"data": "code_booking"},
+          {"data": "noplat"},
+          //render number format for price
+          {"data": "pay", render: $.fn.dataTable.render.number(',', '.', '')},
+          {"data": "tot_cost", render: $.fn.dataTable.render.number(',', '.', '')},
+          {"data": "ch_cost", render: $.fn.dataTable.render.number(',', '.', '')},
+          {"data": "ctime"},
+          {"data": "etime"},
+          {"data": "status",
+            "render": function (data, type, row, meta) {
+              if(data === 'Queue'){
+                var label = 'badge-info';
+              }else if (data === 'Processed'){
+                var label = 'badge-warning';
+              }else{
+                label = 'badge-success';
+              }
+              return '<h5><span class="badge ' + label + '">' + data + '</span></h5>';
+            }
           },
-              oLanguage: {
-              sProcessing: "Loading..."
-          },
-              processing: true,
-              serverSide: true,
-              ajax: {"url": "<?php echo base_url().'user/userTransaction'?>", "type": "POST"},
-                    columns: [
-                        {"data": "code_booking"},
-                        {"data": "noplat"},
-                        //render number format for price
-                        {"data": "pay", render: $.fn.dataTable.render.number(',', '.', '')},
-                        {"data": "tot_cost", render: $.fn.dataTable.render.number(',', '.', '')},
-                        {"data": "ch_cost", render: $.fn.dataTable.render.number(',', '.', '')},
-                        {"data": "ctime"},
-                        {"data": "etime"},
-                        {"data": "status",
-                          "render": function (data, type, row, meta) {
-                            if(data === 'Queue'){
-                              var label = 'badge-info';
-                            }else if (data === 'Processed'){
-                              var label = 'badge-warning';
-                            }else{
-                              label = 'badge-success';
-                            }
-                            return '<h5><span class="badge ' + label + '">' + data + '</span></h5>';
-                          }
-                        },
-                        {"data": "view",
-                          "orderable": false,
-                          "searchable": false,
-                        }
-                    ],
-              order: [[0, 'asc']],
-              lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-                
-          rowCallback: function(row, data, iDisplayIndex) {
-              var info = this.fnPagingInfo();
-              var page = info.iPage;
-              var length = info.iLength;
-              var index = page * length + (iDisplayIndex + 1);
-              $('td:eq(0)', row).html();
+          {"data": "view",
+            "orderable": false,
+            "searchable": false,
           }
-      });
-            // end setup datatables
+        ],
+      order: [[0, 'asc']],
+      lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+              
+      rowCallback: function(row, data, iDisplayIndex) {
+          var info = this.fnPagingInfo();
+          var page = info.iPage;
+          var length = info.iLength;
+          var index = page * length + (iDisplayIndex + 1);
+          $('td:eq(0)', row).html();
+      }
+    });
+    // end setup datatables
 
-            // get delete Records
-            $('#tsc-user').on('click','.delete_record',function(){
-            var booking = $(this).data('booking');
-            $('#ModalDelete').modal('show');
-            $('[name="code_booking"]').val(booking);
-            });
-            //End delete Records
-
+    // get delete Records
+    $('#tsc-user').on('click','.delete_record',function(){
+    var booking = $(this).data('booking');
+    $('#ModalDelete').modal('show');
+    $('[name="code_booking"]').val(booking);
+    });
+    //End delete Records
   });
   </script>
+  
   </body>
 </html>
