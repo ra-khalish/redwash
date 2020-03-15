@@ -107,9 +107,11 @@
           {"data": "status",
             "render": function (data, type, row, meta) {
               if(data === 'Queue'){
-                var label = 'badge-info';
+                var label = 'badge-primary';
               }else if (data === 'Processed'){
                 var label = 'badge-warning';
+              }else if (data === 'Completed'){
+                var label = 'badge-info';
               }else{
                 label = 'badge-success';
               }
