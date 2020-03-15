@@ -44,7 +44,7 @@ class Admin extends CI_Controller{
         $statusP        = 'Processed';
         $statusC        = 'Completed';
         $date           = date("Y-m-d");
-        $data['title']  = 'Motorcycle Queue';
+        $data['title']  = 'Vehicle Queue';
         $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
 
         $data['queue']  = $this->m_admin->getqueue('tbl_washing', $statusQ,$date);
@@ -140,9 +140,9 @@ class Admin extends CI_Controller{
     {
         $useremail      = $this->session->userdata('email');
         $username = $this->session->userdata('username');
-        $data['title']  = 'Order Management';
+        $data['title']  = 'Booking Management';
         $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
-        $data['chstatus'] = ['Queue','Processed','Completed'];
+        $data['chstatus'] = ['Processed','Completed'];
         
         $this->load->view('templates/admin_header',$data);
         $this->load->view('templates/admin_sidebar',$data);
@@ -175,14 +175,14 @@ class Admin extends CI_Controller{
     //Pengolahan Pemesanan
 
     //Arsip Pemesanan
-    public function order_arc()
+    public function booking_arc()
     {
         if ($this->session->userdata('role_id') != '1') {
             redirect('admin');
         }
         $useremail      = $this->session->userdata('email');
         $username = $this->session->userdata('username');
-        $data['title']  = 'Order Archive';
+        $data['title']  = 'Booking Archive';
         $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
 
         //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
@@ -190,7 +190,7 @@ class Admin extends CI_Controller{
         $this->load->view('templates/admin_header',$data);
         $this->load->view('templates/admin_sidebar',$data);
         $this->load->view('templates/admin_topbar',$data);
-        $this->load->view('v_orderarc', $data);
+        $this->load->view('v_bookarc', $data);
         $this->load->view('templates/admin_footer');
     }
 

@@ -27,20 +27,20 @@
   Main
 </div>
 
-<li class="nav-item <?= ($title == 'Motorcycle Queue') ? 'active' :'' ?>">
+<li class="nav-item <?= ($title == 'Vehicle Queue') ? 'active' :'' ?>">
   <a class="nav-link pb-0" href="<?= base_url('admin/mcqueue');?>">
     <i class="fas fa-fw fa-motorcycle"></i>
-    <span>Queue Motorcycle</span></a>
+    <span>Vehicle Queue</span></a>
 </li>
 <li class="nav-item <?= ($title == 'Booking') ? 'active' :'' ?>">
   <a class="nav-link pb-0" href="<?= base_url('admin/fmbooking');?>">
     <i class="fas fa-fw fa-bookmark"></i>
     <span>Booking</span></a>
 </li>
-<li class="nav-item <?= ($title == 'Order Management') ? 'active' :'' ?>">
+<li class="nav-item <?= ($title == 'Booking Management') ? 'active' :'' ?>">
   <a class="nav-link" href="<?= base_url('admin/mngbooking');?>">
     <i class="fas fa-fw fa-clipboard"></i>
-    <span>Order Management</span></a>
+    <span>Booking Management</span></a>
 </li>
 
 <?php if($this->session->userdata('role_id') == '1'):?>
@@ -53,10 +53,10 @@
 </div>
 
 <!-- Nav Item - Charts -->
-<li class="nav-item <?= ($title == 'Order Archive') ? 'active' :'' ?>">
-  <a class="nav-link pb-0" href="<?= base_url('admin/order_arc');?>">
+<li class="nav-item <?= ($title == 'Booking Archive') ? 'active' :'' ?>">
+  <a class="nav-link pb-0" href="<?= base_url('admin/booking_arc');?>">
     <i class="fas fa-fw fa-archive "></i>
-    <span>Data Archive</span></a>
+    <span>Booking Archive</span></a>
 </li>
 
 <li class="nav-item <?= ($title == 'Data Report') ? 'active' :'' ?>">

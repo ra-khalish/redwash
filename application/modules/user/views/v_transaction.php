@@ -54,7 +54,7 @@
             </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-            <button type="submit" class="btn btn-success">Yes</button>
+            <button type="submit" class="btn btn-primary">Yes</button>
           </div>
       </div>
     </div>
