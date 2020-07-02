@@ -152,7 +152,7 @@ class Auth extends CI_Controller{
             $this->load->view('v_registration');
             $this->load->view('templates/auth_footer');
         }else {
-            $email = $this->input->post('email',true);
+            $email = htmlspecialchars($this->input->post('email',true));
             $data = [
                 'user_name' => htmlspecialchars($this->input->post('name',true)),
                 'user_username' => htmlspecialchars($this->input->post('username',true)),
@@ -174,14 +174,14 @@ class Auth extends CI_Controller{
             $this->m_auth->insertReg('users',$data); //Memasukkan data ke table user
             $this->m_auth->insertTkn('users_token',$users_token); //Memasukkan data ke tabel token
             
-            $this->_sendEmail($token, 'verify');//Mengirim token ke fungsi _sendEmail
+            $this->_sendEmail($token,$email,'verify');//Mengirim token ke fungsi _sendEmail
             $this->session->set_flashdata('alert',success('<strong>Congratulation!</strong> Your account has been created, Please Check your email.'));
             redirect('login');
         }
     }
 
     //Fungsi sendEmail
-    private function _sendEmail($token, $type)
+    private function _sendEmail($token, $email, $type)
     {
       //Konfigurasi untuk email pengirim kode aktivasi
       $config = array(
@@ -202,18 +202,18 @@ class Auth extends CI_Controller{
       //Email pengirim
       $this->email->from('radevman403','Admin RedWash');
       //Email akan dikirim ke email yang di input
-      $this->email->to($this->input->post('email'));
+      $this->email->to($email);
 
       //Jika fungsi sendEmail untuk verify
       if($type == 'verify'){
         $this->email->subject('Account Verification');
         $this->email->message('Click this link to verify your account : 
-          <a href="'.base_url() . 'auth/verify?email=' . $this->input->post('email') 
+          <a href="'.base_url() . 'auth/verify?email=' . $email 
           . '&token=' . urlencode($token) . '">Activate</a>');//Masuk kembali ke login
       } else if($type == 'forgot'){
         $this->email->subject('Reset Password');
         $this->email->message('Click this link to reset your password : 
-          <a href="'.base_url() . 'auth/resetpassword?email=' . $this->input->post('email') 
+          <a href="'.base_url() . 'auth/resetpassword?email=' . $email 
           . '&token=' . urlencode($token) . '">Reset Password</a>');//Masuk ke forgot password
       }
 
@@ -310,7 +310,7 @@ class Auth extends CI_Controller{
           //Memasukkan data token ke tabel
           $this->m_auth->insertTkn('users_token',$users_token);
           //Memanggil fungsi sendEmail dengan kondisi forgot
-          $this->_sendEmail($token,'forgot');
+          $this->_sendEmail($token,$email,'forgot');
           $this->session->set_flashdata('alert',success('Please check your email to reset your password!'));
           redirect('login');
         }else{
@@ -380,6 +380,7 @@ class Auth extends CI_Controller{
         $this->db->set('user_password', $password);
         $this->db->where('user_email', $email);
         $this->db->update('users');
+        $this->db->delete('users_token', ['user_email' => $email]);
 
         $this->session->unset_userdata('reset_email');
         $this->session->set_flashdata('alert',success('Password has been changed! Please login.'));
