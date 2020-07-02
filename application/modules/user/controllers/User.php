@@ -176,7 +176,7 @@ class User extends CI_Controller{
                 'user_name' => htmlspecialchars($this->input->post('name',true)),
                 'user_contact' => htmlspecialchars($this->input->post('contact',true)),
             );
-            $this->m_user->updateData('users',$datauser,$useremail);
+            $this->m_user->editUser('users',$datauser,$useremail);
 			$data['message'] = $this->session->set_flashdata('alert',success("Profile has been updated."));
             $data['view'] = 'user_profile';
 		}
