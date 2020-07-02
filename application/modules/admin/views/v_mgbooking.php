@@ -113,7 +113,7 @@
           </div>
           <div class="form-group">
             <label for="noplat" class="col-form-label">Pay:</label>
-            <input type="text" name="pay" id="pay" class="form-control" placeholder="Plat Number" onkeyup="change()">
+            <input type="text" name="pay" id="pay" class="form-control" placeholder="Plat Number" onkeyup="change()" required oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
           </div>
           <div class="form-group">
             <label for="noplat" class="col-form-label">Change Cost:</label>
