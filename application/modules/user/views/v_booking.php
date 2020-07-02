@@ -4,14 +4,12 @@
         <div class="row block">
           <div class="col-lg-9">
             <ul class="breadcrumb">
-              <li class="breadcrumb-item"><a href="<?= base_url('user/queue');?>">Queue</a></li>
               <li class="breadcrumb-item"><?= $title;?></li>
             </ul>
             <h1><?= $title;?></h1>
           </div>
         </div>
 
-        <a class="lead btn btn-primary mb-2" href="<?= base_url('user/queue');?>" role="button"><i class="fas fa-arrow-circle-left"></i>Back</></a>
         <!-- Content -->
         <!-- Basic Card Example -->
         <div class="card-body">

@@ -70,7 +70,7 @@
 <li class="nav-item <?= ($title == 'Employee Management') ? 'active' :'' ?>">
   <a class="nav-link" href="<?= base_url('admin/users_emply');?>">
     <i class="fas fa-fw fa-users"></i>
-    <span>Employee</span></a>
+    <span>Data Employee</span></a>
 </li>
 <?php endif;?>
 
@@ -84,10 +84,17 @@
   
   <!-- Nav Item - Charts -->
   <li class="nav-item <?= ($title == 'My Profile')?'active':''?>">
-    <a class="nav-link pb-3" href="<?= base_url('admin/admin_profile')?>">
+    <a class="nav-link pb-0" href="<?= base_url('admin/admin_profile')?>">
       <i class="fas fa-fw fa-address-card"></i>
       <span>My Profile</span></a>
   </li>
+
+  <li class="nav-item">
+  <a class="nav-link" href="<?=base_url('auth/logout');?>"data-toggle="modal" data-target="#logoutModal">
+      <i class="fas fa-fw fa-sign-out-alt"></i>
+    <span>Logout</span></a>
+  </li>
+
 
 <!-- Divider -->
 <hr class="sidebar-divider d-none d-md-block">

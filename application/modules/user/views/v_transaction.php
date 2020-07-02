@@ -4,7 +4,6 @@
         <div class="row block">
         <div class="col-lg-9">
             <ul class="breadcrumb">
-              <li class="breadcrumb-item"><a href="<?= base_url('user/queue');?>">Queue</a></li>
               <li class="breadcrumb-item"><?= $user['user_name'];?></li>
               <li class="breadcrumb-item"><?= $title;?></li>
             </ul>
@@ -13,7 +12,6 @@
         </div>
     
       <!-- Content -->
-      <a class="lead btn btn-primary mb-3" href="<?= base_url('user/queue');?>" role="button"><i class="fas fa-arrow-circle-left"></i>Queue Page</></a>
       <table class="table table-hover table-responsive table-sm" id="tsc-user" width="100%" cellspacing="0">
         <thead>
           <tr>

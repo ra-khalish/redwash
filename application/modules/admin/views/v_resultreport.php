@@ -52,7 +52,6 @@
 			<th>Pay</th>
 			<th>Total Cost</th>
 			<th>Change</th>
-			<th>Status</th>
 			<th>Cashier</th>
 			<th>Date</th>
 		</tr>
@@ -60,14 +59,13 @@
 		<tbody>
 		<?php foreach ($result as $key => $rs):?>
 		<tr>
-		<td><?= $rs['code_booking']?></td>
+			<td><?= $rs['code_booking']?></td>
 			<td><?= $rs['noplat']?></td>
 			<td><?= $rs['pay']?></td>
 			<td><?= $rs['tot_cost']?></td>
 			<td><?= $rs['ch_cost']?></td>
-			<td><?= $rs['status']?></td>
 			<td><?= $rs['cashier']?></td>
-			<td><?= $rs['etime']?></td>
+			<td><?= $rs['ctime']?></td>
 		</tr>
 		<?php endforeach;?>
 	</tbody>

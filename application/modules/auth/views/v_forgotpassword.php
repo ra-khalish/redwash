@@ -19,7 +19,7 @@
 
             <form class="user" method="post" action="<?= base_url('forgot-password')?>">
             <div class="form-group">
-                <input type="text" class="form-control form-control-user" id="email" name="email" placeholder="Enter Email or Username" value="<?= set_value('email');?>">
+                <input type="text" class="form-control form-control-user" id="email" name="email" placeholder="Enter Your Email" value="<?= set_value('email');?>">
                 <?= form_error('email');?>
             </div>
             <button type="submit" class="btn btn-primary btn-user btn-block">

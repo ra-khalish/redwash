@@ -72,7 +72,7 @@
                     <input type="text" class="form-control" id="contact" name="contact" value="<?= $user['user_contact'];?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="12">
                     </div>
                 </div>
-                <button class="form-group btn btn-primary btn-submit" type="submit">Submit form</button>
+                <button class="form-group btn btn-primary btn-submit" type="submit">Update</button>
             </form>
             </div>
             <div class="tab-pane" id="password" role="tabpanel" aria-labelledby="password-tab">
@@ -89,7 +89,7 @@
                     <label for="new_conpassword">Confirm Password</label>
                     <input type="password" class="form-control" id="new_conpassword" name="new_conpassword">
                 </div>
-                <button type="submit" class="form-group btn btn-primary">Submit</button>
+                <button type="submit" class="form-group btn btn-primary">Update</button>
                 </form>
             </div>
             </div>

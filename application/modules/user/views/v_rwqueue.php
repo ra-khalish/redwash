@@ -10,7 +10,6 @@
           </div>
         </div>
       <!-- Content -->
-      <a class="lead btn btn-primary mb-3" href="<?= base_url('user/fbooking');?>" role="button"><i class="fas fa-plus-circle"></i>Booking</></a>
         <div class="card-deck">
           <div class="card">
             <div class="card-body">
