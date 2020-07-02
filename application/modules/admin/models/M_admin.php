@@ -159,6 +159,8 @@ class M_admin extends CI_Model{
     //update data method for ordermanagement
     function updatePayment(){
         $code_booking = $this->input->post('code_booking');
+        $status = 'Completed';
+        $where = "code_booking = '$code_booking' AND  status = '$status'";
         $data = array(
             'pay'       => $this->input->post('pay'),
             'ch_cost'   => $this->input->post('ch_cost'),
@@ -166,9 +168,13 @@ class M_admin extends CI_Model{
             'cashier' => $this->session->userdata('name'),
             'etime'     => date("Y-m-d H:i:s")
         );
-        $this->db->where('code_booking',$code_booking);
+        $this->db->where($where);
         $result = $this->db->update('tbl_washing', $data);
-        $this->session->set_flashdata('alert',success("The order was paid successfully"));
+        if ($this->db->affected_rows() == TRUE){
+            $this->session->set_flashdata('alert',success("The order was paid successfully"));
+        } else {
+            $this->session->set_flashdata('alert',error("Payment failed, the vehicle has not been completed"));
+        }
         return $result;
     }
 
@@ -185,7 +191,7 @@ class M_admin extends CI_Model{
     function getReport($where) {
         $query = $this
 					->db
-					->select('code_booking,noplat,pay,tot_cost,ch_cost,status,cashier,date(etime)as etime')
+					->select('code_booking,noplat,pay,tot_cost,ch_cost,cashier,date(ctime)as ctime')
 					->from('tbl_washing')
 					->where($where)
 					->get();
