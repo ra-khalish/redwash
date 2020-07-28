@@ -375,6 +375,12 @@
   </script>
 
   <script>
+  // Tombol refresh
+  function refreshPage(){
+      window.location.reload();
+  } 
+
+  // Kembalian
   function change() {
     var ch_cost = 0;
     var pay = parseInt($("input[name=pay]").val());

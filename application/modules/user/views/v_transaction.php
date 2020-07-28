@@ -12,6 +12,9 @@
         </div>
     
       <!-- Content -->
+      <div class="row">
+        <button type="submit" class="btn btn-warning py-1 px-3 mb-2" onClick="refreshPage()"><i class="fas fa-redo"></i></button>
+      </div>
       <table class="table table-hover table-responsive table-sm" id="tsc-user" width="100%" cellspacing="0">
         <thead>
           <tr>

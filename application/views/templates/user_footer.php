@@ -58,9 +58,11 @@
   </div>
 
   <script>
-    $("#notif").delay(350).slideDown('slow');
-    $("#notif").alert().delay(3000).slideUp('slow');
+  // Timer Notifikasi
+  $("#notif").delay(350).slideDown('slow');
+  $("#notif").alert().delay(3000).slideUp('slow');
     
+  // Tab untuk Edit Profile
   $(document).ready(function(){
     $(".nav-tabs a").click(function(){
     $(this).tab('show');
@@ -144,6 +146,12 @@
     });
     //End delete Records
   });
+
+  // Tombol refresh
+  function refreshPage(){
+      window.location.reload();
+  } 
+</script>
   </script>
   
   </body>

@@ -10,6 +10,7 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3">
               <h6 class="m-0 font-weight-bold text-primary">Data Management</h6>
+              <button type="submit" class="btn btn-warning float-right" onClick="refreshPage()"><i class="fas fa-redo"></i></button>
             </div>
             <div class="card-body">
               <div class="table">

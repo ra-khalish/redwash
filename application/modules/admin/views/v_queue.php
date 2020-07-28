@@ -6,6 +6,8 @@
 
 <?= $this->session->flashdata('alert');?>
 
+<button type="submit" class="btn btn-warning mb-2" onClick="refreshPage()"><i class="fas fa-redo"></i></button>
+
 <div class="card-deck">
   
   <div class="card">
