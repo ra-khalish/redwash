@@ -21,6 +21,7 @@ application/logs/*
 !application/logs/.htaccess
 /assets/
 /vendor/
+.env
 
 ### CodeIgniter Patch ###
 
