@@ -2,6 +2,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Admin extends CI_Controller{
+    const statusQ = 'Queue',
+    statusP = 'Processed',
+    statusC = 'Completed';
+
     public function __construct()
     {
         parent::__construct();
@@ -11,61 +15,54 @@ class Admin extends CI_Controller{
         $this->load->model('m_admin');
         $this->load->library('pdf');
     }
-    
-    //Dashboard
-    public function index()
+
+    public function check_session()
     {
         $useremail = $this->session->userdata('email');
         $username = $this->session->userdata('username');
-        $data['title'] = 'Dashboard';
-        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
-        
-        $statusQ = 'Queue';
-        $statusP = 'Processed';
-        $date = date("Y-m-d");
-        $data['queue']  = $this->m_admin->getctqueue($statusQ,$date);
-        $data['process'] = $this->m_admin->getctprocess($statusP,$date);
-        $data['annual'] = $this->m_admin->getannual('tbl_washing',$date);
-        $data['monthly'] = $this->m_admin->getmonthly('tbl_washing',$date);
-        
+        return $this->m_admin->getUser('users', $useremail,$username);
+    }
+
+    public function load_view($main_view, $data)
+    {
         $this->load->view('templates/admin_header',$data);
         $this->load->view('templates/admin_sidebar',$data);
         $this->load->view('templates/admin_topbar',$data);
-        $this->load->view('v_dashboard', $data);
+        $this->load->view("{$main_view}", $data);
         $this->load->view('templates/admin_footer');
+    }
+    
+    //Dashboard
+    function index()
+    {
+        $data['title'] = 'Dashboard';
+        $data['user'] = $this->check_session();
+        $date = date("Y-m-d");
+        $data['queue']  = $this->m_admin->getctqueue(Admin::statusQ ,$date);
+        $data['process'] = $this->m_admin->getctprocess(Admin::statusP,$date);
+        $data['annual'] = $this->m_admin->getannual('tbl_washing',$date);
+        $data['monthly'] = $this->m_admin->getmonthly('tbl_washing',$date);
+        $this->load_view('v_dashboard', $data);
     }
 
     //Tabel antrian motor
     public function mcqueue()
     {
-        $useremail = $this->session->userdata('email');
-        $username = $this->session->userdata('username');
-        $statusQ        = 'Queue';
-        $statusP        = 'Processed';
-        $statusC        = 'Completed';
-        $date           = date("Y-m-d");
         $data['title']  = 'Vehicle Queue';
-        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
-
-        $data['queue']  = $this->m_admin->getqueue('tbl_washing', $statusQ,$date);
-        $data['processed']  = $this->m_admin->getprocess('tbl_washing', $statusP,$date);
-        $data['completed']  = $this->m_admin->getcompleted('tbl_washing', $statusC,$date);
-        
-        $this->load->view('templates/admin_header',$data);
-        $this->load->view('templates/admin_sidebar',$data);
-        $this->load->view('templates/admin_topbar',$data);
-        $this->load->view('v_queue', $data);
-        $this->load->view('templates/admin_footer');
+        $data['user'] = $this->check_session();
+        $date = date("Y-m-d");
+        $data['queue']  = $this->m_admin->getqueue('tbl_washing', Admin::statusQ,$date);
+        $data['processed']  = $this->m_admin->getprocess('tbl_washing', Admin::statusP,$date);
+        $data['completed']  = $this->m_admin->getcompleted('tbl_washing', Admin::statusC,$date);
+        $this->load_view('v_queue', $data);
     }
     //Tabel antrian motor
     
     //Form Pemesanan
     public function fmbooking()
     {
-        $useremail = $this->session->userdata('email');
-        $username = $this->session->userdata('username');
         $data['title'] = 'Booking';
-        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
+        $data['user'] = $this->check_session();
         $data['typemc'] = $this->m_admin->gettype();
         $data['codebooking'] = $this->m_admin->bkcode();
         
@@ -112,11 +109,7 @@ class Admin extends CI_Controller{
         $this->form_validation->set_error_delimiters('<small class="text-danger pl-3">','</small>');
 
         if ($this->form_validation->run() == false) {
-            $this->load->view('templates/admin_header',$data);
-            $this->load->view('templates/admin_sidebar',$data);
-            $this->load->view('templates/admin_topbar',$data);
-            $this->load->view('v_booking', $data);
-            $this->load->view('templates/admin_footer');
+            $this->load_view('v_booking', $data);
         } else {
                 $data = [
                     'nm_consumer' => htmlspecialchars($this->input->post('nm_consumer',true)),
@@ -138,17 +131,10 @@ class Admin extends CI_Controller{
     //Pengolahan Pemesanan
     public function mngbooking()
     {
-        $useremail      = $this->session->userdata('email');
-        $username = $this->session->userdata('username');
         $data['title']  = 'Booking Management';
-        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
-        $data['chstatus'] = ['Processed','Completed'];
-        
-        $this->load->view('templates/admin_header',$data);
-        $this->load->view('templates/admin_sidebar',$data);
-        $this->load->view('templates/admin_topbar',$data);
-        $this->load->view('v_mgbooking', $data);
-        $this->load->view('templates/admin_footer');
+        $data['user'] = $this->check_session();
+        $data['chstatus'] = [Admin::statusP,Admin::statusC];
+        $this->load_view('v_mgbooking', $data);
     }
 
     //DataTable ambil data tbl_washing
@@ -180,18 +166,9 @@ class Admin extends CI_Controller{
         if ($this->session->userdata('role_id') != '1') {
             redirect('admin');
         }
-        $useremail      = $this->session->userdata('email');
-        $username = $this->session->userdata('username');
         $data['title']  = 'Booking Archive';
-        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
-
-        //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
-        
-        $this->load->view('templates/admin_header',$data);
-        $this->load->view('templates/admin_sidebar',$data);
-        $this->load->view('templates/admin_topbar',$data);
-        $this->load->view('v_bookarc', $data);
-        $this->load->view('templates/admin_footer');
+        $data['user'] = $this->check_session();
+        $this->load_view('v_bookarc', $data);
     }
 
     //DataTable ambil arsip pemesanan
@@ -207,12 +184,8 @@ class Admin extends CI_Controller{
         if ($this->session->userdata('role_id') != '1') {
             redirect('admin');
         }
-        $useremail      = $this->session->userdata('email');
-        $username = $this->session->userdata('username');
         $data['title']  = 'Data Report';
-        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
-
-        //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
+        $data['user'] = $this->check_session();
         $startDate  = htmlspecialchars($this->input->post('startDate',true));
         $endDate    = htmlspecialchars($this->input->post('endDate',true));
 
@@ -230,11 +203,7 @@ class Admin extends CI_Controller{
         );
         $this->form_validation->set_rules($rules);
         if($this->input->post() == false){
-            $this->load->view('templates/admin_header',$data);
-            $this->load->view('templates/admin_sidebar',$data);
-            $this->load->view('templates/admin_topbar',$data);
-            $this->load->view('v_report', $data);
-            $this->load->view('templates/admin_footer');
+            $this->load_view('v_report', $data);
         }else{
             $where = "ctime >= '$startDate' AND  ctime <= '$endDate 23:59:59'";
             $data['result'] = $this->m_admin->getReport($where);
@@ -269,18 +238,9 @@ class Admin extends CI_Controller{
         if ($this->session->userdata('role_id') != '1') {
             redirect('admin');
         }
-        $useremail = $this->session->userdata('email');
-        $username = $this->session->userdata('username');
         $data['title']  = 'Employee Management';
-        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
-
-        //$this->db->get_where('users',['user_email' => $this->session->userdata('email')])->row_array();
-        
-        $this->load->view('templates/admin_header',$data);
-        $this->load->view('templates/admin_sidebar',$data);
-        $this->load->view('templates/admin_topbar',$data);
-        $this->load->view('v_emplydata', $data);
-        $this->load->view('templates/admin_footer');
+        $data['user'] = $this->check_session();
+        $this->load_view('v_emplydata', $data);
     }
 
     //DataTable ambil data user yang status karyawan
@@ -373,24 +333,16 @@ class Admin extends CI_Controller{
     //Profile
     public function admin_profile()
     {
-        $useremail = $this->session->userdata('email');
-        $username = $this->session->userdata('username');
         $data['title']  = 'My Profile';
-        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
-
-        $this->load->view('templates/admin_header',$data);
-        $this->load->view('templates/admin_sidebar',$data);
-        $this->load->view('templates/admin_topbar',$data);
-        $this->load->view('v_adminprofile', $data);
-        $this->load->view('templates/admin_footer');
+        $data['user'] = $this->check_session();
+        $this->load_view('v_adminprofile', $data);
     }
 
     //Fungsi edit profile
     public function editProfile()
     {
-        $useremail = $this->session->userdata('email');
-        $username = $this->session->userdata('username');
-        $data['user'] = $this->m_admin->getUser('users', $useremail,$username);
+        $data['user'] = $this->check_session();
+        $username = $data['user']['user_username'];
         $data = array('success' => false, 'messages' => array());
 
         $rules = array(
@@ -431,9 +383,8 @@ class Admin extends CI_Controller{
     //Fungsi edit password
     public function editPass()
     {
-        $useremail = $this->session->userdata('email');
-        $username = $this->session->userdata('username');
-        $user = $this->m_admin->getUser('users', $useremail,$username);
+        $user = $this->check_session();
+        $username = $user['user_username'];
         $data = array('success' => false, 'error' => false, 'messages' => array());
 
         $rules = array(
@@ -456,8 +407,8 @@ class Admin extends CI_Controller{
         $this->form_validation->set_rules($rules);
 		$this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
 		if ($this->form_validation->run() == false) {
-            foreach ($this->input->post() as $key => $value) {
-				$data['messages'][$key] = form_error($key);
+            foreach ($this->input->post() as $key => $value) { // Loop error
+				$data['messages'][$key] = form_error($key); // Menampilkan error
 			}
 		} else {
             $current_password = htmlspecialchars($this->input->post('current_password',true));
