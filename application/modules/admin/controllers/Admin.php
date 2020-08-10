@@ -16,7 +16,7 @@ class Admin extends CI_Controller{
         $this->load->library('pdf');
     }
 
-    public function check_session()
+    public function get_session()
     {
         $useremail = $this->session->userdata('email');
         $username = $this->session->userdata('username');
@@ -36,7 +36,7 @@ class Admin extends CI_Controller{
     function index()
     {
         $data['title'] = 'Dashboard';
-        $data['user'] = $this->check_session();
+        $data['user'] = $this->get_session();
         $date = date("Y-m-d");
         $data['queue']  = $this->m_admin->getctqueue(Admin::statusQ ,$date);
         $data['process'] = $this->m_admin->getctprocess(Admin::statusP,$date);
@@ -49,7 +49,7 @@ class Admin extends CI_Controller{
     public function mcqueue()
     {
         $data['title']  = 'Vehicle Queue';
-        $data['user'] = $this->check_session();
+        $data['user'] = $this->get_session();
         $date = date("Y-m-d");
         $data['queue']  = $this->m_admin->getqueue('tbl_washing', Admin::statusQ,$date);
         $data['processed']  = $this->m_admin->getprocess('tbl_washing', Admin::statusP,$date);
@@ -62,7 +62,7 @@ class Admin extends CI_Controller{
     public function fmbooking()
     {
         $data['title'] = 'Booking';
-        $data['user'] = $this->check_session();
+        $data['user'] = $this->get_session();
         $data['typemc'] = $this->m_admin->gettype();
         $data['codebooking'] = $this->m_admin->bkcode();
         
@@ -132,7 +132,7 @@ class Admin extends CI_Controller{
     public function mngbooking()
     {
         $data['title']  = 'Booking Management';
-        $data['user'] = $this->check_session();
+        $data['user'] = $this->get_session();
         $data['chstatus'] = [Admin::statusP,Admin::statusC];
         $this->load_view('v_mgbooking', $data);
     }
@@ -167,7 +167,7 @@ class Admin extends CI_Controller{
             redirect('admin');
         }
         $data['title']  = 'Booking Archive';
-        $data['user'] = $this->check_session();
+        $data['user'] = $this->get_session();
         $this->load_view('v_bookarc', $data);
     }
 
@@ -185,7 +185,7 @@ class Admin extends CI_Controller{
             redirect('admin');
         }
         $data['title']  = 'Data Report';
-        $data['user'] = $this->check_session();
+        $data['user'] = $this->get_session();
         $startDate  = htmlspecialchars($this->input->post('startDate',true));
         $endDate    = htmlspecialchars($this->input->post('endDate',true));
 
@@ -239,7 +239,7 @@ class Admin extends CI_Controller{
             redirect('admin');
         }
         $data['title']  = 'Employee Management';
-        $data['user'] = $this->check_session();
+        $data['user'] = $this->get_session();
         $this->load_view('v_emplydata', $data);
     }
 
@@ -334,14 +334,14 @@ class Admin extends CI_Controller{
     public function admin_profile()
     {
         $data['title']  = 'My Profile';
-        $data['user'] = $this->check_session();
+        $data['user'] = $this->get_session();
         $this->load_view('v_adminprofile', $data);
     }
 
     //Fungsi edit profile
     public function editProfile()
     {
-        $data['user'] = $this->check_session();
+        $data['user'] = $this->get_session();
         $username = $data['user']['user_username'];
         $data = array('success' => false, 'messages' => array());
 
@@ -383,7 +383,7 @@ class Admin extends CI_Controller{
     //Fungsi edit password
     public function editPass()
     {
-        $user = $this->check_session();
+        $user = $this->get_session();
         $username = $user['user_username'];
         $data = array('success' => false, 'error' => false, 'messages' => array());
 
