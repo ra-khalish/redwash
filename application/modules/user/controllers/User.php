@@ -2,6 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User extends CI_Controller{
+    const statusQ = 'Queue',
+    statusP = 'Processed',
+    statusC = 'Completed';
+
+
     public function __construct()
     {
         parent::__construct();
@@ -11,33 +16,36 @@ class User extends CI_Controller{
         $this->load->model('m_user');
     }
 
+    public function get_session()
+    {
+        $useremail = $this->session->userdata('email');
+        return $this->m_user->getUser('users', $useremail);
+    }
+
+    public function load_view($main_view, $data)
+    {
+        $this->load->view('templates/user_header',$data);
+        $this->load->view("{$main_view}", $data);
+        $this->load->view('templates/user_footer');
+    }
+
     //Kontrol Antrian
     public function queue()
     {
-        $useremail = $this->session->userdata('email');
         $data['title'] = 'Queue Page';
-        $data['user'] = $this->m_user->getUser('users', $useremail);
-
-        $statusQ        = 'Queue';
-        $statusP        = 'Processed';
-        $statusC        = 'Completed';
-        $date           = date("Y-m-d");
-
-        $data['queue']  = $this->m_user->getqueue('tbl_washing', $statusQ,$date);
-        $data['processed']  = $this->m_user->getprocess('tbl_washing', $statusP,$date);
-        $data['completed']  = $this->m_user->getcompleted('tbl_washing', $statusC,$date);
-
-        $this->load->view('templates/user_header',$data);
-        $this->load->view('v_rwqueue', $data);
-        $this->load->view('templates/user_footer');
+        $data['user'] = $this->get_session();
+        $date = date("Y-m-d");
+        $data['queue']  = $this->m_user->getqueue('tbl_washing', User::statusQ,$date);
+        $data['processed']  = $this->m_user->getprocess('tbl_washing', User::statusP,$date);
+        $data['completed']  = $this->m_user->getcompleted('tbl_washing', User::statusC,$date);
+        $this->load_view('v_rwqueue', $data);
     }
 
     //Kontrol Pemesanan
     public function fbooking()
     {
-        $useremail = $this->session->userdata('email');
         $data['title'] = 'Booking';
-        $data['user'] = $this->m_user->getUser('users', $useremail);
+        $data['user'] = $this->get_session();
         $data['typemc'] = $this->m_user->gettype();
         $data['codebooking'] = $this->m_user->bkcode();
 
@@ -84,9 +92,7 @@ class User extends CI_Controller{
         $this->form_validation->set_error_delimiters('<small class="text-danger pl-3">','</small>');
 
         if ($this->form_validation->run() == false) {
-            $this->load->view('templates/user_header',$data);
-            $this->load->view('v_booking', $data);
-            $this->load->view('templates/user_footer');
+            $this->load_view('v_booking', $data);
         } else {
             $data = [
                 'user_id' => htmlspecialchars($this->input->post('user_id',true)),
@@ -95,7 +101,7 @@ class User extends CI_Controller{
                 'code_booking' => htmlspecialchars($this->input->post('code_booking',true)),
                 'noplat' => htmlspecialchars($this->input->post('noplat',true)),
                 'tot_cost' => htmlspecialchars($this->input->post('tot_cost',true)),
-                'status' => 'Queue',
+                'status' => Admin::statusQ,
                 'ctime' => date("Y-m-d H:i:s")
             ];
             $this->m_user->insertBook('tbl_washing',$data);
@@ -107,13 +113,9 @@ class User extends CI_Controller{
     //Kontrol transaksi
     public function transaction()
     {
-        $useremail = $this->session->userdata('email');
         $data['title'] = 'Transaction';
-        $data['user'] = $this->m_user->getUser('users', $useremail);
-
-        $this->load->view('templates/user_header',$data);
-        $this->load->view('v_transaction', $data);
-        $this->load->view('templates/user_footer');
+        $data['user'] = $this->get_session();
+        $this->load_view('v_transaction', $data);
     }
 
     //Fungsi ambil data transaksi dengan json
@@ -133,13 +135,9 @@ class User extends CI_Controller{
     //Kontrol profile
     public function user_profile()
     {
-        $useremail = $this->session->userdata('email');
         $data['title'] = 'Profile';
-        $data['user'] = $this->m_user->getUser('users', $useremail);
-
-        $this->load->view('templates/user_header',$data);
-        $this->load->view('v_userprofile', $data);
-        $this->load->view('templates/user_footer');
+        $data['user'] = $this->get_session();
+        $this->load_view('v_userprofile', $data);
     }
 
     //Fungsi edit profile
