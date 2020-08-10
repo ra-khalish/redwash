@@ -17,7 +17,10 @@
 
     <form action="<?= base_url('admin/fmbooking');?>" id="bookform" method="POST">
       <div class="form-group row">
-          <input type="hidden" class="form-control" id="code_booking" name="code_booking" value="<?= $codebooking?>" readonly>
+        <input type="hidden" class="form-control" id="code_booking" name="code_booking" value="<?= $codebooking?>" readonly>
+      </div>
+      <div>
+        <input type="hidden" class="form-control" id="user_id" name="user_id" value="<?= $user['user_id'];?>" readonly>
       </div>
       <div class="form-group row">
         <label for="name" class="col-sm-2 col-form-label">Name <span class="text-danger">*</span></label>

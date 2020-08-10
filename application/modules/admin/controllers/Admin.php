@@ -112,6 +112,7 @@ class Admin extends CI_Controller{
             $this->load_view('v_booking', $data);
         } else {
                 $data = [
+                    'user_id' => htmlspecialchars($this->input->post('user_id',true)),
                     'nm_consumer' => htmlspecialchars($this->input->post('nm_consumer',true)),
                     'contact' => htmlspecialchars($this->input->post('contact',true)),
                     'code_booking' => htmlspecialchars($this->input->post('code_booking',true)),
