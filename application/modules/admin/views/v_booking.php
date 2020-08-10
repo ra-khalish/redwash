@@ -39,7 +39,7 @@
       <div class="form-group row">
         <label for="noplat" class="col-sm-2 col-form-label">No Plat <span class="text-danger">*</span></label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="noplat" name="noplat" value="<?= set_value('noplat');?>" onkeyup="this.value = this.value.toUpperCase();" maxlength="9" required>
+          <input type="text" class="form-control" id="noplat" name="noplat" value="<?= set_value('noplat');?>" onkeyup="this.value = this.value.toUpperCase();" maxlength="12" required>
           <?= form_error('noplat'); ?>
         </div>
       </div>

@@ -74,7 +74,7 @@ class User extends CI_Controller{
             array(
                     'field' => 'noplat',
                     'label' => 'Plat Number',
-                    'rules' => 'required|trim|min_length[3]'
+                    'rules' => 'required|trim|min_length[12]'
             ),
             array(
                     'field' => 'typemotor',
