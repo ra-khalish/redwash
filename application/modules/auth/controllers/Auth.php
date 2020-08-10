@@ -9,6 +9,13 @@ class Auth extends CI_Controller{
         $this->load->library('form_validation');
     }
 
+    public function load_view($main_view, $data)
+    {
+        $this->load->view('templates/auth_header',$data);
+        $this->load->view("{$main_view}");
+        $this->load->view('templates/auth_footer');
+    }
+
     //Login
     public function index()
     {
@@ -33,10 +40,7 @@ class Auth extends CI_Controller{
       $this->form_validation->set_rules($rules);
       if($this->form_validation->run() == false){
         $data['title'] = 'Login Page';
-        $this->load->view('templates/auth_header',$data);
-        $this->load->view('v_login');
-        $this->load->view('templates/auth_footer');
-
+        $this->load_view('v_login', $data);
       } else {
         $this->_login(); //Mengarah ke fungsi login
       }
@@ -148,9 +152,7 @@ class Auth extends CI_Controller{
       $this->form_validation->set_rules($rules);
         if($this->form_validation->run() == false){
             $data['title'] = 'RedWash Registration';
-            $this->load->view('templates/auth_header',$data);
-            $this->load->view('v_registration');
-            $this->load->view('templates/auth_footer');
+            $this->load_view('v_registration', $data);
         }else {
             $email = htmlspecialchars($this->input->post('email',true));
             $data = [
@@ -292,9 +294,7 @@ class Auth extends CI_Controller{
       $this->form_validation->set_error_delimiters('<small class="text-danger pl-3">','</small>');
       if($this->form_validation->run() == false){
         $data['title'] = 'Forgot Password';
-        $this->load->view('templates/auth_header',$data);
-        $this->load->view('v_forgotpassword');
-        $this->load->view('templates/auth_footer');
+        $this->load_view('v_forgotpassword', $data);
       }else{
         $email  = $this->input->post('email');
         $user   = $this->db->get_where('users', ['user_email' => $email, 'user_is_active' => 1])->row_array();
@@ -370,9 +370,7 @@ class Auth extends CI_Controller{
       $this->form_validation->set_rules($rules);
       if($this->form_validation->run() == false){
         $data['title'] = 'Change Password';
-        $this->load->view('templates/auth_header',$data);
-        $this->load->view('v_changepassword');
-        $this->load->view('templates/auth_footer');
+        $this->load_view('v_changepassword', $data);
       }else{
         $password = password_hash($this->input->post('password1'),PASSWORD_DEFAULT);
         $email = $this->session->userdata('reset_email');
