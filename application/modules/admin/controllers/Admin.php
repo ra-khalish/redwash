@@ -91,7 +91,7 @@ class Admin extends CI_Controller{
             array(
                     'field' => 'noplat',
                     'label' => 'Plat Number',
-                    'rules' => 'required|trim|min_length[12]'
+                    'rules' => 'required|trim|min_length[6]'
             ),
             array(
                     'field' => 'typemotor',
