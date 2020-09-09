@@ -14,6 +14,8 @@ class User extends CI_Controller{
             redirect('block');
         }
         $this->load->model('m_user');
+        // $this->load->library('Php_func');
+        $this->load->library('Pubemail');
     }
 
     public function get_session()
@@ -74,7 +76,7 @@ class User extends CI_Controller{
             array(
                     'field' => 'noplat',
                     'label' => 'Plat Number',
-                    'rules' => 'required|trim|min_length[12]'
+                    'rules' => 'required|trim|min_length[6]'
             ),
             array(
                     'field' => 'typemotor',
@@ -101,10 +103,14 @@ class User extends CI_Controller{
                 'code_booking' => htmlspecialchars($this->input->post('code_booking',true)),
                 'noplat' => htmlspecialchars($this->input->post('noplat',true)),
                 'tot_cost' => htmlspecialchars($this->input->post('tot_cost',true)),
-                'status' => Admin::statusQ,
+                'status' => User::statusQ,
                 'ctime' => date("Y-m-d H:i:s")
             ];
             $this->m_user->insertBook('tbl_washing',$data);
+            $data['email'] = $this->session->userdata('email');
+            $data = json_encode($data);
+            // $this->php_func->processSend($data);
+            $this->pubemail->processSend($data);
             $this->session->set_flashdata('alert',success("<strong>Congratulation!</strong> Motorcycle is already in the queue."));
             redirect('user/queue');
         }
