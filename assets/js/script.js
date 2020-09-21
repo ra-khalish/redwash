@@ -4,12 +4,16 @@
 // });
 
 function caltotal() {
-	var type = 0;
+	var cost = 0;
+	var sel = document.getElementById("typemotor");
 	$("#typemotor option:selected").each(function () {
-		type = parseInt($(this).val());
+		cost = parseInt($(this).val());
+		type = sel.options[sel.selectedIndex].text;
 		console.log(type);
+		console.log(cost);
 	});
-	$("input[name=tot_cost]").val(type);
+	$("input[name=tot_cost]").val(cost);
+	$("input[name=motor_type]").val(type);
 }
 
 $().ready(function () {

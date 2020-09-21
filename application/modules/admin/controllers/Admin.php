@@ -146,7 +146,10 @@ class Admin extends CI_Controller{
     }
 
     function update_order(){ //update record method
-        $this->m_admin->updateOrder();
+        $record = $this->m_admin->updateOrder();
+        $useremail = $this->m_admin->getUsernemail($record['user_id']);
+        $motor_type = $this->m_admin->getPacket($record['tot_cost']);
+        $this->send_email($record, $useremail, $motor_type);
         redirect('admin/mngbooking');
     }
 
@@ -440,4 +443,40 @@ class Admin extends CI_Controller{
         echo json_encode($data);
     }
     //Profile
+
+    private function send_email($record, $useremail, $motor_type)
+    {
+        if($record['status'] == Admin::statusP){
+            $subject = 'Process Notification';
+            $text = 'We are washing your motorbike';
+          } else if($record['status'] == Admin::statusC){
+            $subject = 'Complete Notification';
+            $text = 'Wow! Your motorbike is shiny after washing';
+          }
+          $content = 'notification';
+          $email = $useremail['user_email'];
+          $data = array(
+            'name' => $record['nm_consumer'],
+            'brand' => 'Red Wash',
+            'total' => $record['tot_cost'],
+            'code_booking' => $record['code_booking'],
+            'motor_type' => $motor_type['motor_type'],
+            'status' => $record['status'],
+            'time' => $record['etime'],
+            'cashier' => $record['cashier'],
+            'action_url' => 'https://redwash.000webhostapp.com/user/queue',
+            'text' => $text
+          );
+          $message = $this->load->view("email/{$content}", $data, true);
+          $this->email->from($_ENV['AUTH_EMAIL'], 'Admin Red Wash');
+          $this->email->to($email);
+          $this->email->subject($subject);
+          $this->email->message($message);
+    
+          if ($this->email->send()) {
+            return TRUE;
+          } else {
+            show_error($this->email->print_debugger());
+          }
+    }
 }

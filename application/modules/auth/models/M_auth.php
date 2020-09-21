@@ -4,8 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class M_auth extends CI_Model{
 
   //Input data registrasi
-  public function insertReg($table, $data) {
-    $this->db->insert($table, $data);
+  public function insertReg($table, $user_data) {
+    $this->db->insert($table, $user_data);
   }
 
   //Input data token yang dibuat untuk aktivasi/forgetpassword

@@ -6,7 +6,6 @@ class Auth extends CI_Controller{
     {
         parent::__construct();
         $this->load->model('m_auth');
-        $this->load->library('form_validation');
     }
 
     public function load_view($main_view, $data)
@@ -22,7 +21,7 @@ class Auth extends CI_Controller{
       if($this->session->userdata('status') == 'admin'){
         redirect('admin');
       }else if($this->session->userdata('status') == 'user'){
-        redirect('user');
+        redirect('user/queue');
       }
       $rules = array(
         array(
@@ -155,7 +154,7 @@ class Auth extends CI_Controller{
             $this->load_view('v_registration', $data);
         }else {
             $email = htmlspecialchars($this->input->post('email',true));
-            $data = [
+            $user_data = [
                 'user_name' => htmlspecialchars($this->input->post('name',true)),
                 'user_username' => htmlspecialchars($this->input->post('username',true)),
                 'user_email' => htmlspecialchars($email),
@@ -173,60 +172,109 @@ class Auth extends CI_Controller{
               'user_token' => $token,
               'user_cdate' => time()
             ];
-            $this->m_auth->insertReg('users',$data); //Memasukkan data ke table user
+            $this->m_auth->insertReg('users',$user_data); //Memasukkan data ke table user
             $this->m_auth->insertTkn('users_token',$users_token); //Memasukkan data ke tabel token
             
-            $this->_sendEmail($token,$email,'verify');//Mengirim token ke fungsi _sendEmail
+            $this->_sendEmail($token,$email,'verify',$user_data);//Mengirim token ke fungsi _sendEmail
             $this->session->set_flashdata('alert',success('<strong>Congratulation!</strong> Your account has been created, Please Check your email.'));
             redirect('login');
         }
     }
 
-    //Fungsi sendEmail
-    private function _sendEmail($token, $email, $type)
+    private function _sendEmail($token, $email, $type, $user_data)
     {
-      //Konfigurasi untuk email pengirim kode aktivasi
-      $config = array(
-        'protocol'  => 'smtp',
-        'smtp_host' => 'ssl://smtp.googlemail.com',
-        'smtp_user' => $_ENV['AUTH_EMAIL'],
-        'smtp_pass' => $_ENV['AUTH_PASSWORD'],
-        'smtp_port' => 465,
-        'mailtype'  => 'html',
-        'charset'   => 'utf-8',
-        'newline'   => "\r\n"
-      );
-
-      //$this->load->library('email',$config);
-      //Menjalankan librari email dari konfigurasi yang ada
-      $this->email->initialize($config);
-
-      //Email pengirim
-      $this->email->from('radevman403','Admin RedWash');
-      //Email akan dikirim ke email yang di input
-      $this->email->to($email);
-
-      //Jika fungsi sendEmail untuk verify
       if($type == 'verify'){
-        $this->email->subject('Account Verification');
-        $this->email->message('Click this link to verify your account : 
-          <a href="'.base_url() . 'auth/verify?email=' . $email 
-          . '&token=' . urlencode($token) . '">Activate</a>');//Masuk kembali ke login
+        $subject = 'Account Verification';
+        $url = base_url() . 'auth/verify?email=' . $email . '&token=' . urlencode($token);
+        $content = 'welcome';
       } else if($type == 'forgot'){
-        $this->email->subject('Reset Password');
-        $this->email->message('Click this link to reset your password : 
-          <a href="'.base_url() . 'auth/resetpassword?email=' . $email 
-          . '&token=' . urlencode($token) . '">Reset Password</a>');//Masuk ke forgot password
+        $subject = 'Reset Password';
+        $url = base_url() . 'auth/resetpassword?email=' . $email . '&token=' . urlencode($token);
+        $content = 'password-reset';
       }
+      $data = array(
+        'name' => $user_data['user_name'],
+        'username' => $user_data['user_username'],
+        'sender_email' => $_ENV['AUTH_EMAIL'],
+        'sender' => 'Admin',
+        'brand' => 'Red Wash',
+        'action_url' => $url,
+        'login_url' => 'https://redwash.000webhostapp.com/login'
+      );
+      $message = $this->load->view("email/{$content}", $data, true);
+      
+      $this->email->from($_ENV['AUTH_EMAIL'], 'Admin Red Wash');
+      $this->email->to($email);
+      $this->email->subject($subject);
+      $this->email->message($message);
+      // //Jika fungsi sendEmail untuk verify
+      // if($type == 'verify'){
+      //   $this->email->subject('Account Verification');
+      //   $this->email->message(
+      //     'Click this link to verify your account : 
+      //     <a href="'.base_url() . 'auth/verify?email=' . $email 
+      //     . '&token=' . urlencode($token) . '">Activate</a>');//Masuk kembali ke login
+      // } else if($type == 'forgot'){
+      //   $this->email->subject('Reset Password');
+      //   $this->email->message($message);
+      //     // 'Click this link to reset your password : 
+      //     // <a href="'.base_url() . 'auth/resetpassword?email=' . $email 
+      //     // . '&token=' . urlencode($token) . '">Reset Password</a>');//Masuk ke forgot password
+      // }
 
-      //Mengirim email
-      if($this->email->send()){
-        return true;
-      }else{
-        echo $this->email->print_debugger();
-        die;
+      if ($this->email->send()) {
+        return TRUE;
+      } else {
+        show_error($this->email->print_debugger());
       }
+      
     }
+
+    // //Fungsi sendEmail
+    // private function _sendEmail($token, $email, $type)
+    // {
+    //   //Konfigurasi untuk email pengirim kode aktivasi
+    //   $config = array(
+    //     'protocol'  => 'smtp',
+    //     'smtp_host' => 'ssl://smtp.googlemail.com',
+    //     'smtp_user' => $_ENV['AUTH_EMAIL'],
+    //     'smtp_pass' => $_ENV['AUTH_PASSWORD'],
+    //     'smtp_port' => 465,
+    //     'mailtype'  => 'html',
+    //     'charset'   => 'utf-8',
+    //     'newline'   => "\r\n"
+    //   );
+
+    //   //$this->load->library('email',$config);
+    //   //Menjalankan librari email dari konfigurasi yang ada
+    //   $this->email->initialize($config);
+
+    //   //Email pengirim
+    //   $this->email->from('radevman403','Admin RedWash');
+    //   //Email akan dikirim ke email yang di input
+    //   $this->email->to($email);
+
+    //   //Jika fungsi sendEmail untuk verify
+    //   if($type == 'verify'){
+    //     $this->email->subject('Account Verification');
+    //     $this->email->message('Click this link to verify your account : 
+    //       <a href="'.base_url() . 'auth/verify?email=' . $email 
+    //       . '&token=' . urlencode($token) . '">Activate</a>');//Masuk kembali ke login
+    //   } else if($type == 'forgot'){
+    //     $this->email->subject('Reset Password');
+    //     $this->email->message('Click this link to reset your password : 
+    //       <a href="'.base_url() . 'auth/resetpassword?email=' . $email 
+    //       . '&token=' . urlencode($token) . '">Reset Password</a>');//Masuk ke forgot password
+    //   }
+
+    //   //Mengirim email
+    //   if($this->email->send()){
+    //     return true;
+    //   }else{
+    //     echo $this->email->print_debugger();
+    //     die;
+    //   }
+    // }
 
     //Fungsi verify
     public function verify()
@@ -297,9 +345,9 @@ class Auth extends CI_Controller{
         $this->load_view('v_forgotpassword', $data);
       }else{
         $email  = $this->input->post('email');
-        $user   = $this->db->get_where('users', ['user_email' => $email, 'user_is_active' => 1])->row_array();
+        $user_data   = $this->db->get_where('users', ['user_email' => $email, 'user_is_active' => 1])->row_array();
 
-        if($user){
+        if($user_data){
           $token = base64_encode(random_bytes(32));
           $users_token = [
             'user_email' => $email,
@@ -310,7 +358,7 @@ class Auth extends CI_Controller{
           //Memasukkan data token ke tabel
           $this->m_auth->insertTkn('users_token',$users_token);
           //Memanggil fungsi sendEmail dengan kondisi forgot
-          $this->_sendEmail($token,$email,'forgot');
+          $this->_sendEmail($token,$email,'forgot',$user_data);
           $this->session->set_flashdata('alert',success('Please check your email to reset your password!'));
           redirect('login');
         }else{

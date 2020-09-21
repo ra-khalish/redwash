@@ -10,6 +10,16 @@ class M_admin extends CI_Model{
         return $this->db->get_where($table, $where)->row_array();
     }
 
+    public function getUsernemail($user_id)
+    {
+        $result = $this->db
+            ->select('user_email')
+            ->from('users')
+            ->where("user_id = {$user_id}")
+            ->get();
+        return $result->row_array();
+    }
+
     //Ambil jumlah antrian hari ini
     public function getctqueue($statusQ, $date)
     {
@@ -85,6 +95,16 @@ class M_admin extends CI_Model{
         return $this->db->get('tbl_typemotor')->result();
     }
 
+    public function getPacket($price)
+    {
+        $result = $this->db
+            ->select('motor_type')
+            ->from('tbl_typemotor')
+            ->where("price = {$price}")
+            ->get();
+        return $result->row_array();
+    }
+
     //Fungsi membuat kode
     public function bkcode()
     {
@@ -118,7 +138,7 @@ class M_admin extends CI_Model{
         $this->datatables->add_column('payment','<a href="javascript:void(0);" class="pay_record border-0 btn-transition btn btn-outline-warning btn-sm mb" 
         data-booking="$1" data-noplat="$2" data-tot_cost="$4" data-pay="$3" data-ch_cost="$5"><i class="fas fa-money-check-alt"></i></a> 
         ', 'code_booking,noplat,pay,tot_cost,ch_cost');
-        $this->datatables->add_column('view',
+        $this->datatables->add_column('action',
         '<a href="javascript:void(0);" class="edit_record border-0 btn-transition btn btn-outline-success btn-sm mb" 
         data-booking="$1" data-noplat="$2" data-status="$3"><i class="fas fa-edit"></i></a> 
         <a href="javascript:void(0);" class="delete_record border-0 btn-transition btn btn-outline-danger btn-sm mb" 
@@ -151,7 +171,8 @@ class M_admin extends CI_Model{
             'etime'         => date("Y-m-d H:i:s")
         );
         $this->db->where('code_booking',$code_booking);
-        $result = $this->db->update('tbl_washing', $data);
+        $this->db->update('tbl_washing', $data);
+        $result = $this->db->get_where('tbl_washing', array('code_booking' => $code_booking))->row_array();
         $this->session->set_flashdata('alert',success("The status of the motorcycle has changed"));
         return $result;
     }

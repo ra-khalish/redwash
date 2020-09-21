@@ -94,17 +94,19 @@ class User extends CI_Controller{
         if ($this->form_validation->run() == false) {
             $this->load_view('v_booking', $data);
         } else {
-            $data = [
+            $data_book = [
                 'user_id' => htmlspecialchars($this->input->post('user_id',true)),
                 'nm_consumer' => htmlspecialchars($this->input->post('nm_consumer',true)),
                 'contact' => htmlspecialchars($this->input->post('contact',true)),
                 'code_booking' => htmlspecialchars($this->input->post('code_booking',true)),
                 'noplat' => htmlspecialchars($this->input->post('noplat',true)),
                 'tot_cost' => htmlspecialchars($this->input->post('tot_cost',true)),
-                'status' => Admin::statusQ,
+                'status' => User::statusQ,
                 'ctime' => date("Y-m-d H:i:s")
             ];
-            $this->m_user->insertBook('tbl_washing',$data);
+            $this->m_user->insertBook('tbl_washing',$data_book);
+            $motor_type = ['motor_type' => htmlspecialchars($this->input->post('motor_type',true))];
+            $this->send_email($data_book, $motor_type);
             $this->session->set_flashdata('alert',success("<strong>Congratulation!</strong> Motorcycle is already in the queue."));
             redirect('user/queue');
         }
@@ -238,5 +240,35 @@ class User extends CI_Controller{
             }
         }
         echo json_encode($data);
+    }
+
+    private function send_email($data_book, $motor_type)
+    {  
+        $subject = 'Your order '.$data_book['code_booking'];
+        $content = 'notification';
+        $email = $this->session->userdata('email');
+        $data = array(
+        'name' => $data_book['nm_consumer'],
+        'brand' => 'Red Wash',
+        'text' => 'Come on, immediately bring Your vehicle here',
+        'code_booking' => $data_book['code_booking'],
+        'motor_type' => $motor_type['motor_type'],
+        'total' => $data_book['tot_cost'],
+        'status' => $data_book['status'],
+        'time' => $data_book['ctime'],
+        'action_url' => 'https://redwash.000webhostapp.com/user/queue'
+        );
+        $message = $this->load->view("email/{$content}", $data, true);
+        
+        $this->email->from($_ENV['AUTH_EMAIL'], 'Admin Red Wash');
+        $this->email->to($email);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        if ($this->email->send()) {
+        return TRUE;
+        } else {
+        show_error($this->email->print_debugger());
+        }
     }
 }
