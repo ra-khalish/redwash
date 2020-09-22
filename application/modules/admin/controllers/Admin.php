@@ -449,11 +449,12 @@ class Admin extends CI_Controller{
         if($record['status'] == Admin::statusP){
             $subject = 'Process Notification';
             $text = 'We are washing your motorbike';
+            $content = 'notification';
           } else if($record['status'] == Admin::statusC){
             $subject = 'Complete Notification';
             $text = 'Wow! Your motorbike is shiny after washing';
+            $content = 'invoice';
           }
-          $content = 'notification';
           $email = $useremail['user_email'];
           $data = array(
             'name' => $record['nm_consumer'],

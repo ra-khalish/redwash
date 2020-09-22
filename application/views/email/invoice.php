@@ -457,6 +457,8 @@
                     <td class="content-cell">
                       <div class="f-fallback">
                         <h1>Hi <?=$name?>,</h1>
+                        <p><?= $text?>.</p>
+                        <p>Don't forget to take your motorbike.</p>
                         <p>Thanks for using <?=$brand?>. This is an invoice for your recent order.</p>
                         <table class="attributes" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                           <tr>
@@ -472,7 +474,7 @@
                                 <tr>
                                   <td class="attributes_item">
                                     <span class="f-fallback">
-              <strong>Due By:</strong> <?=$due_date?>
+              <strong>Due By:</strong> <?=date("Y-m-d")?> 22:00
             </span>
                                   </td>
                                 </tr>
@@ -502,7 +504,7 @@
                               <h3><?=$code_booking?></h3>
                             </td>
                             <td>
-                              <h3 class="align-right"><?=$cdate?></h3>
+                              <h3 class="align-right"><?=$time?></h3>
                             </td>
                           </tr>
                           <tr>
@@ -517,22 +519,21 @@
                                   </th>
                                 </tr>                
                                 <tr>
-                                  <td width="80%" class="purchase_item"><span class="f-fallback">{{description}}</span></td>
-                                  <td class="align-right" width="20%" class="purchase_item"><span class="f-fallback">{{amount}}</span></td>
+                                  <td width="80%" class="purchase_item"><span class="f-fallback"><?=$motor_type?></span></td>
+                                  <td class="align-right" width="20%" class="purchase_item"><span class="f-fallback"><?=$total?></span></td>
                                 </tr>
                                 <tr>
                                   <td width="80%" class="purchase_footer" valign="middle">
                                     <p class="f-fallback purchase_total purchase_total--label">Total</p>
                                   </td>
                                   <td width="20%" class="purchase_footer" valign="middle">
-                                    <p class="f-fallback purchase_total">{{total}}</p>
+                                    <p class="f-fallback purchase_total"><?=$total?></p>
                                   </td>
                                 </tr>
                               </table>
                             </td>
                           </tr>
                         </table>
-                        <p>If you have any questions about this invoice, simply reply to this email or reach out to our <a href="{{support_url}}">support team</a> for help.</p>
                         <p>Cheers,
                           <br>The <?=$brand?> Team</p>
                         <!-- Sub copy -->
@@ -540,7 +541,7 @@
                           <tr>
                             <td>
                               <p class="f-fallback sub">If you’re having trouble with the button above, copy and paste the URL below into your web browser.</p>
-                              <p class="f-fallback sub">{{action_url}}</p>
+                              <p class="f-fallback sub"><?=$action_url?></p>
                             </td>
                           </tr>
                         </table>
