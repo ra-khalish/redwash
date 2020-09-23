@@ -51,14 +51,6 @@ class User extends CI_Controller{
 
         $rules = array(
             array(
-                'field' => 'code_booking',
-                'label' => 'Code Booking',
-                'rules' => 'is_unique[tbl_washing.code_booking]',
-                'errors' => array(
-                    'is_unique' => 'Please send the booking again'
-                ),
-            ),
-            array(
                     'field' => 'nm_consumer',
                     'label' => 'Consumer',
                     'rules' => 'required'
@@ -104,6 +96,7 @@ class User extends CI_Controller{
                 'status' => User::statusQ,
                 'ctime' => date("Y-m-d H:i:s")
             ];
+            $data_book['code_booking'] = $this->m_user->bkcode();
             $this->m_user->insertBook('tbl_washing',$data_book);
             $motor_type = ['motor_type' => htmlspecialchars($this->input->post('motor_type',true))];
             $this->send_email($data_book, $motor_type);

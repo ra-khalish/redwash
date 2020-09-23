@@ -67,14 +67,14 @@ class Admin extends CI_Controller{
         $data['codebooking'] = $this->m_admin->bkcode();
         
         $rules = array(
-            array(
-                'field' => 'code_booking',
-                'label' => 'Code Booking',
-                'rules' => 'is_unique[tbl_washing.code_booking]',
-                'errors' => array(
-                    'is_unique' => 'Please send the booking again'
-                ),
-            ),
+            // array(
+            //     'field' => 'code_booking',
+            //     'label' => 'Code Booking',
+            //     'rules' => 'is_unique[tbl_washing.code_booking]',
+            //     'errors' => array(
+            //         'is_unique' => 'Please send the booking again'
+            //     ),
+            // ),
             array(
                     'field' => 'nm_consumer',
                     'label' => 'Consumer',
@@ -122,6 +122,7 @@ class Admin extends CI_Controller{
                     'cashier' => $this->session->userdata('name'),
                     'ctime' => date("Y-m-d H:i:s")
                 ];
+                $data['code_booking'] = $this->m_user->bkcode();
                 $this->m_admin->insertBook('tbl_washing',$data);
                 $this->session->set_flashdata('alert',success("<strong>Congratulation!</strong> Motorcycle is already in the queue."));
                 redirect('admin/mcqueue');
