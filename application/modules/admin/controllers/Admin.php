@@ -136,6 +136,8 @@ class Admin extends CI_Controller{
         $data['title']  = 'Booking Management';
         $data['user'] = $this->get_session();
         $data['chstatus'] = [Admin::statusP,Admin::statusC];
+        // $time =  $this->benchmark->elapsed_time('code_start', 'code_end');
+		// var_dump($time);
         $this->load_view('v_mgbooking', $data);
     }
 
@@ -147,10 +149,16 @@ class Admin extends CI_Controller{
     }
 
     function update_order(){ //update record method
+        $this->benchmark->mark('code_start');
         $record = $this->m_admin->updateOrder();
         $useremail = $this->m_admin->getUsernemail($record['user_id']);
         $motor_type = $this->m_admin->getPacket($record['tot_cost']);
         $this->send_email($record, $useremail, $motor_type);
+        $this->benchmark->mark('code_end');
+        $time =  $this->benchmark->elapsed_time('code_start', 'code_end');
+        log_message('info','Function Execution Time: '.$time);
+        // var_dump($time);
+        // $this->load_view('v_mgbooking');
         redirect('admin/mngbooking');
     }
 
