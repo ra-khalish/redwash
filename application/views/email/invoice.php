@@ -436,7 +436,7 @@
   <![endif]-->
   </head>
   <body>
-    <span class="preheader">This is an invoice for your order on <?=$purchase_date?>. Please submit payment by <?=$due_date?></span>
+    <span class="preheader">This is an invoice for your order on <?=$order_created?>. Please submit payment by before <?=date("Y-m-d")?> 22:00</span>
     <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
         <td align="center">
@@ -540,7 +540,7 @@
                         <table class="body-sub" role="presentation">
                           <tr>
                             <td>
-                              <p class="f-fallback sub">If you’re having trouble with the button above, copy and paste the URL below into your web browser.</p>
+                              <p class="f-fallback sub">If you're having trouble with the button above, copy and paste the URL below into your web browser.</p>
                               <p class="f-fallback sub"><?=$action_url?></p>
                             </td>
                           </tr>

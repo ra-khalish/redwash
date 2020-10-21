@@ -464,6 +464,7 @@ class Admin extends CI_Controller{
             'code_booking' => $record['code_booking'],
             'motor_type' => $motor_type['motor_type'],
             'status' => $record['status'],
+            'order_created' => $record['ctime'],
             'time' => $record['etime'],
             'cashier' => $record['cashier'],
             'action_url' => 'https://redwash.000webhostapp.com/user/queue',
