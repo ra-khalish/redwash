@@ -38,8 +38,8 @@
         <?php if($this->session->userdata('status') == 'user'):?>
             <!-- Example single danger button -->
             <!-- Nav Item - User Information -->
-            <li class="nav-item"><a href="<?= base_url('user/queue');?>" class="nav-link link-scroll">Queue</a></li>
-            <li class="nav-item"><a href="<?= base_url('user/fbooking');?>" class="nav-link link-scroll">Booking</a></li>
+            <li class="nav-item"><a href="<?= base_url('user_queue');?>" class="nav-link link-scroll">Queue</a></li>
+            <li class="nav-item"><a href="<?= base_url('user_booking');?>" class="nav-link link-scroll">Booking</a></li>
             <li class="nav-item dropdown no-arrow">
               <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="mr-2"><?= $user['user_name'];?></span>
@@ -47,10 +47,10 @@
 
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="<?= base_url('user/user_profile');?>">
+                <a class="dropdown-item" href="<?= base_url('user_profile');?>">
                   My Profile
                 </a>
-                <a class="dropdown-item" href="<?= base_url('user/transaction');?>">
+                <a class="dropdown-item" href="<?= base_url('user_transaction');?>">
                   Transaction
                 </a>
                 <div class="dropdown-divider"></div>

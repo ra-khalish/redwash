@@ -28,17 +28,17 @@
 </div>
 
 <li class="nav-item <?= ($title == 'Vehicle Queue') ? 'active' :'' ?>">
-  <a class="nav-link pb-0" href="<?= base_url('admin/mcqueue');?>">
+  <a class="nav-link pb-0" href="<?= base_url('admin_queue');?>">
     <i class="fas fa-fw fa-motorcycle"></i>
     <span>Vehicle Queue</span></a>
 </li>
 <li class="nav-item <?= ($title == 'Booking') ? 'active' :'' ?>">
-  <a class="nav-link pb-0" href="<?= base_url('admin/fmbooking');?>">
+  <a class="nav-link pb-0" href="<?= base_url('admin_booking');?>">
     <i class="fas fa-fw fa-bookmark"></i>
     <span>Booking</span></a>
 </li>
 <li class="nav-item <?= ($title == 'Booking Management') ? 'active' :'' ?>">
-  <a class="nav-link" href="<?= base_url('admin/mngbooking');?>">
+  <a class="nav-link" href="<?= base_url('admin_manage');?>">
     <i class="fas fa-fw fa-clipboard"></i>
     <span>Booking Management</span></a>
 </li>
@@ -54,13 +54,13 @@
 
 <!-- Nav Item - Charts -->
 <li class="nav-item <?= ($title == 'Booking Archive') ? 'active' :'' ?>">
-  <a class="nav-link pb-0" href="<?= base_url('admin/booking_arc');?>">
+  <a class="nav-link pb-0" href="<?= base_url('booking_arc');?>">
     <i class="fas fa-fw fa-archive "></i>
     <span>Booking Archive</span></a>
 </li>
 
 <li class="nav-item <?= ($title == 'Data Report') ? 'active' :'' ?>">
-  <a class="nav-link pb-0" href="<?= base_url('admin/data_report');?>">
+  <a class="nav-link pb-0" href="<?= base_url('data_report');?>">
     <i class="fas fa-fw fa-print"></i>
     <span>Data Report</span></a>
 </li>
@@ -68,7 +68,7 @@
 <!-- Nav Item - Tables -->
 
 <li class="nav-item <?= ($title == 'Employee Management') ? 'active' :'' ?>">
-  <a class="nav-link" href="<?= base_url('admin/users_emply');?>">
+  <a class="nav-link" href="<?= base_url('data_emply');?>">
     <i class="fas fa-fw fa-users"></i>
     <span>Data Employee</span></a>
 </li>
