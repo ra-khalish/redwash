@@ -122,10 +122,10 @@ class Admin extends CI_Controller{
                     'cashier' => $this->session->userdata('name'),
                     'ctime' => date("Y-m-d H:i:s")
                 ];
-                $data['code_booking'] = $this->m_user->bkcode();
+                $data['code_booking'] = $this->m_admin->bkcode();
                 $this->m_admin->insertBook('tbl_washing',$data);
                 $this->session->set_flashdata('alert',success("<strong>Congratulation!</strong> Motorcycle is already in the queue."));
-                redirect('admin/mcqueue');
+                redirect('admin_queue');
         }
     }
     //Form Pemesanan
@@ -136,8 +136,6 @@ class Admin extends CI_Controller{
         $data['title']  = 'Booking Management';
         $data['user'] = $this->get_session();
         $data['chstatus'] = [Admin::statusP,Admin::statusC];
-        // $time =  $this->benchmark->elapsed_time('code_start', 'code_end');
-		// var_dump($time);
         $this->load_view('v_mgbooking', $data);
     }
 
@@ -155,21 +153,21 @@ class Admin extends CI_Controller{
         $motor_type = $this->m_admin->getPacket($record['tot_cost']);
         $this->send_email($record, $useremail, $motor_type);
         $this->benchmark->mark('code_end');
+        $ipadd = $this->input->ip_address();
+        $agent = $this->get_useragent();
         $time =  $this->benchmark->elapsed_time('code_start', 'code_end');
-        log_message('info','Function Execution Time: '.$time);
-        // var_dump($time);
-        // $this->load_view('v_mgbooking');
-        redirect('admin/mngbooking');
+        log_message('info','[v] IP Add: '. $ipadd .' Benchmark time: '.$time .' '. $agent);
+        redirect('admin_manage');
     }
 
     function update_payment(){ //update payment record
         $this->m_admin->updatePayment();
-        redirect('admin/mngbooking');
+        redirect('admin_manage');
     }
 
     function delete_order(){ //delete record method
         $this->m_admin->deleteOrder();
-        redirect('admin/mngbooking');
+        redirect('admin_manage');
     }
     //Pengolahan Pemesanan
 
@@ -334,12 +332,12 @@ class Admin extends CI_Controller{
     //Update status karyawan aktif atau tidak
     function update_emply(){ //update record method
         $this->m_admin->updateEmply();
-        redirect('admin/users_emply');
+        redirect('data_emply');
     }
 
     function delete_emply(){ //delete record method
         $this->m_admin->deleteEmply();
-        redirect('admin/users_emply');
+        redirect('data_emply');
     }
     //Data Karyawan
 
@@ -456,16 +454,16 @@ class Admin extends CI_Controller{
     private function send_email($record, $useremail, $motor_type)
     {
         if($record['status'] == Admin::statusP){
-            $subject = 'Process Notification';
+            $subject = 'Process Notification '.$record['code_booking'];
             $text = 'We are washing your motorbike';
             $content = 'notification';
-          } else if($record['status'] == Admin::statusC){
-            $subject = 'Complete Notification';
+        } else if($record['status'] == Admin::statusC){
+            $subject = 'Complete Notification '.$record['code_booking'];
             $text = 'Wow! Your motorbike is shiny after washing';
             $content = 'invoice';
-          }
-          $email = $useremail['user_email'];
-          $data = array(
+         }
+        $email = $useremail['user_email'];
+        $data = array(
             'name' => $record['nm_consumer'],
             'brand' => 'Red Wash',
             'total' => $record['tot_cost'],
@@ -477,17 +475,27 @@ class Admin extends CI_Controller{
             'cashier' => $record['cashier'],
             'action_url' => 'https://redwash.000webhostapp.com/user/queue',
             'text' => $text
-          );
-          $message = $this->load->view("email/{$content}", $data, true);
-          $this->email->from($_ENV['AUTH_EMAIL'], 'Admin Red Wash');
-          $this->email->to($email);
-          $this->email->subject($subject);
-          $this->email->message($message);
-    
-          if ($this->email->send()) {
+        );
+        $message = $this->load->view("email/{$content}", $data, true);
+        $this->email->from($_ENV['SENDGRID_EMAIL'], 'RedWash');
+        $this->email->to($email);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        if ($this->email->send()) {
             return TRUE;
-          } else {
+        } else {
             show_error($this->email->print_debugger());
-          }
+        }
+    }
+
+    function get_useragent()
+    {
+        $this->load->library('user_agent');
+        $agent = [
+            'platform' => $this->agent->platform(),
+            'browser' => $this->agent->browser().' '.$this->agent->version(),
+        ];
+        return $agent['platform'].' '.$agent['browser'];
     }
 }

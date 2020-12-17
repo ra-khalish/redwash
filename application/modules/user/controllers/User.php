@@ -86,6 +86,7 @@ class User extends CI_Controller{
         if ($this->form_validation->run() == false) {
             $this->load_view('v_booking', $data);
         } else {
+            $this->benchmark->mark('code_start');
             $data_book = [
                 'user_id' => htmlspecialchars($this->input->post('user_id',true)),
                 'nm_consumer' => htmlspecialchars($this->input->post('nm_consumer',true)),
@@ -100,8 +101,13 @@ class User extends CI_Controller{
             $this->m_user->insertBook('tbl_washing',$data_book);
             $motor_type = ['motor_type' => htmlspecialchars($this->input->post('motor_type',true))];
             $this->send_email($data_book, $motor_type);
+            $this->benchmark->mark('code_end');
+            $ipadd = $this->input->ip_address();
+            $agent = $this->get_useragent();
+            $time =  $this->benchmark->elapsed_time('code_start', 'code_end');
+            log_message('info','[v] IP Add: '. $ipadd . " user_id: " . $data_book['user_id'].' Benchmark time: '.$time .' '. $agent);
             $this->session->set_flashdata('alert',success("<strong>Congratulation!</strong> Motorcycle is already in the queue."));
-            redirect('user/queue');
+            redirect('user_queue');
         }
     }
 
@@ -124,7 +130,7 @@ class User extends CI_Controller{
     //Fungsi delete data transaksi
     function deleteTransaction(){ //delete record method
         $this->m_user->delTransaction();
-        redirect('user/transaction');
+        redirect('user_transaction');
     }
 
     //Kontrol profile
@@ -241,27 +247,38 @@ class User extends CI_Controller{
         $content = 'notification';
         $email = $this->session->userdata('email');
         $data = array(
-        'name' => $data_book['nm_consumer'],
-        'brand' => 'Red Wash',
-        'text' => 'Come on, immediately bring Your vehicle here',
-        'code_booking' => $data_book['code_booking'],
-        'motor_type' => $motor_type['motor_type'],
-        'total' => $data_book['tot_cost'],
-        'status' => $data_book['status'],
-        'time' => $data_book['ctime'],
-        'action_url' => 'https://redwash.000webhostapp.com/user/queue'
+            'name' => $data_book['nm_consumer'],
+            'brand' => 'Red Wash',
+            'text' => 'Come on, immediately bring Your vehicle here',
+            'code_booking' => $data_book['code_booking'],
+            'motor_type' => $motor_type['motor_type'],
+            'total' => $data_book['tot_cost'],
+            'status' => $data_book['status'],
+            'time' => $data_book['ctime'],
+            'action_url' => 'https://redwash.000webhostapp.com/user/queue'
         );
         $message = $this->load->view("email/{$content}", $data, true);
         
-        $this->email->from($_ENV['AUTH_EMAIL'], 'Admin Red Wash');
+        $this->email->from($_ENV['SENDGRID_EMAIL'], 'RedWash');
         $this->email->to($email);
         $this->email->subject($subject);
         $this->email->message($message);
 
         if ($this->email->send()) {
-        return TRUE;
+            return TRUE;
         } else {
-        show_error($this->email->print_debugger());
+            show_error($this->email->print_debugger());
         }
     }
+
+    function get_useragent()
+    {
+        $this->load->library('user_agent');
+        $agent = [
+            'platform' => $this->agent->platform(),
+            'browser' => $this->agent->browser().' '.$this->agent->version(),
+        ];
+        return $agent['platform'].' '.$agent['browser'];
+    }
+
 }

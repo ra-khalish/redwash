@@ -50,6 +50,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'home';
+
+# Admin
+$route['admin_queue'] = 'admin/mcqueue';
+$route['admin_booking'] = 'admin/fmbooking';
+$route['admin_manage'] = 'admin/mngbooking';
+$route['booking_arc'] = 'admin/booking_arc';
+$route['data_report'] = 'admin/data_report';
+$route['data_emply'] = 'admin/users_emply';
+
+# User
+$route['user_queue'] = 'user/queue';
+$route['user_booking'] = 'user/fbooking';
+$route['user_profile'] = 'user/user_profile';
+$route['user_transaction'] = 'user/transaction';
+
+# Auth
 $route['login'] = 'auth';
 $route['registration'] = 'auth/registration';
 $route['forgot-password'] = 'auth/forgotPass';
