@@ -53,14 +53,6 @@ class User extends CI_Controller{
 
         $rules = array(
             array(
-                'field' => 'code_booking',
-                'label' => 'Code Booking',
-                'rules' => 'is_unique[tbl_washing.code_booking]',
-                'errors' => array(
-                    'is_unique' => 'Please send the booking again'
-                ),
-            ),
-            array(
                     'field' => 'nm_consumer',
                     'label' => 'Consumer',
                     'rules' => 'required'
@@ -76,7 +68,7 @@ class User extends CI_Controller{
             array(
                     'field' => 'noplat',
                     'label' => 'Plat Number',
-                    'rules' => 'required|trim|min_length[6]'
+                    'rules' => 'required|trim|min_length[3]'
             ),
             array(
                     'field' => 'typemotor',
@@ -96,7 +88,8 @@ class User extends CI_Controller{
         if ($this->form_validation->run() == false) {
             $this->load_view('v_booking', $data);
         } else {
-            $data = [
+            $this->benchmark->mark('code_start');
+            $data_book = [
                 'user_id' => htmlspecialchars($this->input->post('user_id',true)),
                 'nm_consumer' => htmlspecialchars($this->input->post('nm_consumer',true)),
                 'contact' => htmlspecialchars($this->input->post('contact',true)),
@@ -106,13 +99,21 @@ class User extends CI_Controller{
                 'status' => User::statusQ,
                 'ctime' => date("Y-m-d H:i:s")
             ];
-            $this->m_user->insertBook('tbl_washing',$data);
+            $data_book['code_booking'] = $this->m_user->bkcode();
+            $this->m_user->insertBook('tbl_washing',$data_book);
             $data['email'] = $this->session->userdata('email');
+            $motor_type = ['motor_type' => htmlspecialchars($this->input->post('motor_type',true))];
             $data = json_encode($data);
             // $this->php_func->processSend($data);
             $this->pubemail->processSend($data);
+            $this->send_email($data_book, $motor_type);
+            $this->benchmark->mark('code_end');
+            $ipadd = $this->input->ip_address();
+            $agent = $this->get_useragent();
+            $time =  $this->benchmark->elapsed_time('code_start', 'code_end');
+            log_message('info','[v] IP Add: '. $ipadd . " user_id: " . $data_book['user_id'].' Benchmark time: '.$time .' '. $agent);
             $this->session->set_flashdata('alert',success("<strong>Congratulation!</strong> Motorcycle is already in the queue."));
-            redirect('user/queue');
+            redirect('user_queue');
         }
     }
 
@@ -135,7 +136,7 @@ class User extends CI_Controller{
     //Fungsi delete data transaksi
     function deleteTransaction(){ //delete record method
         $this->m_user->delTransaction();
-        redirect('user/transaction');
+        redirect('user_transaction');
     }
 
     //Kontrol profile
@@ -245,4 +246,45 @@ class User extends CI_Controller{
         }
         echo json_encode($data);
     }
+
+    private function send_email($data_book, $motor_type)
+    {  
+        $subject = 'Your order '.$data_book['code_booking'];
+        $content = 'notification';
+        $email = $this->session->userdata('email');
+        $data = array(
+            'name' => $data_book['nm_consumer'],
+            'brand' => 'Red Wash',
+            'text' => 'Come on, immediately bring Your vehicle here',
+            'code_booking' => $data_book['code_booking'],
+            'motor_type' => $motor_type['motor_type'],
+            'total' => $data_book['tot_cost'],
+            'status' => $data_book['status'],
+            'time' => $data_book['ctime'],
+            'action_url' => 'https://redwash.000webhostapp.com/user/queue'
+        );
+        $message = $this->load->view("email/{$content}", $data, true);
+        
+        $this->email->from($_ENV['SENDGRID_EMAIL'], 'RedWash');
+        $this->email->to($email);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        if ($this->email->send()) {
+            return TRUE;
+        } else {
+            show_error($this->email->print_debugger());
+        }
+    }
+
+    function get_useragent()
+    {
+        $this->load->library('user_agent');
+        $agent = [
+            'platform' => $this->agent->platform(),
+            'browser' => $this->agent->browser().' '.$this->agent->version(),
+        ];
+        return $agent['platform'].' '.$agent['browser'];
+    }
+
 }

@@ -33,7 +33,7 @@ class M_user extends CI_Model{
     //Ambil data tipemotor/paket cuci motor
     public function gettype()
     {
-        return $this->db->get('tbl_typemotor')->result();
+        return $this->db->get('tbl_typemotor')->result_array();
     }
 
     //Membuat kode pemesanan
@@ -57,8 +57,8 @@ class M_user extends CI_Model{
     }
 
     //Menginput pemesanan
-    public function insertBook($table, $data) {
-        $this->db->insert($table, $data);
+    public function insertBook($table, $data_book) {
+        $this->db->insert($table, $data_book);
     }
 
     //Ambil data transaksi dengan DataTables

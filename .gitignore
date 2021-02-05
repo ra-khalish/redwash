@@ -1,7 +1,3 @@
-
-# Created by https://www.gitignore.io/api/linux,codeigniter,visualstudiocode
-# Edit at https://www.gitignore.io/?templates=linux,codeigniter,visualstudiocode
-
 ### CodeIgniter ###
 */config/development
 */logs/log-*.php
@@ -19,7 +15,6 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
-/assets/
 /vendor/
 .env
 
@@ -46,9 +41,8 @@ application/logs/*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+*.code-workspace
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
-
-# End of https://www.gitignore.io/api/linux,codeigniter,visualstudiocode

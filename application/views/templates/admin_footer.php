@@ -122,7 +122,7 @@
               }
             }
           },
-          {"data": "view",
+          {"data": "action",
             "orderable": false,
             "searchable": false,
           }
