@@ -14,6 +14,8 @@ class User extends CI_Controller{
             redirect('block');
         }
         $this->load->model('m_user');
+        // $this->load->library('Php_func');
+        $this->load->library('Pubemail');
     }
 
     public function get_session()
@@ -99,7 +101,11 @@ class User extends CI_Controller{
             ];
             $data_book['code_booking'] = $this->m_user->bkcode();
             $this->m_user->insertBook('tbl_washing',$data_book);
+            $data['email'] = $this->session->userdata('email');
             $motor_type = ['motor_type' => htmlspecialchars($this->input->post('motor_type',true))];
+            $data = json_encode($data);
+            // $this->php_func->processSend($data);
+            $this->pubemail->processSend($data);
             $this->send_email($data_book, $motor_type);
             $this->benchmark->mark('code_end');
             $ipadd = $this->input->ip_address();

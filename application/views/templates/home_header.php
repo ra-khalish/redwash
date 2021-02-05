@@ -61,7 +61,7 @@
           </ul>
         <?php else:?>
           <div class="navbar-text">   
-            <!-- Button trigger modal--><a href="<?= base_url('login');?>" class="btn btn-primary navbar-btn btn-shadow btn-gradient">Login</a>
+            <!-- Button trigger modal--><a href="<?= base_url('login');?>" id="login-button" class="btn btn-primary navbar-btn btn-shadow btn-gradient">Login</a>
             <!-- Button trigger modal--><!--<a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary navbar-btn btn-shadow btn-gradient">Sign Up</a>-->
           </div>
         <?php endif;?>
