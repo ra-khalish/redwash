@@ -36,6 +36,16 @@ class M_user extends CI_Model{
         return $this->db->get('tbl_typemotor')->result_array();
     }
 
+    public function getPacket($price)
+    {
+        $result = $this->db
+            ->select('motor_type')
+            ->from('tbl_typemotor')
+            ->where("price = {$price}")
+            ->get();
+        return $result->row_array();
+    }
+
     //Membuat kode pemesanan
     public function bkcode()
     {

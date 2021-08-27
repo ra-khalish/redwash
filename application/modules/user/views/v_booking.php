@@ -61,9 +61,9 @@
             <?= form_error('typemotor'); ?>
             </div>
           </div>
-            <div>
-              <input type="hidden" class="form-control" id="motor_type" name="motor_type" name="motor_type" value="" readonly>
-            </div>
+            <!-- <div>
+              <input type="hidden" class="form-control" id="motor_type" name="motor_type" value="" readonly>
+            </div> -->
           <div class="form-group row">
             <label for="total" class="col-sm-2 col-form-label">Total Amount :</label>
             <div class="col-sm-10">

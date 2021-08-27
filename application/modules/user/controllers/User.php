@@ -14,8 +14,7 @@ class User extends CI_Controller{
             redirect('block');
         }
         $this->load->model('m_user');
-        // $this->load->library('Php_func');
-        $this->load->library('Pubemail');
+        $this->load->library('Producer');
     }
 
     public function get_session()
@@ -60,9 +59,9 @@ class User extends CI_Controller{
             array(
                     'field' => 'contact',
                     'label' => 'Contact',
-                    'rules' => 'required|trim|max_length[12]|integer',
+                    'rules' => 'required|trim|min_length[11]|integer',
                     'errors' => array(
-                            'max_length' => 'Your number is too short',
+                            'min_length' => 'Your number is too short',
                     ),
             ),
             array(
@@ -70,11 +69,11 @@ class User extends CI_Controller{
                     'label' => 'Plat Number',
                     'rules' => 'required|trim|min_length[3]'
             ),
-            array(
-                    'field' => 'typemotor',
-                    'label' => 'Type',
-                    'rules' => 'required'
-            ),
+            // array(
+            //         'field' => 'typemotor',
+            //         'label' => 'Type',
+            //         'rules' => 'required'
+            // ),
             array(
                     'field' => 'tot_cost',
                     'label' => 'Total Cost',
@@ -89,29 +88,29 @@ class User extends CI_Controller{
             $this->load_view('v_booking', $data);
         } else {
             $this->benchmark->mark('code_start');
-            $data_book = [
+            $data_order = [
                 'user_id' => htmlspecialchars($this->input->post('user_id',true)),
                 'nm_consumer' => htmlspecialchars($this->input->post('nm_consumer',true)),
                 'contact' => htmlspecialchars($this->input->post('contact',true)),
-                'code_booking' => htmlspecialchars($this->input->post('code_booking',true)),
+                // 'code_booking' => htmlspecialchars($this->input->post('code_booking',true)),
                 'noplat' => htmlspecialchars($this->input->post('noplat',true)),
                 'tot_cost' => htmlspecialchars($this->input->post('tot_cost',true)),
                 'status' => User::statusQ,
                 'ctime' => date("Y-m-d H:i:s")
             ];
-            $data_book['code_booking'] = $this->m_user->bkcode();
-            $this->m_user->insertBook('tbl_washing',$data_book);
-            $data['email'] = $this->session->userdata('email');
-            $motor_type = ['motor_type' => htmlspecialchars($this->input->post('motor_type',true))];
-            $data = json_encode($data);
-            // $this->php_func->processSend($data);
-            $this->pubemail->processSend($data);
-            $this->send_email($data_book, $motor_type);
+            $data_order['code_booking'] = $this->m_user->bkcode();
+            $this->m_user->insertBook('tbl_washing',$data_order);
+            $data_order['email'] = $this->session->userdata('email');
+            $data_order = array_merge(
+                $data_order,
+                $this->m_user->getPacket($data_order['tot_cost'])
+            );
+            $this->notif_service($data_order);
             $this->benchmark->mark('code_end');
             $ipadd = $this->input->ip_address();
             $agent = $this->get_useragent();
             $time =  $this->benchmark->elapsed_time('code_start', 'code_end');
-            log_message('info','[v] IP Add: '. $ipadd . " user_id: " . $data_book['user_id'].' Benchmark time: '.$time .' '. $agent);
+            log_message('info','[v] IP Add: '. $ipadd . " user_id: " . $data_order['user_id'].' Benchmark time: '.$time .' '. $agent);
             $this->session->set_flashdata('alert',success("<strong>Congratulation!</strong> Motorcycle is already in the queue."));
             redirect('user_queue');
         }
@@ -247,34 +246,28 @@ class User extends CI_Controller{
         echo json_encode($data);
     }
 
-    private function send_email($data_book, $motor_type)
+    private function notif_service($data_order)
     {  
-        $subject = 'Your order '.$data_book['code_booking'];
-        $content = 'notification';
-        $email = $this->session->userdata('email');
-        $data = array(
-            'name' => $data_book['nm_consumer'],
-            'brand' => 'Red Wash',
-            'text' => 'Come on, immediately bring Your vehicle here',
-            'code_booking' => $data_book['code_booking'],
-            'motor_type' => $motor_type['motor_type'],
-            'total' => $data_book['tot_cost'],
-            'status' => $data_book['status'],
-            'time' => $data_book['ctime'],
-            'action_url' => 'https://redwash.000webhostapp.com/user/queue'
-        );
-        $message = $this->load->view("email/{$content}", $data, true);
-        
-        $this->email->from($_ENV['SENDGRID_EMAIL'], 'RedWash');
-        $this->email->to($email);
-        $this->email->subject($subject);
-        $this->email->message($message);
-
-        if ($this->email->send()) {
-            return TRUE;
-        } else {
-            show_error($this->email->print_debugger());
-        }
+        $message = [
+            'subject' => 'Your order '.$data_order['code_booking'],
+            'html_content' => 'notification',
+            'to_email' => $data_order['email'],
+            'data_content' => [
+                'name' => $data_order['nm_consumer'],
+                'brand' => 'Red Wash',
+                'text' => 'Come on, immediately bring Your vehicle here',
+                'code_booking' => $data_order['code_booking'],
+                'noplat' => $data_order['noplat'],
+                'motor_type' => $data_order['motor_type'],
+                'total' => $data_order['tot_cost'],
+                'status' => $data_order['status'],
+                'time' => $data_order['ctime'],
+                'action_url' => base_url('user/queue'),
+                'year' => date('Y')
+            ],
+            'message_type' => 'notif'
+        ];
+        $this->producer->publish($message);
     }
 
     function get_useragent()
