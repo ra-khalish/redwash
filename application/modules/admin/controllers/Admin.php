@@ -14,6 +14,7 @@ class Admin extends CI_Controller{
         }
         $this->load->model('m_admin');
         $this->load->library('pdf');
+        $this->load->library('Producer');
     }
 
     public function get_session()
@@ -148,10 +149,12 @@ class Admin extends CI_Controller{
 
     function update_order(){ //update record method
         $this->benchmark->mark('code_start');
-        $record = $this->m_admin->updateOrder();
-        $useremail = $this->m_admin->getUsernemail($record['user_id']);
-        $motor_type = $this->m_admin->getPacket($record['tot_cost']);
-        $this->send_email($record, $useremail, $motor_type);
+        $data_order = $this->m_admin->updateOrder();
+        $data_order = array_merge(
+            $data_order, 
+            $this->m_admin->getUsernemail($data_order['user_id']),
+            $this->m_admin->getPacket($data_order['tot_cost']));
+        $this->notif_service($data_order);
         $this->benchmark->mark('code_end');
         $ipadd = $this->input->ip_address();
         $agent = $this->get_useragent();
@@ -451,42 +454,39 @@ class Admin extends CI_Controller{
     }
     //Profile
 
-    private function send_email($record, $useremail, $motor_type)
+    private function notif_service($data_order)
     {
-        if($record['status'] == Admin::statusP){
-            $subject = 'Process Notification '.$record['code_booking'];
+        if($data_order['status'] == Admin::statusP){
+            $subject = 'Process Notification '.$data_order['code_booking'];
             $text = 'We are washing your motorbike';
             $content = 'notification';
-        } else if($record['status'] == Admin::statusC){
-            $subject = 'Complete Notification '.$record['code_booking'];
+        } else if($data_order['status'] == Admin::statusC){
+            $subject = 'Complete Notification '.$data_order['code_booking'];
             $text = 'Wow! Your motorbike is shiny after washing';
             $content = 'invoice';
-         }
-        $email = $useremail['user_email'];
-        $data = array(
-            'name' => $record['nm_consumer'],
-            'brand' => 'Red Wash',
-            'total' => $record['tot_cost'],
-            'code_booking' => $record['code_booking'],
-            'motor_type' => $motor_type['motor_type'],
-            'status' => $record['status'],
-            'order_created' => $record['ctime'],
-            'time' => $record['etime'],
-            'cashier' => $record['cashier'],
-            'action_url' => 'https://redwash.000webhostapp.com/user/queue',
-            'text' => $text
-        );
-        $message = $this->load->view("email/{$content}", $data, true);
-        $this->email->from($_ENV['SENDGRID_EMAIL'], 'RedWash');
-        $this->email->to($email);
-        $this->email->subject($subject);
-        $this->email->message($message);
-
-        if ($this->email->send()) {
-            return TRUE;
-        } else {
-            show_error($this->email->print_debugger());
         }
+        $message = [
+            'subject' => $subject,
+            'html_content' => $content,
+            'to_email' => $data_order['user_email'],
+            'data_content' => [
+                'name' => $data_order['nm_consumer'],
+                'brand' => 'Red Wash',
+                'text' => $text,
+                'code_booking' => $data_order['code_booking'],
+                'noplat' => $data_order['noplat'],
+                'motor_type' => $data_order['motor_type'],
+                'total' => $data_order['tot_cost'],
+                'status' => $data_order['status'],
+                'time' => $data_order['ctime'],
+                'cashier' => $data_order['cashier'],
+                'action_url' => base_url('user/queue'),
+                'date' => date("Y-m-d"),
+                'year' => date("Y")
+            ],
+            'message_type' => 'notif'
+        ];
+        $this->producer->publish($message);
     }
 
     function get_useragent()
