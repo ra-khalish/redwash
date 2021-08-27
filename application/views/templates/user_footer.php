@@ -125,7 +125,7 @@
             "searchable": false,
           }
         ],
-      order: [[0, 'asc']],
+      order: [[0, 'desc']],
       lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
               
       rowCallback: function(row, data, iDisplayIndex) {
