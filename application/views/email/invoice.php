@@ -436,7 +436,7 @@
   <![endif]-->
   </head>
   <body>
-    <span class="preheader">This is an invoice for your order on <?=$order_created?>. Please submit payment by before <?=date("Y-m-d")?> 22:00</span>
+    <span class="preheader">This is an invoice for your order on <?=$order_created?>. Please submit payment by before <?=$date?> 22:00</span>
     <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
         <td align="center">
@@ -474,7 +474,7 @@
                                 <tr>
                                   <td class="attributes_item">
                                     <span class="f-fallback">
-              <strong>Due By:</strong> <?=date("Y-m-d")?> 22:00
+              <strong>Due By:</strong> <?=$date?> 22:00
             </span>
                                   </td>
                                 </tr>
@@ -519,7 +519,7 @@
                                   </th>
                                 </tr>                
                                 <tr>
-                                  <td width="80%" class="purchase_item"><span class="f-fallback"><?=$motor_type?></span></td>
+                                  <td width="80%" class="purchase_item"><span class="f-fallback"><?=$noplat.' '.$motor_type?></span></td>
                                   <td class="align-right" width="20%" class="purchase_item"><span class="f-fallback"><?=$total?></span></td>
                                 </tr>
                                 <tr>
@@ -556,7 +556,7 @@
                 <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
                     <td class="content-cell" align="center">
-                      <p class="f-fallback sub align-center">&copy; <?= date('Y');?> <?=$brand?>. All rights reserved.</p>
+                      <p class="f-fallback sub align-center">&copy; <?= $year?> <?=$brand?>. All rights reserved.</p>
                       <p class="f-fallback sub align-center">
                         [<?=$brand?>, DPK]
                         <br>1234 Street Rd.

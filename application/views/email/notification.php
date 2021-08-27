@@ -444,7 +444,7 @@
             <tr>
               <td class="email-masthead">
                 <a href="https://redwash.000webhostapp.com/home" class="f-fallback email-masthead_name">
-                [<?=$brand?>]
+                <?=$brand?>
               </a>
               </td>
             </tr>
@@ -489,6 +489,13 @@
                                 <tr>
                                   <td class="attributes_item">
                                     <span class="f-fallback">
+                                      <strong>No Plat:</strong> <?= $noplat?>
+                                    </span>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="attributes_item">
+                                    <span class="f-fallback">
                                       <strong>Status:</strong> <?= $status?>
                                     </span>
                                   </td>
@@ -520,7 +527,7 @@
                         </table>
                         <br>
                         <p>Best Regards,
-                          <br>The [<?=$brand?>] Team</p>
+                          <br>The <?=$brand?> Team</p>
                         <!-- Sub copy -->
                         <table class="body-sub" role="presentation">
                           <tr>
@@ -541,9 +548,9 @@
                 <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
                     <td class="content-cell" align="center">
-                      <p class="f-fallback sub align-center">&copy; <?= date('Y');?> <?=$brand?>. All rights reserved.</p>
+                      <p class="f-fallback sub align-center">&copy; <?= $year?> <?=$brand?>. All rights reserved.</p>
                       <p class="f-fallback sub align-center">
-                        [<?=$brand?>, DPK]
+                        <?=$brand?>, DPK
                         <br>1234 Street Rd.
                         <br>Suite 1234
                       </p>
