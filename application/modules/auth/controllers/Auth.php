@@ -6,6 +6,7 @@ class Auth extends CI_Controller{
     {
         parent::__construct();
         $this->load->model('m_auth');
+        $this->load->library('Notificationservice');
     }
 
     public function load_view($main_view, $data)
@@ -192,21 +193,33 @@ class Auth extends CI_Controller{
         $url = base_url() . 'auth/resetpassword?email=' . $email . '&token=' . urlencode($token);
         $content = 'password-reset';
       }
-      $data = array(
-        'name' => $user_data['user_name'],
-        'username' => $user_data['user_username'],
-        'sender_email' => $_ENV['AUTH_EMAIL'],
-        'sender' => 'Admin',
-        'brand' => 'Red Wash',
-        'action_url' => $url,
-        'login_url' => 'https://redwash.000webhostapp.com/login'
-      );
-      $message = $this->load->view("email/{$content}", $data, true);
       
-      $this->email->from($_ENV['AUTH_EMAIL'], 'Admin Red Wash');
-      $this->email->to($email);
-      $this->email->subject($subject);
-      $this->email->message($message);
+      $message = [
+        'subject' => $subject,
+        'html_content' => $content,
+        'to_email' => $email,
+        'data_content' => [
+          'name' => $user_data['user_name'],
+          'username' => $user_data['user_username'],
+          'sender_email' => $_ENV['SENDGRID_EMAIL'],
+          'sender' => 'Admin',
+          'brand' => 'Red Wash',
+          'action_url' => $url,
+          'login_url' => base_url('login'),
+          'date' => date("Y-m-d H:i:s"),
+          'year' => date("Y")
+        ],
+        'message_type' => 'auth'
+      ];
+      $this->notificationservice->send_email($message);
+
+      // $this->producer->publish($message);
+      // $message = $this->load->view("email/{$content}", $data, true);
+      
+      // $this->email->from($_ENV['AUTH_EMAIL'], 'Admin Red Wash');
+      // $this->email->to($email);
+      // $this->email->subject($subject);
+      // $this->email->message($message);
       // //Jika fungsi sendEmail untuk verify
       // if($type == 'verify'){
       //   $this->email->subject('Account Verification');
@@ -222,11 +235,11 @@ class Auth extends CI_Controller{
       //     // . '&token=' . urlencode($token) . '">Reset Password</a>');//Masuk ke forgot password
       // }
 
-      if ($this->email->send()) {
-        return TRUE;
-      } else {
-        show_error($this->email->print_debugger());
-      }
+      // if ($this->email->send()) {
+      //   return TRUE;
+      // } else {
+      //   show_error($this->email->print_debugger());
+      // }
       
     }
 
